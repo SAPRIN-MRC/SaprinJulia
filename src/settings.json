@@ -1,0 +1,8 @@
+{
+  "NodeId": 3,
+  "PeriodEnd": "2018-12-31T23:59:59",
+  "Node": "AHRI",
+  "BaseDirectory": "D:\\Data\\SAPRIN_Data",
+  "Server":"localhost",
+  "Databases":{"Agincourt":"SaprinDb_Agincourt202012","DIMAMO":"SaprinDb_DIMAMO","AHRI":"SaprinDb_AHRI202012"}
+}
