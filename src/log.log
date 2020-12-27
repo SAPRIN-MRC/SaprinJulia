@@ -1,0 +1,14 @@
+┌ Info: Execution started 2020-12-26 18:53
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:15
+┌ Info: Processing node AHRI
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:35
+┌ Info: Read 239252 individuals
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:70
+┌ Info: Sex breakdown
+│   sex = 3-element Named Array{Int64,1}
+Sex  │ 
+─────┼───────
+0    │      5
+1    │ 111845
+2    │ 127402
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:72

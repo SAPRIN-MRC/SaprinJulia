@@ -1,0 +1,3 @@
+┌ Warning: Some Julia code in the VS Code extension crashed with
+│   e = UndefVarError(:main)
+└ @ VSCodeDebugger c:\Users\kobus\.vscode\extensions\julialang.language-julia-1.0.10\scripts\error_handler.jl:5
