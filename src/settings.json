@@ -4,5 +4,5 @@
   "Node": "AHRI",
   "BaseDirectory": "D:\\Data\\SAPRIN_Data",
   "Server":"localhost",
-  "Databases":{"Agincourt":"SaprinDb_Agincourt202012","DIMAMO":"SaprinDb_DIMAMO","AHRI":"SaprinDb_AHRI202012"}
+  "Databases":{"Agincourt":"SaprinDb_Agincourt202012","DIMAMO":"SaprinDb_DIMAMO202012","AHRI":"SaprinDb_AHRI202012"}
 }
