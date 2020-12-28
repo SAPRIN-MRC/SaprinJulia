@@ -1,18 +1,192 @@
-┌ Info: Execution started 2020-12-27 16:27
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:17
+┌ Info: Execution started 2020-12-28 15:42
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:22
 ┌ Info: Processing node AHRI
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:37
-┌ Info: Read 239252 individuals
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:71
-┌ Info: Sex breakdown
-│   sex = 3-element Named Array{Int64,1}
-Sex  │ 
-─────┼───────
-0    │      5
-1    │ 111845
-2    │ 127402
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:73
-┌ Info: Read 75505 pregnancies
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:83
-┌ Info: Read 75505 unique children
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:85
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:43
+┌ Info: Reading AHRI individuals start = 2020-12-28T15:42:16.676
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:121
+┌ Info: Completed reading AHRI individuals
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:124
+┌ Info: Reading AHRI locations start = 2020-12-28T15:42:16.687
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:168
+┌ Info: Completed reading AHRI locations
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:171
+┌ Info: Read 321472 residences
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:201
+┌ Info: Start years breakdown
+│   a = 19-element Named Array{Int64,1}
+Dim1  │ 
+──────┼──────
+2000  │ 70453
+2001  │ 11773
+2002  │ 14163
+2003  │ 11846
+2004  │ 10629
+2005  │ 10865
+2006  │ 11214
+2007  │ 10930
+2008  │ 11125
+2009  │ 12878
+2010  │ 13139
+2011  │ 11632
+2012  │  9811
+2013  │  8767
+2014  │  8272
+2015  │  8611
+2016  │  9230
+2017  │ 55332
+2018  │  9101
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:215
+┌ Info: End years breakdown
+│   a = 21-element Named Array{Int64,1}
+Dim1  │ 
+──────┼───────
+1797  │      5
+1798  │      6
+2000  │   4388
+2001  │   9700
+2002  │  14828
+2003  │  13208
+2004  │  11131
+2005  │  10607
+2006  │  10200
+⋮            ⋮
+2010  │  12688
+2011  │  11697
+2012  │  11421
+2013  │   9422
+2014  │   8416
+2015  │   9200
+2016  │  11428
+2017  │  11442
+2018  │ 117698
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:218
+
+ ─────────────────────────────────────────────────────────────────────────
+                                  Time                   Allocations      
+                          ──────────────────────   ───────────────────────
+     Tot / % measured:         4.65s / 96.5%           1.31GiB / 98.7%    
+
+ Section          ncalls     time   %tot     avg     alloc   %tot      avg
+ ─────────────────────────────────────────────────────────────────────────
+ readresidences        1    4.49s   100%   4.49s   1.29GiB  100%   1.29GiB
+ ─────────────────────────────────────────────────────────────────────────
+┌ Info: Execution started 2020-12-28 15:47
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:22
+┌ Info: Processing node AHRI
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:43
+┌ Info: Reading AHRI individuals start = 2020-12-28T15:47:10.724
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:121
+┌ Info: Completed reading AHRI individuals
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:124
+┌ Info: Reading AHRI locations start = 2020-12-28T15:47:10.735
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:168
+┌ Info: Completed reading AHRI locations
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:171
+┌ Info: Read 321472 residences
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:201
+� Info: Completed reading AHRI locations
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:171
+┌ Info: Read 321472 residences
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:201
+┌ Info: Start years breakdown
+│   a = 8-element Named Array{Int64,1}
+Dim1  │ 
+──────┼──
+2000  │ 2
+2007  │ 2
+2008  │ 2
+2009  │ 1
+2011  │ 1
+2013  │ 1
+2015  │ 1
+2017  │ 1
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:216
+┌ Info: End years breakdown
+│   a = 2-element Named Array{Int64,1}
+Dim1  │ 
+──────┼──
+1797  │ 5
+1798  │ 6
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:219
+
+ ─────────────────────────────────────────────────────────────────────────
+                                  Time                   Allocations      
+                          ──────────────────────   ───────────────────────
+     Tot / % measured:         3.87s / 95.5%            827MiB / 97.8%    
+
+ Section          ncalls     time   %tot     avg     alloc   %tot      avg
+ ─────────────────────────────────────────────────────────────────────────
+ readresidences        1    3.70s   100%   3.70s    808MiB  100%    808MiB
+ ─────────────────────────────────────────────────────────────────────────
+┌ Info: Execution started 2020-12-28 15:49
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:22
+┌ Info: Processing node AHRI
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:43
+┌ Info: Reading AHRI individuals start = 2020-12-28T15:49:53.734
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:121
+┌ Info: Completed reading AHRI individuals
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:124
+┌ Info: Reading AHRI locations start = 2020-12-28T15:49:53.745
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:168
+┌ Info: Completed reading AHRI locations
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:171
+┌ Info: Read 321472 residences
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:201
+┌ Info: Start years breakdown
+│   a = 19-element Named Array{Int64,1}
+Dim1  │ 
+──────┼──────
+2000  │ 70451
+2001  │ 11773
+2002  │ 14163
+2003  │ 11846
+2004  │ 10629
+2005  │ 10865
+2006  │ 11214
+2007  │ 10928
+2008  │ 11123
+2009  │ 12877
+2010  │ 13139
+2011  │ 11631
+2012  │  9811
+2013  │  8766
+2014  │  8272
+2015  │  8610
+2016  │  9230
+2017  │ 55331
+2018  │  9101
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:216
+┌ Info: End years breakdown
+│   a = 19-element Named Array{Int64,1}
+Dim1  │ 
+──────┼───────
+2000  │   4388
+2001  │   9700
+2002  │  14828
+2003  │  13208
+2004  │  11131
+2005  │  10607
+2006  │  10200
+2007  │  10798
+2008  │  10271
+2009  │  11217
+2010  │  12688
+2011  │  11697
+2012  │  11421
+2013  │   9422
+2014  │   8416
+2015  │   9200
+2016  │  11428
+2017  │  11442
+2018  │ 117698
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:219
+
+ ─────────────────────────────────────────────────────────────────────────
+                                  Time                   Allocations      
+                          ──────────────────────   ───────────────────────
+     Tot / % measured:         5.09s / 96.6%           1.33GiB / 98.6%    
+
+ Section          ncalls     time   %tot     avg     alloc   %tot      avg
+ ─────────────────────────────────────────────────────────────────────────
+ readresidences        1    4.92s   100%   4.92s   1.31GiB  100%   1.31GiB
+ ─────────────────────────────────────────────────────────────────────────
