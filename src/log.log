@@ -142,3 +142,89 @@ ading individuals start = 2021-01-01T06:53:10.211
  ──────────────────────────────────────────────────────────────────────────────
  readresidencestatus        2    21.3s   100%   10.7s   5.06GiB  100%   2.53GiB
  ──────────────────────────────────────────────────────────────────────────────
+┌ Info: Execution started 2021-01-01 07:28
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:25
+┌ Info: Processing node AHRI
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
+┌ Info: Reading individuals start = 2021-01-01T07:28:22.505
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
+┌ Info: Completed reading individuals
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
+┌ Info: Reading locations start = 2021-01-01T07:28:22.575
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
+┌ Info: Completed reading locations
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
+┌ Info: Read 695105 DIMAMO residence statuses
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:448
+┌ Info: Wrote 563061 DIMAMO residence statuses
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:459
+┌ Info: Read 2125658 Agincourt residence statuses
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:448
+┌ Info: Wrote 2001873 Agincourt residence statuses
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:459
+
+ ──────────────────────────────────────────────────────────────────────────────
+                                       Time                   Allocations      
+                               ──────────────────────   ───────────────────────
+       Tot / % measured:            30.1s / 68.6%           6.68GiB / 75.8%    
+
+ Section               ncalls     time   %tot     avg     alloc   %tot      avg
+ ──────────────────────────────────────────────────────────────────────────────
+ readresidencestatus        2    20.7s   100%   10.3s   5.06GiB  100%   2.53GiB
+ ──────────────────────────────────────────────────────────────────────────────
+┌ Info: Execution started 2021-01-01 07:30
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:25
+┌ Info: Processing node AHRI
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
+┌ Info: Reading individuals start = 2021-01-01T07:30:25.996
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
+┌ Info: Completed reading individuals
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
+┌ Info: Reading locations start = 2021-01-01T07:30:26.006
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
+┌ Info: Completed reading locations
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
+┌ Info: Read 695105 DIMAMO residence statuses
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:448
+┌ Info: Wrote 563061 DIMAMO residence statuses
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:459
+┌ Info: Read 2125658 Agincourt residence statuses
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:448
+┌ Info: Wrote 2001873 Agincourt residence statuses
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:459
+
+ ──────────────────────────────────────────────────────────────────────────────
+                                       Time                   Allocations      
+                               ──────────────────────   ───────────────────────
+       Tot / % measured:            14.9s / 98.6%           3.49GiB / 99.4%    
+
+ Section               ncalls     time   %tot     avg     alloc   %tot      avg
+ ──────────────────────────────────────────────────────────────────────────────
+ readresidencestatus        2    14.6s   100%   7.32s   3.47GiB  100%   1.74GiB
+ ──────────────────────────────────────────────────────────────────────────────
+┌ Info: Execution started 2021-01-01 12:02
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:25
+┌ Info: Processing node AHRI
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
+┌ Info: Reading individuals start = 2021-01-01T12:02:00.288
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
+┌ Info: Completed reading individuals
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
+┌ Info: Reading locations start = 2021-01-01T12:02:00.298
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
+┌ Info: Completed reading locations
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
+┌ Info: Read 2125658 Agincourt residence statuses
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:449
+┌ Info: Wrote 2001873 Agincourt residence statuses
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:460
+
+ ──────────────────────────────────────────────────────────────────────────────
+                                       Time                   Allocations      
+                               ──────────────────────   ───────────────────────
+       Tot / % measured:            9.13s / 97.7%           2.39GiB / 99.1%    
+
+ Section               ncalls     time   %tot     avg     alloc   %tot      avg
+ ──────────────────────────────────────────────────────────────────────────────
+ readresidencestatus        1    8.91s   100%   8.91s   2.37GiB  100%   2.37GiB
+ ──────────────────────────────────────────────────────────────────────────────

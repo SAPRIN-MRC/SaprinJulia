@@ -419,10 +419,11 @@ end
         IndividualUid,
         LocationUid,
         ObservationDate,
-        CASE
-          WHEN LastStatus=NextStatus THEN LastStatus
-          ELSE ResStatusCode
-        END ResStatusCode,
+        --CASE
+        --  WHEN LastStatus=NextStatus THEN LastStatus
+        --  ELSE ResStatusCode
+        --END 
+        ResStatusCode,
         ResidentStatus
       FROM ExpandedStatus
     )
@@ -453,6 +454,7 @@ end
     locationmap = Arrow.Table(joinpath(basedirectory,node,"Staging","LocationMap.arrow")) |> DataFrame
     resstatuses = innerjoin(resstatuses, locationmap, on=:LocationUid => :LocationUid, makeunique=true, matchmissing=:equal)
     select!(resstatuses,[:IndividualId,:LocationId,:ObservationDate,:ResidentStatus])
+    disallowmissing!(resstatuses, [:ObservationDate,:ResidentStatus])
     sort!(resstatuses, [:IndividualId,:LocationId,:ObservationDate])
     Arrow.write(joinpath(basedirectory, node, "Staging", "ResidentStatus.arrow"), resstatuses, compress=:zstd)
     @info "Wrote $(nrow(resstatuses)) $(node) residence statuses"
@@ -463,7 +465,7 @@ end #readresidencestatus
 # readresidences(settings.Databases["Agincourt"], "Agincourt", settings.BaseDirectory, Date(settings.PeriodEnd), Date(1992,03,01))
 # eliminateresidenceoverlaps("DIMAMO", settings.BaseDirectory)
 # eliminateresidenceoverlaps("Agincourt", settings.BaseDirectory)
-readresidencestatus(settings.Databases["DIMAMO"], "DIMAMO", settings.BaseDirectory, Date(settings.PeriodEnd), Date(1995,01,26))
+# readresidencestatus(settings.Databases["DIMAMO"], "DIMAMO", settings.BaseDirectory, Date(settings.PeriodEnd), Date(1995,01,26))
 readresidencestatus(settings.Databases["Agincourt"], "Agincourt", settings.BaseDirectory, Date(settings.PeriodEnd), Date(1992,03,01))
 #endregion
 #region clean up
