@@ -1,230 +1,47 @@
-┌ Info: Execution started 2020-12-31 19:10
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:24
-┌ Info: Processing node AHRI
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:45
-┌ Info: Reading individuals start = 2020-12-31T19:10:46.353
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:134
-┌ Info: Completed reading individuals
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:142
-┌ Info: Reading locations start = 2020-12-31T19:10:46.424
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:187
-┌ Info: Execution started 2020-12-31 19:28
+┌ Info: Execution started 2021-01-02 03:11
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:25
 ┌ Info: Processing node AHRI
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
-┌ Info: Reading individuals start = 2020-12-31T19:28:40.433
+┌ Info: Reading individuals start = 2021-01-02T03:11:08.363
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
 ┌ Info: Completed reading individuals
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
-┌ Info: Reading locations start = 2020-12-31T19:28:40.504
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
-┌ Info: Completed reading locations
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
-┌ Info: Node DIMAMO 126893 episodes
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:349
-┌ Info: Node Agincourt 277722 episodes
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:349
-
- ─────────────────────────────────────────────────────────────────────────────────────
-                                              Time                   Allocations      
-                                      ──────────────────────   ───────────────────────
-           Tot / % measured:               1937s / 99.5%            634GiB / 100%     
-
- Section                      ncalls     time   %tot     avg     alloc   %tot      avg
- ─────────────────────────────────────────────────────────────────────────────────────
- eliminateresidenceoverlaps        2    1928s   100%    964s    632GiB  100%    316GiB
- ─────────────────────────────────────────────────────────────────────────────────────
-┌ Info: Execution started 2021-01-01 06:45
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:25
-┌ Info: Processing node AHRI
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
-┌ Info: Reading individuals start = 2021-01-01T06:45:44.637
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
-┌ Info: Completed reading individuals
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
-┌ Info: Reading locations start = 2021-01-01T06:45:44.707
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
-┌ Info: Completed reading locations
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
-jl:25
-┌ Info: Processing node AHRI
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
-┌ Info: Reading individuals start = 2021-01-01T06:46:47.671
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
-┌ Info: Completed reading individuals
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
-┌ Info: Reading locations start = 2021-01-01T06:46:47.682
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
-┌ Info: Completed reading locations
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
-jl:25
-┌ Info: Processing node AHRI
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
-┌ Info: Reading individuals start = 2021-01-01T06:48:24.408
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
-┌ Info: Completed reading individuals
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
-┌ Info: Reading locations start = 2021-01-01T06:48:24.419
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
-┌ Info: Completed reading locations
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
-jl:25
-┌ Info: Processing node AHRI
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
-┌ Info: Reading individuals start = 2021-01-01T06:49:44.953
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
-┌ Info: Completed reading individuals
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
-┌ Info: Reading locations start = 2021-01-01T06:49:44.964
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
-┌ Info: Completed reading locations
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
-jl:25
-┌ Info: Processing node AHRI
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
-┌ Info: Reading individuals start = 2021-01-01T06:52:29.691
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
-┌ Info: Completed reading individuals
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
-┌ Info: Reading locations start = 2021-01-01T06:52:29.701
+┌ Info: Reading locations start = 2021-01-02T03:11:08.434
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
 ┌ Info: Completed reading locations
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
 ┌ Info: Read 695105 DIMAMO residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:448
-ading individuals start = 2021-01-01T06:53:10.211
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
-┌ Info: Completed reading individuals
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
-┌ Info: Reading locations start = 2021-01-01T06:53:10.222
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
-┌ Info: Completed reading locations
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
-┌ Info: Read 695105 DIMAMO residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:448
-
- ──────────────────────────────────────────────────────────────────────────────
-                                       Time                   Allocations      
-                               ──────────────────────   ───────────────────────
-       Tot / % measured:            6.70s / 92.9%           1.50GiB / 94.6%    
-
- Section               ncalls     time   %tot     avg     alloc   %tot      avg
- ──────────────────────────────────────────────────────────────────────────────
- readresidencestatus        1    6.23s   100%   6.23s   1.42GiB  100%   1.42GiB
- ──────────────────────────────────────────────────────────────────────────────
-┌ Info: Execution started 2021-01-01 06:56
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:25
-┌ Info: Processing node AHRI
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
-┌ Info: Reading individuals start = 2021-01-01T06:56:16.654
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
-┌ Info: Completed reading individuals
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
-┌ Info: Reading locations start = 2021-01-01T06:56:16.725
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
-┌ Info: Completed reading locations
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
-┌ Info: Read 695105 DIMAMO residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:448
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:449
 ┌ Info: Wrote 563061 DIMAMO residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:458
-┌ Info: Read 2125658 Agincourt residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:448
-┌ Info: Wrote 2001873 Agincourt residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:458
-
- ──────────────────────────────────────────────────────────────────────────────
-                                       Time                   Allocations      
-                               ──────────────────────   ───────────────────────
-       Tot / % measured:            32.9s / 64.8%           7.03GiB / 72.0%    
-
- Section               ncalls     time   %tot     avg     alloc   %tot      avg
- ──────────────────────────────────────────────────────────────────────────────
- readresidencestatus        2    21.3s   100%   10.7s   5.06GiB  100%   2.53GiB
- ──────────────────────────────────────────────────────────────────────────────
-┌ Info: Execution started 2021-01-01 07:28
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:25
-┌ Info: Processing node AHRI
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
-┌ Info: Reading individuals start = 2021-01-01T07:28:22.505
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
-┌ Info: Completed reading individuals
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
-┌ Info: Reading locations start = 2021-01-01T07:28:22.575
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
-┌ Info: Completed reading locations
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
-┌ Info: Read 695105 DIMAMO residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:448
-┌ Info: Wrote 563061 DIMAMO residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:459
-┌ Info: Read 2125658 Agincourt residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:448
-┌ Info: Wrote 2001873 Agincourt residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:459
-
- ──────────────────────────────────────────────────────────────────────────────
-                                       Time                   Allocations      
-                               ──────────────────────   ───────────────────────
-       Tot / % measured:            30.1s / 68.6%           6.68GiB / 75.8%    
-
- Section               ncalls     time   %tot     avg     alloc   %tot      avg
- ──────────────────────────────────────────────────────────────────────────────
- readresidencestatus        2    20.7s   100%   10.3s   5.06GiB  100%   2.53GiB
- ──────────────────────────────────────────────────────────────────────────────
-┌ Info: Execution started 2021-01-01 07:30
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:25
-┌ Info: Processing node AHRI
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
-┌ Info: Reading individuals start = 2021-01-01T07:30:25.996
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
-┌ Info: Completed reading individuals
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
-┌ Info: Reading locations start = 2021-01-01T07:30:26.006
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
-┌ Info: Completed reading locations
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
-┌ Info: Read 695105 DIMAMO residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:448
-┌ Info: Wrote 563061 DIMAMO residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:459
-┌ Info: Read 2125658 Agincourt residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:448
-┌ Info: Wrote 2001873 Agincourt residence statuses
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:459
-
- ──────────────────────────────────────────────────────────────────────────────
-                                       Time                   Allocations      
-                               ──────────────────────   ───────────────────────
-       Tot / % measured:            14.9s / 98.6%           3.49GiB / 99.4%    
-
- Section               ncalls     time   %tot     avg     alloc   %tot      avg
- ──────────────────────────────────────────────────────────────────────────────
- readresidencestatus        2    14.6s   100%   7.32s   3.47GiB  100%   1.74GiB
- ──────────────────────────────────────────────────────────────────────────────
-┌ Info: Execution started 2021-01-01 12:02
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:25
-┌ Info: Processing node AHRI
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
-┌ Info: Reading individuals start = 2021-01-01T12:02:00.288
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:135
-┌ Info: Completed reading individuals
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
-┌ Info: Reading locations start = 2021-01-01T12:02:00.298
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:188
-┌ Info: Completed reading locations
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:195
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:460
 ┌ Info: Read 2125658 Agincourt residence statuses
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:449
 ┌ Info: Wrote 2001873 Agincourt residence statuses
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:460
+┌ Info: 273938 Agincourt residence rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:470
+┌ Info: 2001873 Agincourt residence status rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:472
+┌ Info: Node Agincourt 411225 episodes after resident split
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:524
+┌ Info: Node Agincourt 291704 episodes after dropping non-resident episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:541
+┌ Info: 126867 DIMAMO residence rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:470
+┌ Info: 563061 DIMAMO residence status rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:472
+┌ Info: Node DIMAMO 153172 episodes after resident split
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:524
+┌ Info: Node DIMAMO 127146 episodes after dropping non-resident episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:541
 
- ──────────────────────────────────────────────────────────────────────────────
-                                       Time                   Allocations      
-                               ──────────────────────   ───────────────────────
-       Tot / % measured:            9.13s / 97.7%           2.39GiB / 99.1%    
+ ──────────────────────────────────────────────────────────────────────────────────
+                                           Time                   Allocations      
+                                   ──────────────────────   ───────────────────────
+         Tot / % measured:              59.7s / 78.7%           23.8GiB / 90.5%    
 
- Section               ncalls     time   %tot     avg     alloc   %tot      avg
- ──────────────────────────────────────────────────────────────────────────────
- readresidencestatus        1    8.91s   100%   8.91s   2.37GiB  100%   2.37GiB
- ──────────────────────────────────────────────────────────────────────────────
+ Section                   ncalls     time   %tot     avg     alloc   %tot      avg
+ ──────────────────────────────────────────────────────────────────────────────────
+ dropnonresidentepisodes        2    29.4s  62.6%   14.7s   17.6GiB  81.8%  8.81GiB
+ readresidencestatus            2    17.6s  37.4%   8.80s   3.93GiB  18.2%  1.96GiB
+ ──────────────────────────────────────────────────────────────────────────────────
