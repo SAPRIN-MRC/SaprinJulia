@@ -40,6 +40,7 @@ s = readsettings("settings.json")
     Server::String = s["Server"]
     Database::String = s["Databases"][s["Node"]]
     Databases = s["Databases"]
+    LeftCensorDates = s["LeftCensorDates"]
 end # struct
 
 settings = Settings()
@@ -132,17 +133,45 @@ end # readindividuals
 function readindividuals(s::Settings)
     return readindividuals(s.Database, s.Node, s.BaseDirectory)
 end
-@info "Reading individuals start = $(now())"
-#=readindividuals(settings.Databases["AHRI"],"AHRI",settings.BaseDirectory)
-flush(io)
-#readindividuals(settings.Databases["DIMAMO"],"DIMAMO",settings.BaseDirectory)
-flush(io)
-#readindividuals(settings.Databases["Agincourt"],"Agincourt",settings.BaseDirectory)
-flush(io)
-=#
-@info "Completed reading individuals"
-#endregion
+"Creates a dataset with the earliest and latest date at which an individual has been observed within left and rightcensor dates"
+@timeit to function individualobservationbounds(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+    con = ODBC.Connection(db)
+    sql = """SELECT
+        UPPER(CONVERT(varchar(50),O.IndividualUid)) IndividualUid,
+        CONVERT(date,E.EventDate) EventDate
+    FROM dbo.IndividualObservations O
+        JOIN dbo.Events E ON O.ObservationUid=E.EventUid
+    """
+    observations =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    DBInterface.close!(con)
+    @info "Read $(nrow(observations)) $(node) individual observations"
+    filter!(:EventDate => s -> s <= periodend, observations) # event must be before period end
+    filter!(:EventDate => s -> s >= leftcensor, observations) # event must be after left censor date
+    @info "Read $(nrow(observations)) $(node) individual observations after bounds"
+    bounds = combine(groupby(observations, :IndividualUid), :EventDate => minimum => :EarliestDate, :EventDate => maximum => :LatestDate)
+    disallowmissing!(bounds, :IndividualUid)
+    @info "Read $(nrow(bounds)) $(node) individuals after group"
+    individualmap = Arrow.Table(joinpath(basedirectory, node, "Staging", "IndividualMap.arrow")) |> DataFrame
+    bounds = innerjoin(bounds, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
+    select!(bounds,[:IndividualId, :EarliestDate, :LatestDate])
+    sort!(bounds,:IndividualId)
+    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualBounds.arrow"), bounds, compress=:zstd)
+    @info "Wrote $(nrow(bounds)) $(node) individual bounds"
+    return nothing
+end
+#@info "Reading individuals start = $(now())"
+#node = "Agincourt"
+#readindividuals(settings.Databases[node],node,settings.BaseDirectory)
+#individualobservationbounds(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+#node = "DIMAMO"
+#readindividuals(settings.Databases[node],node,settings.BaseDirectory)
+#individualobservationbounds(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+#node = "AHRI"
+#readindividuals(settings.Databases[node],node,settings.BaseDirectory)
+#individualobservationbounds(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+#@info "Completed reading individuals"
 
+#endregion
 #region read Locations
 "Read location and anonimise for node specified in settings and save id map and location data to to arrow files"
 @timeit to function readlocations(db::String, node::String, basedirectory::String)
@@ -350,7 +379,7 @@ end
     select!(residences, [:ResidenceId, :IndividualId, :LocationId, :StartDate,:StartType, :EndDate, :EndType, :ResidentIndex])
     insertcols!(residences,:ResidentIndex, :GapStart => 0, :GapEnd => 0, :Gap => 0)
     s = similar(residences,0)
-    @time for row in eachrow(residences)
+    for row in eachrow(residences)
         tf = DataFrame(row)
         ttf=repeat(tf, Dates.value.(row.EndDate-row.StartDate) + 1)
         ttf.DayDate = ttf.StartDate .+ Dates.Day.(0:nrow(ttf)-1)
@@ -360,8 +389,8 @@ end
     end
     n = nrow(s)
     @info "$(n) day rows for $(node)"
-    @time sort!(s,[:IndividualId,:DayDate,order(:ResidentIndex, rev=true), :StartDate, order(:EndDate, rev=true)]);
-    @time unique!(s,[:IndividualId,:DayDate]);
+    sort!(s,[:IndividualId,:DayDate,order(:ResidentIndex, rev=true), :StartDate, order(:EndDate, rev=true)]);
+    unique!(s,[:IndividualId,:DayDate]);
     n = nrow(s)
     @info "$(n) unique day rows for $(node)"
     lastindividual = -1
@@ -556,6 +585,311 @@ readresidencestatus(settings.Databases["Agincourt"], "Agincourt", settings.BaseD
 dropnonresidentepisodes(settings.BaseDirectory,"Agincourt")
 dropnonresidentepisodes(settings.BaseDirectory,"DIMAMO")
 =#
+#endregion
+#region Households
+@timeit to function readhouseholds(db::String, node::String, basedirectory::String)
+    con = ODBC.Connection(db)
+    sql = """SELECT
+        UPPER(CONVERT(nvarchar(50),H.HouseholdUid)) HouseholdUid,
+        CONVERT(date,SE.EventDate) StartDate,
+        SE.EventTypeId StartType,
+        CONVERT(date,EE.EventDate) EndDate,
+        EE.EventTypeId EndType
+    FROM dbo.Households H
+        JOIN dbo.Events SE ON H.StartEventUid=SE.EventUid
+        JOIN dbo.Events EE ON H.EndEventUid=EE.EventUid
+    ORDER BY HouseholdUid
+    """
+    households = DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    @info "Read $(nrow(households)) $(node) households"
+    DBInterface.close!(con)
+    households.HouseholdId = 1:nrow(households)
+    map = households[!,[:HouseholdUid,:HouseholdId]]
+    Arrow.write(joinpath(basedirectory, node, "Staging", "HouseholdMap.arrow"), map, compress=:zstd)
+    select!(households,[:HouseholdId, :StartDate, :StartType, :EndDate, :EndType])
+    Arrow.write(joinpath(basedirectory, node, "Staging", "Households.arrow"), households, compress=:zstd)
+    return nothing
+end #readhouseholds
+"Retrieve household residencies with left and right censor dates"
+@timeit to function readhouseholdresidences(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+    con = ODBC.Connection(db)
+    sql = """SELECT
+        UPPER(CONVERT(nvarchar(50),HouseholdResidenceUid)) HouseholdResidenceUid
+    , UPPER(CONVERT(nvarchar(50),HR.HouseholdUid)) HouseholdUid
+    , UPPER(CONVERT(nvarchar(50),HR.LocationUid)) LocationUid
+    , CONVERT(date, SE.EventDate) StartDate
+    , SE.EventTypeId StartType
+    , SO.EventDate StartObservationDate
+    , CONVERT(date, EE.EventDate) EndDate
+    , EE.EventTypeId EndType
+    , EO.EventDate EndObservationDate
+    FROM dbo.HouseholdResidences HR
+        JOIN dbo.Events SE ON HR.StartEventUid=SE.EventUid
+        JOIN dbo.Events EE ON HR.EndEventUid=EE.EventUid
+        JOIN dbo.Events SO ON SE.ObservationEventUid=SO.EventUid
+        JOIN dbo.Events EO ON EE.ObservationEventUid=EO.EventUid
+    """
+    residences =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    @info "Read $(nrow(residences)) $(node) household residences"
+    sql = """SELECT
+      HM.IndividualUid
+    , UPPER(CONVERT(nvarchar(50),HM.HouseholdUid)) HouseholdUid
+    , HHRelationshipTypeId
+    , CONVERT(date, HRS.EventDate) StartDate
+    , CASE 
+        WHEN CONVERT(date, HRS.EventDate)=CONVERT(date, HMS.EventDate) THEN HMS.EventTypeId
+        ELSE HRS.EventTypeId
+        END StartType
+    , HRSS.EventDate StartObservationDate
+    , CONVERT(date, HRE.EventDate) EndDate
+    , CASE 
+        WHEN CONVERT(date, HRE.EventDate)=CONVERT(date, HME.EventDate) THEN HME.EventTypeId
+        ELSE HRE.EventTypeId
+        END EndType
+    , CONVERT(date,HRSE.EventDate) EndObservationDate
+    FROM dbo.HHeadRelationships HR
+        JOIN dbo.HouseholdMemberships HM ON HR.HouseholdMembershipUid=HM.HouseholdMembershipUid
+        JOIN dbo.Events HRS ON HR.StartEventUid=HRS.EventUid
+        JOIN dbo.Events HRE ON HR.EndEventUid=HRE.EventUid
+        JOIN dbo.Events HMS ON HM.StartEventUid=HMS.EventUid
+        JOIN dbo.Events HME ON HM.EndEventUid=HME.EventUid
+        JOIN dbo.Events HRSS ON HRS.ObservationEventUid=HRSS.EventUid
+        JOIN dbo.Events HRSE ON HRE.ObservationEventUid=HRSE.EventUid;  
+    """
+    relationships =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    DBInterface.close!(con)
+    @info "Read $(nrow(relationships)) $(node) household relationships"
+    lastseen = combine(groupby(relationships, :HouseholdUid), :EndDate => maximum => :LastHHDate, :EndObservationDate => maximum => :LastObservationDate)
+    @info "Grouped $(nrow(lastseen)) $(node) households from household relationships"
+    sort!(residences, [:HouseholdUid,:StartDate])
+    residences = combine(groupby(residences, :HouseholdUid), sdf -> sort(sdf, :StartDate), s -> 1:nrow(s), nrow => :Episodes)
+    rename!(residences, :x1 => :Episode)
+    @info "Household residences $(nrow(residences)) $(node) after episode counts"
+    r = leftjoin(residences, lastseen, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
+    for i = 1:nrow(r)
+        if r[i, :StartDate] < leftcensor
+            r[i, :StartType] = 1 # set to enumeration
+            r[i, :StartDate] = Date(residences[i, :StartObservationDate])
+        end
+        if !ismissing(r[i, :LastHHDate]) && r[i, :Episode] == r[i, :Episodes] && r[i, :LastHHDate] > r[i, :EndDate]
+            r[i,:EndDate] = r[i,:LastHHDate]
+            r[i,:EndObservationDate] = r[i,:LastObservationDate]
+        end
+        if r[i,:EndDate] > periodend
+            r[i, :EndDate] = periodend # right censor to period end
+            r[i, :EndType] = 9 # end of episode beyond periodend => OBE
+        end
+    end
+    filter!(:StartDate => s -> s <= periodend, r)        # drop episodes that start after period end
+    filter!([:StartDate,:EndDate] => (s, e) -> s <= e, r) # start date must be smaller or equal to end date
+    select!(r,[:HouseholdUid,:LocationUid,:StartDate,:StartType,:EndDate,:EndType,:StartObservationDate,:EndObservationDate])
+    @info "Household residences $(nrow(r)) $(node) after right censor"
+    householdmap = Arrow.Table(joinpath(basedirectory,node,"Staging","HouseholdMap.arrow")) |> DataFrame
+    r = innerjoin(r, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
+    locationmap = Arrow.Table(joinpath(basedirectory,node,"Staging","LocationMap.arrow")) |> DataFrame
+    r = innerjoin(r, locationmap, on=:LocationUid => :LocationUid, makeunique=true, matchmissing=:equal)
+    select!(r,[:HouseholdId,:LocationId,:StartDate,:StartType,:EndDate,:EndType,:StartObservationDate,:EndObservationDate])
+    disallowmissing!(r,[:StartDate,:EndDate])
+    Arrow.write(joinpath(basedirectory, node, "Staging", "HouseholdResidences.arrow"), r, compress=:zstd)
+    @info "Wrote $(nrow(r)) $(node) household residences"
+    return nothing
+end
+#readhouseholds(settings.Databases["Agincourt"],"Agincourt",settings.BaseDirectory)
+#readhouseholds(settings.Databases["DIMAMO"],"DIMAMO",settings.BaseDirectory)
+#readhouseholds(settings.Databases["AHRI"],"AHRI",settings.BaseDirectory)
+#readhouseholdresidences(settings.Databases["AHRI"], "AHRI", settings.BaseDirectory, Date(settings.PeriodEnd), Date(2000, 01, 01))
+#readhouseholdresidences(settings.Databases["DIMAMO"], "DIMAMO", settings.BaseDirectory, Date(settings.PeriodEnd), Date(1995,01,26))
+#readhouseholdresidences(settings.Databases["Agincourt"], "Agincourt", settings.BaseDirectory, Date(settings.PeriodEnd), Date(1992,03,01))
+"Retrieve household memberships with left and right censor dates"
+@timeit to function readhouseholdmemberships(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+    con = ODBC.Connection(db)
+    sql = """SELECT
+      UPPER(CONVERT(varchar(50),HM.IndividualUid)) IndividualUid
+    , UPPER(CONVERT(varchar(50),HM.HouseholdUid)) HouseholdUid
+    , CONVERT(date,HMS.EventDate) StartDate
+    , HMS.EventTypeId StartType
+    , HRSS.EventDate StartObservationDate
+    , CONVERT(date,HME.EventDate) EndDate
+    , HME.EventTypeId EndType
+    , HRSE.EventDate EndObservationDate
+    FROM dbo.HouseholdMemberships HM
+        JOIN dbo.Events HMS ON HM.StartEventUid=HMS.EventUid
+        JOIN dbo.Events HME ON HM.EndEventUid=HME.EventUid
+        JOIN dbo.Events HRSS ON HMS.ObservationEventUid=HRSS.EventUid
+        JOIN dbo.Events HRSE ON HME.ObservationEventUid=HRSE.EventUid
+    WHERE HME.EventTypeId>0 -- get rid of NYO episodes
+    """
+    memberships =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    DBInterface.close!(con)
+    @info "Read $(nrow(memberships)) $(node) membership episodes from database"
+    householdmap = Arrow.Table(joinpath(basedirectory,node,"Staging","HouseholdMap.arrow")) |> DataFrame
+    memberships = innerjoin(memberships, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
+    @info "Read $(nrow(memberships)) $(node) membership episodes"
+    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    memberships = innerjoin(memberships, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
+    @info "Read $(nrow(memberships)) $(node) membership episodes"
+    individualbounds = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualBounds.arrow")) |> DataFrame
+    m = leftjoin(memberships,individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
+    @info "Read $(nrow(m)) $(node) membership episodes after individual bounds join"
+    #adjust start and end dates
+    for i = 1:nrow(m)
+        if m[i,:StartDate] < leftcensor && !ismissing(m[i,:EarliestDate])
+            m[i,:StartDate] = m[i,:EarliestDate]
+            m[i,:StartObservationDate] = m[i,:EarliestDate]
+            m[i,:StartType] = 1
+        end
+        if m[i,:EndDate] > periodend
+            m[i,:EndDate] = periodend
+            m[i,:EndType] = 9
+        end
+    end
+    filter!(:StartDate => s -> s <= periodend, m)         # drop episodes that start after period end
+    filter!([:StartDate,:EndDate] => (s, e) -> s <= e, m) # start date must be smaller or equal to end date
+    sort!(m,[:IndividualId,:HouseholdId,:StartDate])
+    m.MembershipId = 1:nrow(m)
+    transform!(groupby(m,[:IndividualId,:HouseholdId]), :IndividualId => eachindex => :Episode)
+    select!(m,[:MembershipId, :IndividualId, :HouseholdId, :StartDate, :StartType, :StartObservationDate, :EndDate, :EndType, :EndObservationDate, :Episode])
+    Arrow.write(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow"), m, compress=:zstd)
+    @info "Wrote $(nrow(m)) $(node) membership episodes"
+    return nothing
+end
+#=
+node = "Agincourt"
+readhouseholdmemberships(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd),Date(settings.LeftCensorDates[node]))
+node = "DIMAMO"
+readhouseholdmemberships(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd),Date(settings.LeftCensorDates[node]))
+node = "AHRI"
+readhouseholdmemberships(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd),Date(settings.LeftCensorDates[node]))
+=#
+"Retrieve household head relationships with left and right censor dates"
+@timeit to function readhouseholdheadrelationships(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+    con = ODBC.Connection(db)
+    sql = """SELECT
+        UPPER(CONVERT(varchar(50),HM.IndividualUid)) IndividualUid
+    , UPPER(CONVERT(varchar(50),HM.HouseholdUid)) HouseholdUid
+    , HR.HHRelationshipTypeId
+    , CONVERT(date,HMS.EventDate) StartDate
+    , HMS.EventTypeId StartType
+    , CONVERT(date,HME.EventDate) EndDate
+    , HME.EventTypeId EndType
+    , HRSS.EventDate StartObservationDate
+    , HRSE.EventDate EndObservationDate
+    FROM dbo.HHeadRelationships HR
+        JOIN dbo.HouseholdMemberships HM ON HR.HouseholdMembershipUid=HM.HouseholdMembershipUid
+        JOIN dbo.Events HMS ON HR.StartEventUid=HMS.EventUid
+        JOIN dbo.Events HME ON HR.EndEventUid=HME.EventUid
+        JOIN dbo.Events HRSS ON HMS.ObservationEventUid=HRSS.EventUid
+        JOIN dbo.Events HRSE ON HME.ObservationEventUid=HRSE.EventUid
+    WHERE HME.EventTypeId>0 -- get rid of NYO episodes
+    """
+    relationships =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    DBInterface.close!(con)
+    @info "Read $(nrow(relationships)) $(node) relationships episodes from database"
+    householdmap = Arrow.Table(joinpath(basedirectory,node,"Staging","HouseholdMap.arrow")) |> DataFrame
+    relationships = innerjoin(relationships, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
+    @info "Read $(nrow(relationships)) $(node) relationships episodes"
+    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    relationships = innerjoin(relationships, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
+    @info "Read $(nrow(relationships)) $(node) relationships episodes"
+    individualbounds = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualBounds.arrow")) |> DataFrame
+    m = leftjoin(relationships,individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
+    @info "Read $(nrow(m)) $(node) relationships episodes after individual bounds join"
+    #adjust start and end dates
+    for i = 1:nrow(m)
+        if m[i,:StartDate] < leftcensor && !ismissing(m[i,:EarliestDate])
+            m[i,:StartDate] = m[i,:EarliestDate]
+            m[i,:StartObservationDate] = m[i,:EarliestDate]
+            m[i,:StartType] = 1
+        end
+        if m[i,:EndDate] > periodend
+            m[i,:EndDate] = periodend
+            m[i,:EndType] = 9
+        end
+    end
+    filter!(:StartDate => s -> s <= periodend, m)         # drop episodes that start after period end
+    filter!([:StartDate,:EndDate] => (s, e) -> s <= e, m) # start date must be smaller or equal to end date
+    sort!(m,[:IndividualId,:HouseholdId, :StartDate, :HHRelationshipTypeId])
+    m.RelationshipId = 1:nrow(m)
+    transform!(groupby(m,[:IndividualId,:HouseholdId]), :IndividualId => eachindex => :Episode)
+    select!(m,[:RelationshipId, :IndividualId, :HouseholdId, :HHRelationshipTypeId, :StartDate, :StartType, :StartObservationDate, :EndDate, :EndType, :EndObservationDate, :Episode])
+    Arrow.write(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow"), m, compress=:zstd)
+    @info "Wrote $(nrow(m)) $(node) relationships episodes"
+    return nothing
+end
+#=
+node = "Agincourt"
+readhouseholdheadrelationships(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd),Date(settings.LeftCensorDates[node]))
+node = "DIMAMO"
+readhouseholdheadrelationships(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd),Date(settings.LeftCensorDates[node]))
+node = "AHRI"
+readhouseholdheadrelationships(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd),Date(settings.LeftCensorDates[node]))
+=#
+function getmembershipdays(basedirectory::String, node::String)
+    memberships = Arrow.Table(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow")) |> DataFrame
+    m = similar(memberships,0)
+    for row in eachrow(memberships)
+        tf = DataFrame(row)
+        ttf=repeat(tf, Dates.value.(row.EndDate-row.StartDate) + 1)
+        ttf.DayDate = ttf.StartDate .+ Dates.Day.(0:nrow(ttf)-1)
+        ttf.Start = ttf.DayDate .== ttf.StartDate
+        ttf.End = ttf.DayDate .== ttf.EndDate
+        append!(m, ttf, cols = :union)
+    end
+    memberships = nothing
+    unique!(m,[:IndividualId,:HouseholdId,:DayDate])
+    return m
+end
+function getrelationshipdays(basedirectory::String, node::String)
+    relationships = Arrow.Table(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow")) |> DataFrame
+    r = similar(relationships,0)
+    for row in eachrow(relationships)
+        tf = DataFrame(row)
+        ttf=repeat(tf, Dates.value.(row.EndDate-row.StartDate) + 1)
+        ttf.DayDate = ttf.StartDate .+ Dates.Day.(0:nrow(ttf)-1)
+        ttf.Start = ttf.DayDate .== ttf.StartDate
+        ttf.End = ttf.DayDate .== ttf.EndDate
+        append!(r, ttf, cols = :union)
+    end
+    relationships = nothing
+    unique!(r,[:IndividualId,:HouseholdId,:DayDate])
+    return r
+end
+"Construct individual household memberships with household head relationships"
+function individualmemberships(basedirectory::String, node::String)
+    mr = leftjoin(getmembershipdays(basedirectory,node), getrelationshipdays(basedirectory,node) , on = [:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
+    select!(mr,[:MembershipId, :IndividualId, :HouseholdId, :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :StartObservationDate, :EndObservationDate, :Episode])
+    replace!(mr.HHRelationshipTypeId, missing => 12)
+    disallowmissing!(mr,[:HHRelationshipTypeId, :DayDate])
+    @info "$(nrow(mr)) $(node) day rows"
+    mr = combine(groupby(mr,[:IndividualId,:HouseholdId]), :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :StartObservationDate, :EndObservationDate, :Episode, 
+                             :HHRelationshipTypeId => Base.Fix2(lag,1) => :LastRelation, :HHRelationshipTypeId => Base.Fix2(lead,1) => :NextRelation)
+    for i = 1:nrow(mr)
+        if !ismissing(mr[i,:LastRelation])
+            if mr[i, :LastRelation] != mr[i, :HHRelationshipTypeId]
+                mr[i, :StartType] = 104
+            end
+        end
+        if !ismissing(mr[i,:NextRelation])
+            if mr[i, :NextRelation] != mr[i, :HHRelationshipTypeId]
+                mr[i, :EndType] = 104
+            end
+        end
+    end
+    memberships = combine(groupby(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :Episode]), :DayDate => minimum => :StartDate, :StartType => first => :StartType,
+                                                                                            :DayDate => maximum => :EndDate, :EndType => last => :EndType,
+                                                                                            :StartObservationDate => first =>:StartObservationDate, :EndObservationDate => first => :EndObservationDate)
+    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualMemberships.arrow"), memberships, compress=:zstd)
+    @info "Wrote $(nrow(memberships)) $(node) individual membership episodes"
+    return nothing
+end
+node = "Agincourt"
+individualmemberships(settings.BaseDirectory, node)
+flush(io)
+node = "DIMAMO"
+individualmemberships(settings.BaseDirectory, node)
+flush(io)
+node = "AHRI"
+individualmemberships(settings.BaseDirectory, node)
 #endregion
 #region clean up
 
