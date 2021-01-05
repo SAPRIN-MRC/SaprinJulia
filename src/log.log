@@ -4,3 +4,274 @@
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:47
 ┌ Info: Reading locations start = 2021-01-05T07:50:05.074
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:217
+┌ Info: Completed reading locations
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:224
+┌ Info: Minimum id 1, maximum Id 218775, idrange 218775, batches 9
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:914
+┌ Info: Batch 1 from 1 to 25000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 90701771
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 90701771
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 90701771 Agincourt day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 35338 Agincourt individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 2 from 25001 to 50000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 92420996
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 92420996
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 92420996 Agincourt day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 35258 Agincourt individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 3 from 50001 to 75000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 90913361
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 90913361
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 90913361 Agincourt day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 34882 Agincourt individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 4 from 75001 to 100000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 92202073
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 92202073
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 92202073 Agincourt day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 35633 Agincourt individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 5 from 100001 to 125000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 91878656
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 91878656
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 91878656 Agincourt day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 35091 Agincourt individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 6 from 125001 to 150000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 91407943
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 91407943
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 91407943 Agincourt day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 35230 Agincourt individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 7 from 150001 to 175000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 90830790
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 90830790
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 90830790 Agincourt day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 35335 Agincourt individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 8 from 175001 to 200000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 93021120
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 93021120
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 93021120 Agincourt day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 35471 Agincourt individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 9 from 200001 to 218775
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 69061280
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 69061280
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 69061280 Agincourt day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 26357 Agincourt individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Minimum id 1, maximum Id 125436, idrange 125436, batches 6
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:914
+┌ Info: Batch 1 from 1 to 25000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 31909646
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 32227425
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 31909646 DIMAMO day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 24627 DIMAMO individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 2 from 25001 to 50000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 31402889
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 31644010
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 31402889 DIMAMO day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 24684 DIMAMO individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 3 from 50001 to 75000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 31905415
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 32176645
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 31905415 DIMAMO day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 24644 DIMAMO individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 4 from 75001 to 100000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 31923695
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 32226250
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 31923695 DIMAMO day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 24683 DIMAMO individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 5 from 100001 to 125000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 31623921
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 31923043
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 31623921 DIMAMO day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 24673 DIMAMO individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 6 from 125001 to 125436
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 540081
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 541227
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 540081 DIMAMO day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 430 DIMAMO individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Minimum id 1, maximum Id 239252, idrange 239252, batches 10
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:914
+┌ Info: Batch 1 from 1 to 25000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 74445911
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 73761638
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 74445911 AHRI day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 33998 AHRI individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 2 from 25001 to 50000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 75667639
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 75011414
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 75667639 AHRI day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 34152 AHRI individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 3 from 50001 to 75000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 74517424
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 73622109
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 74517424 AHRI day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 34084 AHRI individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 4 from 75001 to 100000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 74913492
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 74041126
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 74913492 AHRI day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 33832 AHRI individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 5 from 100001 to 125000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 74217218
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 73355941
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 74217218 AHRI day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 34082 AHRI individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 6 from 125001 to 150000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 75807970
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 74842176
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 75807970 AHRI day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 34290 AHRI individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 7 from 150001 to 175000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 75580851
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 74764134
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 75580851 AHRI day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 34227 AHRI individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 8 from 175001 to 200000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 75402345
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 74523167
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 75402345 AHRI day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 34569 AHRI individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 9 from 200001 to 225000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 74834111
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 73994060
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 74834111 AHRI day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 34368 AHRI individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+┌ Info: Batch 10 from 225001 to 239252
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:918
+┌ Info: Unique membership rows 42099289
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:841
+┌ Info: Unique relationship rows 41673653
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:858
+┌ Info: 42099289 AHRI day rows
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:866
+┌ Info: Wrote 19277 AHRI individual membership episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:884
+
+ ──────────────────────────────────────────────────────────────────────────────────
+                                           Time                   Allocations      
+                                   ──────────────────────   ───────────────────────
+         Tot / % measured:              6958s / 100%            4031GiB / 100%     
+
+ Section                   ncalls     time   %tot     avg     alloc   %tot      avg
+ ──────────────────────────────────────────────────────────────────────────────────
+ batchmemberships               3    6948s   100%   2316s   4029GiB  100%   1343GiB
+   individualmemberships       25    6947s   100%    278s   4029GiB  100%    161GiB
+     getrelationshipdays       25     355s  5.10%   14.2s    143GiB  3.54%  5.70GiB
+     getmembershipdays         25     348s  5.01%   13.9s    143GiB  3.55%  5.72GiB
+ ──────────────────────────────────────────────────────────────────────────────────
