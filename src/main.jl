@@ -13,10 +13,6 @@ using TimerOutputs
 using ShiftedArrays
 using Statistics
 
-#region TimerOutputs
-const to = TimerOutput()
-#endregion
-
 #region Setup Logging
 l = open("log.log", "a+")
 io = IOContext(l, :displaysize=>(100,100))
@@ -71,7 +67,7 @@ end
 
 #region Read Individuals
 "Read individuals and anonimise for node specified in settings and save id map and individual data to to arrow files"
-@timeit to function readindividuals(db::String, node::String, basedirectory::String)
+function readindividuals(db::String, node::String, basedirectory::String)
     con = ODBC.Connection(db)
     sql = """SELECT
         UPPER(CONVERT(nvarchar(50),I.IndividualUid)) IndividualUid,
@@ -134,7 +130,7 @@ function readindividuals(s::Settings)
     return readindividuals(s.Database, s.Node, s.BaseDirectory)
 end
 "Creates a dataset with the earliest and latest date at which an individual has been observed within left and rightcensor dates"
-@timeit to function individualobservationbounds(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function individualobservationbounds(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """SELECT
         UPPER(CONVERT(varchar(50),O.IndividualUid)) IndividualUid,
@@ -174,7 +170,7 @@ end
 #endregion
 #region read Locations
 "Read location and anonimise for node specified in settings and save id map and location data to to arrow files"
-@timeit to function readlocations(db::String, node::String, basedirectory::String)
+function readlocations(db::String, node::String, basedirectory::String)
     con = ODBC.Connection(db)
     sql1 = """WITH Areas AS (
         SELECT 
@@ -232,7 +228,7 @@ function rightcensor(a::Date,b::Date)
 end
 #region individual residence episodes
 "Retrieve and save residence episodes directly from database"
-@timeit to function readresidences(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function readresidences(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """WITH ResidentStatus AS (
         SELECT
@@ -373,7 +369,7 @@ end
     return nothing
 end
 "Decompose residences into days and eliminate overlaps"
-@timeit to function eliminateresidenceoverlaps(node::String, basedirectory::String)
+function eliminateresidenceoverlaps(node::String, basedirectory::String)
     residences = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualResidencies.arrow")) |> DataFrame
     @info "Node $(node) $(nrow(residences)) episodes before overlap elimination"
     select!(residences, [:ResidenceId, :IndividualId, :LocationId, :StartDate,:StartType, :EndDate, :EndType, :ResidentIndex])
@@ -425,7 +421,7 @@ end
     return nothing
 end
 "Read resident status observations"
-@timeit to function readresidencestatus(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function readresidencestatus(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql ="""/*
     Designed to smooth single instances of changed resident status over
@@ -494,7 +490,7 @@ function newrandomdate(base::Date,startdate::Date,enddate::Date)
     return base + Dates.Day(trunc(Int64, Dates.value(enddate - startdate) * rand(Float64)))
 end
 "Use resident status observations to identify non-resident episodes and drop those from residency episodes"
-@timeit to function dropnonresidentepisodes(basedirectory::String, node::String)
+function dropnonresidentepisodes(basedirectory::String, node::String)
     r = Arrow.Table(joinpath(basedirectory, node, "Staging", "IndividualResidenciesIntermediate.arrow")) |> DataFrame
     @info "$(nrow(r)) $(node) residence rows"
     rs = Arrow.Table(joinpath(basedirectory, node, "Staging", "ResidentStatus.arrow")) |> DataFrame
@@ -587,7 +583,7 @@ dropnonresidentepisodes(settings.BaseDirectory,"DIMAMO")
 =#
 #endregion
 #region Households
-@timeit to function readhouseholds(db::String, node::String, basedirectory::String)
+function readhouseholds(db::String, node::String, basedirectory::String)
     con = ODBC.Connection(db)
     sql = """SELECT
         UPPER(CONVERT(nvarchar(50),H.HouseholdUid)) HouseholdUid,
@@ -611,7 +607,7 @@ dropnonresidentepisodes(settings.BaseDirectory,"DIMAMO")
     return nothing
 end #readhouseholds
 "Retrieve household residencies with left and right censor dates"
-@timeit to function readhouseholdresidences(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function readhouseholdresidences(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """SELECT
         UPPER(CONVERT(nvarchar(50),HouseholdResidenceUid)) HouseholdResidenceUid
@@ -701,7 +697,7 @@ end
 #readhouseholdresidences(settings.Databases["DIMAMO"], "DIMAMO", settings.BaseDirectory, Date(settings.PeriodEnd), Date(1995,01,26))
 #readhouseholdresidences(settings.Databases["Agincourt"], "Agincourt", settings.BaseDirectory, Date(settings.PeriodEnd), Date(1992,03,01))
 "Retrieve household memberships with left and right censor dates"
-@timeit to function readhouseholdmemberships(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function readhouseholdmemberships(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """SELECT
       UPPER(CONVERT(varchar(50),HM.IndividualUid)) IndividualUid
@@ -762,7 +758,7 @@ node = "AHRI"
 readhouseholdmemberships(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd),Date(settings.LeftCensorDates[node]))
 =#
 "Retrieve household head relationships with left and right censor dates"
-@timeit to function readhouseholdheadrelationships(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function readhouseholdheadrelationships(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """SELECT
         UPPER(CONVERT(varchar(50),HM.IndividualUid)) IndividualUid
@@ -824,7 +820,7 @@ readhouseholdheadrelationships(settings.Databases[node], node, settings.BaseDire
 node = "AHRI"
 readhouseholdheadrelationships(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd),Date(settings.LeftCensorDates[node]))
 =#
-@timeit to function getmembershipdays(basedirectory::String, node::String, fromId::Int64, toId::Int64)
+function getmembershipdays(basedirectory::String, node::String, fromId::Int64, toId::Int64)
     memberships =Arrow.Table(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow")) |> DataFrame
     f = filter([:IndividualId] => id -> id >= fromId && id <= toId, memberships)
     select!(f,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType])
@@ -841,7 +837,7 @@ readhouseholdheadrelationships(settings.Databases[node], node, settings.BaseDire
     @info "Unique membership rows $(nrow(m))"
     return m
 end
-@timeit to function getrelationshipdays(basedirectory::String, node::String, fromId::Int64, toId::Int64)
+function getrelationshipdays(basedirectory::String, node::String, fromId::Int64, toId::Int64)
     relationships = Arrow.Table(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow")) |> DataFrame
     f =filter([:IndividualId] => id -> id >= fromId && id <= toId, relationships)
     select!(f,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType, :HHRelationshipTypeId])
@@ -858,7 +854,7 @@ end
     @info "Unique relationship rows $(nrow(r))"
     return r
 end
-@timeit to function individualmemberships(basedirectory::String, node::String, fromId::Int64, toId::Int64, batch::Int64)
+function individualmemberships(basedirectory::String, node::String, fromId::Int64, toId::Int64, batch::Int64)
     mr = leftjoin(getmembershipdays(basedirectory,node,fromId,toId), getrelationshipdays(basedirectory,node,fromId,toId) , on = [:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
     select!(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :Episode])
     replace!(mr.HHRelationshipTypeId, missing => 12)
@@ -898,6 +894,7 @@ function combinemembershipbatch(basedirectory::String, node::String, batches)
         append!(r, m)
     end
     Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualMemberships.arrow"), r, compress=:zstd)
+    @info "Final individual membership rows $(nrow(r)) for $(node)"
     #delete chunks
     for i = 1:batches
         rm(joinpath(basedirectory, node, "Staging", "IndividualMemberships$(i).arrow"))
@@ -905,14 +902,14 @@ function combinemembershipbatch(basedirectory::String, node::String, batches)
     return nothing
 end
 "Normalise memberships in batches"
-@timeit to function batchmemberships(basedirectory::String, node::String, batchsize::Int64)
+function batchmemberships(basedirectory::String, node::String, batchsize::Int64)
     individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
     minId = minimum(individualmap[!,:IndividualId])
     maxId = maximum(individualmap[!,:IndividualId])
     idrange = (maxId - minId) + 1
     batches = ceil(Int32, idrange / batchsize)
     @info "Minimum id $(minId), maximum Id $(maxId), idrange $(idrange), batches $(batches)"
-    for i = 1:batches
+    Threads.@threads for i = 1:batches
         fromId = minId + batchsize * (i-1)
         toId = min(maxId, (minId + batchsize * i)-1)
         @info "Batch $(i) from $(fromId) to $(toId)"
@@ -922,18 +919,69 @@ end
     return nothing
 end
 node = "Agincourt"
-batchmemberships(settings.BaseDirectory, node, 25000)
+println("Starting $(node) at $(now())")
+@time batchmemberships(settings.BaseDirectory, node, 12500)
 flush(io)
 node = "DIMAMO"
-batchmemberships(settings.BaseDirectory, node, 25000)
+println("Starting $(node) at $(now())")
+@time batchmemberships(settings.BaseDirectory, node, 12500)
 flush(io)
 node = "AHRI"
-batchmemberships(settings.BaseDirectory, node, 25000)
+println("Starting $(node) at $(now())")
+@time batchmemberships(settings.BaseDirectory, node, 12500)
+flush(io)
+println("Completing $(node) at $(now())")
+#endregion
+#region EducationStatuses
+function educationstatus(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+    con = ODBC.Connection(db)
+    sql = """SELECT
+    UPPER(CONVERT(varchar(50),IndividualUid)) IndividualUid
+    , CONVERT(date, OE.EventDate) ObservationDate
+    , CurrentEducation
+    , HighestSchoolLevel
+    , HighestNonSchoolLevel
+    FROM dbo.IndividualObservations IO
+        JOIN dbo.Events OE ON IO.ObservationUid=OE.EventUid
+    """
+    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    DBInterface.close!(con)
+    @info "Read $(nrow(s)) $(node) education statuses from database"
+    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    si = innerjoin(s, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
+    individualbounds = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualBounds.arrow")) |> DataFrame
+    m = leftjoin(si, individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
+    insertcols!(m,:OutsideBounds => false)
+    for i=1:nrow(m)
+        if (!ismissing(m[i,:EarliestDate]) && m[i,:ObservationDate] < m[i,:EarliestDate]) || (m[i,:ObservationDate] < leftcensor)
+            m[i,:OutsideBounds]=true
+        end
+        if (!ismissing(m[i,:LatestDate]) && m[i,:ObservationDate] > m[i,:LatestDate]) || (m[i,:ObservationDate] > periodend)
+            m[i,:OutsideBounds]=true
+        end
+    end
+    #filter if outside bounds
+    filter!([:OutsideBounds] => x -> !x, m)
+    @info "Read $(nrow(m)) $(node) education statuses inside bounds"
+    filter!([:CurrentEducation, :HighestSchoolLevel, :HighestNonSchoolLevel] => (x,y,z) -> !(x<0 && y<0 && z<0), m)
+    @info "Read $(nrow(m)) $(node) education statuses not missing"
+    disallowmissing!(m,[:ObservationDate])
+    select!(m,[:IndividualId,:ObservationDate,:CurrentEducation, :HighestSchoolLevel, :HighestNonSchoolLevel])
+    sort!(m,[:IndividualId,:ObservationDate])
+    Arrow.write(joinpath(basedirectory, node, "Staging", "EducationStatuses.arrow"), m, compress=:zstd)
+    return nothing
+end
+#=
+node = "Agincourt"
+educationstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+flush(io)
+node = "DIMAMO"
+educationstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+flush(io)
+node = "AHRI"
+educationstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+=#
 #endregion
 #region clean up
-
-println(io)
-show(io,to)
-println(io)
 close(io)
 #endregion
