@@ -824,10 +824,12 @@ readhouseholdheadrelationships(settings.Databases[node], node, settings.BaseDire
 node = "AHRI"
 readhouseholdheadrelationships(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd),Date(settings.LeftCensorDates[node]))
 =#
-function getmembershipdays(basedirectory::String, node::String)
-    memberships = Arrow.Table(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow")) |> DataFrame
-    m = similar(memberships,0)
-    for row in eachrow(memberships)
+@timeit to function getmembershipdays(basedirectory::String, node::String, fromId::Int64, toId::Int64)
+    memberships =Arrow.Table(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow")) |> DataFrame
+    f = filter([:IndividualId] => id -> id >= fromId && id <= toId, memberships)
+    select!(f,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType])
+    m = similar(f,0)
+    for row in eachrow(f)
         tf = DataFrame(row)
         ttf=repeat(tf, Dates.value.(row.EndDate-row.StartDate) + 1)
         ttf.DayDate = ttf.StartDate .+ Dates.Day.(0:nrow(ttf)-1)
@@ -835,14 +837,16 @@ function getmembershipdays(basedirectory::String, node::String)
         ttf.End = ttf.DayDate .== ttf.EndDate
         append!(m, ttf, cols = :union)
     end
-    memberships = nothing
     unique!(m,[:IndividualId,:HouseholdId,:DayDate])
+    @info "Unique membership rows $(nrow(m))"
     return m
 end
-function getrelationshipdays(basedirectory::String, node::String)
+@timeit to function getrelationshipdays(basedirectory::String, node::String, fromId::Int64, toId::Int64)
     relationships = Arrow.Table(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow")) |> DataFrame
+    f =filter([:IndividualId] => id -> id >= fromId && id <= toId, relationships)
+    select!(f,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType, :HHRelationshipTypeId])
     r = similar(relationships,0)
-    for row in eachrow(relationships)
+    for row in eachrow(f)
         tf = DataFrame(row)
         ttf=repeat(tf, Dates.value.(row.EndDate-row.StartDate) + 1)
         ttf.DayDate = ttf.StartDate .+ Dates.Day.(0:nrow(ttf)-1)
@@ -850,18 +854,17 @@ function getrelationshipdays(basedirectory::String, node::String)
         ttf.End = ttf.DayDate .== ttf.EndDate
         append!(r, ttf, cols = :union)
     end
-    relationships = nothing
     unique!(r,[:IndividualId,:HouseholdId,:DayDate])
+    @info "Unique relationship rows $(nrow(r))"
     return r
 end
-"Construct individual household memberships with household head relationships"
-function individualmemberships(basedirectory::String, node::String)
-    mr = leftjoin(getmembershipdays(basedirectory,node), getrelationshipdays(basedirectory,node) , on = [:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
-    select!(mr,[:MembershipId, :IndividualId, :HouseholdId, :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :StartObservationDate, :EndObservationDate, :Episode])
+@timeit to function individualmemberships(basedirectory::String, node::String, fromId::Int64, toId::Int64, batch::Int64)
+    mr = leftjoin(getmembershipdays(basedirectory,node,fromId,toId), getrelationshipdays(basedirectory,node,fromId,toId) , on = [:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
+    select!(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :Episode])
     replace!(mr.HHRelationshipTypeId, missing => 12)
     disallowmissing!(mr,[:HHRelationshipTypeId, :DayDate])
     @info "$(nrow(mr)) $(node) day rows"
-    mr = combine(groupby(mr,[:IndividualId,:HouseholdId]), :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :StartObservationDate, :EndObservationDate, :Episode, 
+    mr = combine(groupby(mr,[:IndividualId,:HouseholdId]), :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :Episode, 
                              :HHRelationshipTypeId => Base.Fix2(lag,1) => :LastRelation, :HHRelationshipTypeId => Base.Fix2(lead,1) => :NextRelation)
     for i = 1:nrow(mr)
         if !ismissing(mr[i,:LastRelation])
@@ -876,20 +879,56 @@ function individualmemberships(basedirectory::String, node::String)
         end
     end
     memberships = combine(groupby(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :Episode]), :DayDate => minimum => :StartDate, :StartType => first => :StartType,
-                                                                                            :DayDate => maximum => :EndDate, :EndType => last => :EndType,
-                                                                                            :StartObservationDate => first =>:StartObservationDate, :EndObservationDate => first => :EndObservationDate)
-    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualMemberships.arrow"), memberships, compress=:zstd)
+                                                                                            :DayDate => maximum => :EndDate, :EndType => last => :EndType)
+    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualMemberships$(batch).arrow"), memberships, compress=:zstd)
     @info "Wrote $(nrow(memberships)) $(node) individual membership episodes"
     return nothing
 end
+function openchunk(basedirectory::String, node::String, chunk::Int64)
+    open(joinpath(basedirectory, node, "Staging", "IndividualMemberships$(chunk).arrow")) do io
+        return Arrow.Table(io) |> DataFrame
+    end;
+end
+"Concatenate membership batches"
+function combinemembershipbatch(basedirectory::String, node::String, batches)
+    memberships = openchunk(basedirectory::String, node::String, 1)
+    r = similar(memberships,0)
+    for i = 1:batches
+        m = openchunk(basedirectory::String, node::String, i)
+        append!(r, m)
+    end
+    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualMemberships.arrow"), r, compress=:zstd)
+    #delete chunks
+    for i = 1:batches
+        rm(joinpath(basedirectory, node, "Staging", "IndividualMemberships$(i).arrow"))
+    end
+    return nothing
+end
+"Normalise memberships in batches"
+@timeit to function batchmemberships(basedirectory::String, node::String, batchsize::Int64)
+    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    minId = minimum(individualmap[!,:IndividualId])
+    maxId = maximum(individualmap[!,:IndividualId])
+    idrange = (maxId - minId) + 1
+    batches = ceil(Int32, idrange / batchsize)
+    @info "Minimum id $(minId), maximum Id $(maxId), idrange $(idrange), batches $(batches)"
+    for i = 1:batches
+        fromId = minId + batchsize * (i-1)
+        toId = min(maxId, (minId + batchsize * i)-1)
+        @info "Batch $(i) from $(fromId) to $(toId)"
+        individualmemberships(basedirectory,node,fromId,toId,i)
+    end
+    combinemembershipbatch(basedirectory,node,batches)
+    return nothing
+end
 node = "Agincourt"
-individualmemberships(settings.BaseDirectory, node)
+batchmemberships(settings.BaseDirectory, node, 25000)
 flush(io)
 node = "DIMAMO"
-individualmemberships(settings.BaseDirectory, node)
+batchmemberships(settings.BaseDirectory, node, 25000)
 flush(io)
 node = "AHRI"
-individualmemberships(settings.BaseDirectory, node)
+batchmemberships(settings.BaseDirectory, node, 25000)
 #endregion
 #region clean up
 
