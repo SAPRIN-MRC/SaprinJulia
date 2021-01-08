@@ -12,6 +12,7 @@ using DataValues
 using TimerOutputs
 using ShiftedArrays
 using Statistics
+using XLSX
 
 #region Setup Logging
 l = open("log.log", "a+")
@@ -918,6 +919,7 @@ function batchmemberships(basedirectory::String, node::String, batchsize::Int64)
     combinemembershipbatch(basedirectory,node,batches)
     return nothing
 end
+#=
 node = "Agincourt"
 println("Starting $(node) at $(now())")
 @time batchmemberships(settings.BaseDirectory, node, 12500)
@@ -931,6 +933,7 @@ println("Starting $(node) at $(now())")
 @time batchmemberships(settings.BaseDirectory, node, 12500)
 flush(io)
 println("Completing $(node) at $(now())")
+=#
 #endregion
 #region EducationStatuses
 function educationstatus(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
@@ -981,6 +984,149 @@ flush(io)
 node = "AHRI"
 educationstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
 =#
+#endregion
+#region Household Socio-economic
+function convertanytoint(a)
+    return convert(Int64, a)
+end
+function convertanytostr(a)
+    return string(a)
+end
+function householdassets(db::String, node::String, basedirectory::String)
+    con = ODBC.Connection(db)
+    sql = """SELECT
+        UPPER(CONVERT(varchar(50),HA.HouseholdObservationUid)) HouseholdObservationUid,
+        HA.AssetId,
+        HA.AssetStatusId
+    FROM dbo.HouseholdAssets HA
+    WHERE HA.AssetStatusId>0;
+    """
+    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    DBInterface.close!(con)
+    @info "Read $(nrow(s)) $(node) asset statuses from database"
+    assetmap = DataFrame(XLSX.readtable("Assets.xlsx","Consolidated")...)
+    assetmap[!,:AssetId] = map(convertanytoint,assetmap[!,:AssetId])
+    assetmap[!,:Id] = map(convertanytoint,assetmap[!,:Id])
+    assetmap[!,:AssetName] = map(convertanytostr,assetmap[!,:AssetName])
+    assetmap[!,:Name] = map(convertanytostr,assetmap[!,:Name])
+    assetmap[!,:AssetIdx] = map(convertanytostr,assetmap[!,:AssetIdx])    
+    si = innerjoin(s, assetmap, on = :AssetId => :AssetId,  makeunique=true, matchmissing=:equal)
+    g = combine(groupby(si,[:HouseholdObservationUid,:Id]), :AssetStatusId => minimum => :AssetStatus, :AssetIdx => first => :AssetGroup)
+    @info "$(nrow(g)) $(node) grouped asset statuses"
+    filter!([:AssetStatus] => x -> x == 1, g)
+    @info "$(nrow(g)) $(node) present asset statuses"
+    gg = combine(groupby(g,[:HouseholdObservationUid,:AssetGroup]), :AssetStatus => sum => :Idx)
+    @info "$(nrow(gg)) $(node) asset groups"
+    filter!([:AssetGroup] => x -> x != "0",gg)
+    w = unstack(gg, :HouseholdObservationUid, :AssetGroup, :Idx)
+    replace!(w.Modern, missing => 0)
+    replace!(w.Livestock, missing => 0)
+    disallowmissing!(w,[:HouseholdObservationUid,:Modern,:Livestock])
+    a = freqtable(w,:Modern)
+    @info "Modern asset breakdown for $(node)" a
+    a = freqtable(w,:Livestock)
+    @info "Livestock asset breakdown for $(node)" a
+    Arrow.write(joinpath(basedirectory, node, "Staging", "AssetStatus.arrow"), w, compress=:zstd)
+    return nothing
+end
+#=
+@info "Starting Household socio-economic $(now())"
+node = "Agincourt"
+householdassets(settings.Databases[node], node, settings.BaseDirectory)
+flush(io)
+node = "DIMAMO"
+householdassets(settings.Databases[node], node, settings.BaseDirectory)
+flush(io)
+node = "AHRI"
+householdassets(settings.Databases[node], node, settings.BaseDirectory)
+@info "Starting Household socio-economic $(now())"
+=#
+function householdsocioeconomic(db::String, node::String, basedirectory::String)
+    con = ODBC.Connection(db)
+    sql = """SELECT
+        UPPER(CONVERT(varchar(50),HouseholdObservationUid)) HouseholdObservationUid,
+        UPPER(CONVERT(varchar(50),HouseholdUid)) HouseholdUid,
+        CONVERT(date,E.EventDate) ObservationDate,
+        WaterSource,
+        Toilet,
+        ConnectedToGrid,
+        CookingFuel,
+        WallMaterial,
+        FloorMaterial,
+        Bedrooms,
+        Crime,
+        FinancialStatus,
+        CutMeals,
+        CutMealsFrequency,
+        NotEat,
+        NotEatFrequency,
+        ChildMealSkipCut,
+        ChildMealSkipCutFrequency,
+        ConsentToCall
+    FROM dbo.HouseholdObservations HO
+        JOIN dbo.Events E ON HO.ObservationUid = E.EventUid;
+    """
+    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    DBInterface.close!(con)
+    @info "Read $(nrow(s)) $(node) HSE observations from database"
+    householdmap = Arrow.Table(joinpath(basedirectory,node,"Staging","HouseholdMap.arrow")) |> DataFrame
+    si = innerjoin(s, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
+    @info "Read $(nrow(si)) $(node) HSE observations after household map"
+    householdassets = Arrow.Table(joinpath(basedirectory,node,"Staging","AssetStatus.arrow")) |> DataFrame
+    s = leftjoin(si,householdassets,on = :HouseholdObservationUid => :HouseholdObservationUid, makeunique=true, matchmissing=:equal)
+    select!(s,Not([:HouseholdObservationUid,:HouseholdUid]))
+    a = freqtable(s,:WaterSource)
+    @info "Watersource breakdown for $(node)" a
+    recode!(s[!,:WaterSource], missing =>0, 1 =>4, 2 => 3, 3 => 2, 4 => 1, 5 => 1, 6 => 1, 7 => 1, 8 => 1, 9 => 0, 10 => 2, 11 => 1)
+    a = freqtable(s,:WaterSource)
+    @info "Watersource breakdown for $(node) after recode" a
+    a = freqtable(s,:Toilet)
+    @info "Toilet breakdown for $(node)" a
+    recode!(s[!,:Toilet], missing => 0, 0 => 0, 1 => 3, [2,5] => 2, [3, 4] => 1)
+    a = freqtable(s,:Toilet)
+    @info "Toilet breakdown for $(node) after recode" a
+    a = freqtable(s,:CookingFuel)
+    @info "CookingFuel breakdown for $(node)" a
+    recode!(s[!,:CookingFuel], missing => 0, 0 => 0, 1 => 1, 2 => 4, 3 => 2, 4 => 5, [5,6] => 3)
+    a = freqtable(s,:CookingFuel)
+    @info "CookingFuel breakdown for $(node) after recode" a
+    a = freqtable(s,:WallMaterial)
+    @info "WallMaterial breakdown for $(node)"
+    recode!(s[!,:WallMaterial], missing => 0, 0 => 0, [1, 2] => 4, 3 => 3, 4 => 2, [5, 6, 7] => 1)
+    a = freqtable(s,:WallMaterial)
+    @info "WallMaterial breakdown for $(node) after recode" a
+    a = freqtable(s,:FloorMaterial)
+    @info "FloorMaterial breakdown for $(node)" a
+    recode!(s[!,:FloorMaterial], missing => 0, 0 => 0, [1, 2, 8, 9] => 3, [3, 6, 10] => 2, [11, 12, 13] => 1)
+    a = freqtable(s,:FloorMaterial)
+    @info "FloorMaterial breakdown for $(node) after recode"
+    a = freqtable(s,:Bedrooms)
+    @info "Bedrooms breakdown for $(node)" a
+    recode!(s[!,:Bedrooms], missing => 0, 0 => 0, [1, 2] => 1, [3, 4] => 2, [5, 6] => 3, 7:90 => 4, 91:99 => 0, 100:9999 => 4)
+    @info "Bedrooms breakdown for $(node) after recode"
+    a = freqtable(s,:ConnectedToGrid)
+    @info "ConnectedToGrid breakdown for $(node)" a
+    replace!(s.ConnectedToGrid, missing => 0, true => 1, false => 0)
+    a = freqtable(s,:ConnectedToGrid)
+    @info "ConnectedToGrid for $(node) after recode"
+    transform!(s,[:Bedrooms,:WallMaterial,:FloorMaterial] => ByRow((b,w,f) -> (b/4 + w/4 + f/3)/3) => :DwellingIdx, 
+                 [:WaterSource,:Toilet] => ByRow((w,t) -> (w/4 + t/3)/2) => :WaterSanitationIdx, 
+                 [:ConnectedToGrid, :CookingFuel] => ByRow((x,y) -> ((x + y/5)/2)) => :PowerSupplyIdx,
+                 [:Livestock] => ByRow(x -> x/2) => :LivestockIdx,
+                 [:Modern] => ByRow(x -> x/9) => :ModernAssetIdx)
+    transform!(s,[:DwellingIdx,:WaterSanitationIdx,:PowerSupplyIdx,:LivestockIdx, :ModernAssetIdx] => ByRow((a,b,c,d,e) -> (a + b + c + d + e)) => :SEIdx)
+    select!(s, [:HouseholdId,:ObservationDate,:SEIdx,:DwellingIdx,:WaterSanitationIdx,:PowerSupplyIdx,:LivestockIdx, :ModernAssetIdx, 
+                :Crime, :FinancialStatus, :CutMeals, :CutMealsFrequency, :NotEat, :NotEatFrequency, :ChildMealSkipCut, :ChildMealSkipCutFrequency, :ConsentToCall])
+    sort!(s, [:HouseholdId,:ObservationDate])
+    Arrow.write(joinpath(basedirectory, node, "Staging", "SocioEconomic.arrow"), s, compress=:zstd)
+    return nothing
+end
+node = "Agincourt"
+df = householdsocioeconomic(settings.Databases[node], node, settings.BaseDirectory)
+node = "DIMAMO"
+df = householdsocioeconomic(settings.Databases[node], node, settings.BaseDirectory)
+node = "AHRI"
+df = householdsocioeconomic(settings.Databases[node], node, settings.BaseDirectory)
 #endregion
 #region clean up
 close(io)
