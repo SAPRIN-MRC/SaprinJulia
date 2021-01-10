@@ -559,3 +559,387 @@ true             │ 150371
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1108
 ┌ Info: ConnectedToGrid for AHRI after recode
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1111
+┌ Info: Execution started 2021-01-09 13:06
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:22
+┌ Info: Processing node AHRI
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:44
+┌ Info: Reading locations start = 2021-01-09T13:06:26.522
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:214
+┌ Info: Completed reading locations
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:221
+┌ Info: Read 2125540 Agincourt marital statuses from database
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1145
+┌ Info: 2125540 Agincourt marital statuses after individual map
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1148
+┌ Info: 2001755 Agincourt marital statuses inside bounds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1163
+┌ Info: Marital Status breakdown for Agincourt
+│   a = 4-element Named Array{Int64,1}
+MaritalStatus  │ 
+───────────────┼────────
+1              │ 1754173
+2              │  182276
+4              │   30731
+5              │   34575
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1165
+┌ Info: Read 271726 DIMAMO marital statuses from database
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1145
+┌ Info: 271726 DIMAMO marital statuses after individual map
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1148
+┌ Info: 169592 DIMAMO marital statuses inside bounds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1163
+┌ Info: Marital Status breakdown for DIMAMO
+│   a = 5-element Named Array{Int64,1}
+MaritalStatus  │ 
+───────────────┼───────
+1              │ 111460
+2              │  38568
+3              │     53
+4              │   4068
+5              │  15443
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1165
+┌ Info: Read 3018022 AHRI marital statuses from database
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1145
+┌ Info: 3018022 AHRI marital statuses after individual map
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1148
+┌ Info: 2698947 AHRI marital statuses inside bounds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1163
+┌ Info: Marital Status breakdown for AHRI
+│   a = 5-element Named Array{Int64,1}
+MaritalStatus  │ 
+───────────────┼────────
+1              │ 2112148
+2              │  345248
+3              │   42261
+4              │   27706
+5              │  171584
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1165
+┌ Info: Execution started 2021-01-09 14:12
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:22
+┌ Info: Processing node AHRI
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:44
+┌ Info: Reading locations start = 2021-01-09T14:12:42.355
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:214
+┌ Info: Completed reading locations
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:221
+┌ Info: Read 481899 Agincourt labour statuses from database
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1201
+┌ Info: 481899 Agincourt labour statuses after individual map
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1204
+┌ Info: Read 387913 Agincourt labour statuses inside bounds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1221
+┌ Info: CurrentEmployment breakdown for Agincourt
+│   a = 10-element Named Array{Int64,1}
+CurrentEmployment  │ 
+───────────────────┼───────
+0                  │     76
+1                  │ 161104
+3                  │   8867
+4                  │  23873
+5                  │   3180
+11                 │  21095
+12                 │  64819
+13                 │ 101319
+14                 │   3259
+202                │    321
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1223
+┌ Info: EmploymentSector breakdown for Agincourt
+│   a = 10-element Named Array{Int64,1}
+EmploymentSector  │ 
+──────────────────┼───────
+100               │ 288973
+101               │   6610
+102               │   5957
+103               │   4460
+105               │   4389
+106               │  10770
+107               │   9257
+301               │  11801
+305               │  43535
+306               │   2161
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1225
+┌ Info: EmploymentType breakdown for Agincourt
+│   a = 4-element Named Array{Int64,1}
+EmploymentType  │ 
+────────────────┼───────
+200             │ 367409
+201             │  15423
+202             │    665
+203             │   4416
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1227
+┌ Info: Employer breakdown for Agincourt
+│   a = 5-element Named Array{Int64,1}
+Employer  │ 
+──────────┼───────
+201       │ 108997
+300       │ 264296
+305       │    483
+307       │  13461
+308       │    676
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1229
+┌ Info: Read 65900 DIMAMO labour statuses from database
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1201
+┌ Info: 65900 DIMAMO labour statuses after individual map
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1204
+┌ Info: Read 398 DIMAMO labour statuses inside bounds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1221
+┌ Info: CurrentEmployment breakdown for DIMAMO
+│   a = 3-element Named Array{Int64,1}
+CurrentEmployment  │ 
+───────────────────┼────
+1                  │ 102
+2                  │  23
+4                  │ 273
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1223
+┌ Info: EmploymentSector breakdown for DIMAMO
+│   a = 1-element Named Array{Int64,1}
+EmploymentSector  │ 
+──────────────────┼────
+100               │ 398
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1225
+┌ Info: EmploymentType breakdown for DIMAMO
+│   a = 3-element Named Array{Int64,1}
+EmploymentType  │ 
+────────────────┼────
+0               │ 271
+201             │ 119
+202             │   8
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1227
+┌ Info: Employer breakdown for DIMAMO
+│   a = 8-element Named Array{Int64,1}
+Employer  │ 
+──────────┼────
+0         │ 279
+301       │  10
+302       │   4
+303       │   1
+304       │  30
+305       │  64
+306       │   5
+308       │   5
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1229
+┌ Info: Read 759767 AHRI labour statuses from database
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1201
+┌ Info: 759767 AHRI labour statuses after individual map
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1204
+┌ Info: Read 615383 AHRI labour statuses inside bounds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1221
+┌ Info: CurrentEmployment breakdown for AHRI
+│   a = 5-element Named Array{Int64,1}
+CurrentEmployment  │ 
+───────────────────┼───────
+0                  │     17
+1                  │ 210866
+2                  │  35285
+12                 │ 302924
+13                 │  66291
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1223
+┌ Info: EmploymentSector breakdown for AHRI
+│   a = 17-element Named Array{Int64,1}
+EmploymentSector  │ 
+──────────────────┼───────
+100               │ 586268
+101               │   3223
+102               │    705
+103               │   3358
+104               │    522
+105               │   2799
+106               │   4110
+107               │   1196
+108               │   1887
+109               │    268
+110               │   1942
+111               │    798
+112               │    904
+113               │    196
+114               │   5499
+115               │    626
+116               │   1082
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1225
+┌ Info: EmploymentType breakdown for AHRI
+│   a = 1-element Named Array{Int64,1}
+EmploymentType  │ 
+────────────────┼───────
+200             │ 615383
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1227
+┌ Info: Employer breakdown for AHRI
+│   a = 9-element Named Array{Int64,1}
+Employer  │ 
+──────────┼───────
+300       │ 584470
+301       │   1029
+302       │   2703
+303       │    478
+304       │   2166
+305       │  16990
+306       │    827
+307       │   3135
+308       │   3585
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1229
+┌ Info: Execution started 2021-01-09 14:15
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:22
+┌ Info: Processing node AHRI
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:44
+┌ Info: Reading locations start = 2021-01-09T14:15:35.805
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:214
+┌ Info: Completed reading locations
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:221
+┌ Info: Read 2125658 Agincourt labour statuses from database
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1201
+┌ Info: 2125658 Agincourt labour statuses after individual map
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1204
+┌ Info: Read 2001873 Agincourt labour statuses inside bounds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1221
+┌ Info: CurrentEmployment breakdown for Agincourt
+│   a = 10-element Named Array{Int64,1}
+CurrentEmployment  │ 
+───────────────────┼────────
+0                  │ 1614036
+1                  │  161104
+3                  │    8867
+4                  │   23873
+5                  │    3180
+11                 │   21095
+12                 │   64819
+13                 │  101319
+14                 │    3259
+202                │     321
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1223
+┌ Info: EmploymentSector breakdown for Agincourt
+│   a = 10-element Named Array{Int64,1}
+EmploymentSector  │ 
+──────────────────┼────────
+100               │ 1902933
+101               │    6610
+102               │    5957
+103               │    4460
+105               │    4389
+106               │   10770
+107               │    9257
+301               │   11801
+305               │   43535
+306               │    2161
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1225
+┌ Info: EmploymentType breakdown for Agincourt
+│   a = 4-element Named Array{Int64,1}
+EmploymentType  │ 
+────────────────┼────────
+200             │ 1981369
+201             │   15423
+202             │     665
+203             │    4416
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1227
+┌ Info: Employer breakdown for Agincourt
+│   a = 5-element Named Array{Int64,1}
+Employer  │ 
+──────────┼────────
+201       │  108997
+300       │ 1878256
+305       │     483
+307       │   13461
+308       │     676
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1229
+┌ Info: Read 695105 DIMAMO labour statuses from database
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1201
+┌ Info: 695105 DIMAMO labour statuses after individual map
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1204
+┌ Info: Read 563061 DIMAMO labour statuses inside bounds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1221
+┌ Info: CurrentEmployment breakdown for DIMAMO
+│   a = 4-element Named Array{Int64,1}
+CurrentEmployment  │ 
+───────────────────┼───────
+0                  │ 562663
+1                  │    102
+2                  │     23
+4                  │    273
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1223
+┌ Info: EmploymentSector breakdown for DIMAMO
+│   a = 2-element Named Array{Int64,1}
+EmploymentSector  │ 
+──────────────────┼───────
+0                 │ 531703
+100               │  31358
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1225
+┌ Info: EmploymentType breakdown for DIMAMO
+│   a = 3-element Named Array{Int64,1}
+EmploymentType  │ 
+────────────────┼───────
+0               │ 562934
+201             │    119
+202             │      8
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1227
+┌ Info: Employer breakdown for DIMAMO
+│   a = 8-element Named Array{Int64,1}
+Employer  │ 
+──────────┼───────
+0         │ 562942
+301       │     10
+302       │      4
+303       │      1
+304       │     30
+305       │     64
+306       │      5
+308       │      5
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1229
+┌ Info: Read 5909057 AHRI labour statuses from database
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1201
+┌ Info: 5909057 AHRI labour statuses after individual map
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1204
+┌ Info: Read 5206668 AHRI labour statuses inside bounds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1221
+┌ Info: CurrentEmployment breakdown for AHRI
+│   a = 5-element Named Array{Int64,1}
+CurrentEmployment  │ 
+───────────────────┼────────
+0                  │ 4591302
+1                  │  210866
+2                  │   35285
+12                 │  302924
+13                 │   66291
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1223
+┌ Info: EmploymentSector breakdown for AHRI
+│   a = 18-element Named Array{Int64,1}
+EmploymentSector  │ 
+──────────────────┼────────
+0                 │  933766
+100               │ 4243787
+101               │    3223
+102               │     705
+103               │    3358
+104               │     522
+105               │    2799
+106               │    4110
+107               │    1196
+108               │    1887
+109               │     268
+110               │    1942
+111               │     798
+112               │     904
+113               │     196
+114               │    5499
+115               │     626
+116               │    1082
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1225
+┌ Info: EmploymentType breakdown for AHRI
+│   a = 2-element Named Array{Int64,1}
+EmploymentType  │ 
+────────────────┼────────
+0               │  933766
+200             │ 4272902
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1227
+┌ Info: Employer breakdown for AHRI
+│   a = 10-element Named Array{Int64,1}
+Employer  │ 
+──────────┼────────
+0         │  933766
+300       │ 4241989
+301       │    1029
+302       │    2703
+303       │     478
+304       │    2166
+305       │   16990
+306       │     827
+307       │    3135
+308       │    3585
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:1229

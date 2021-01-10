@@ -1121,12 +1121,125 @@ function householdsocioeconomic(db::String, node::String, basedirectory::String)
     Arrow.write(joinpath(basedirectory, node, "Staging", "SocioEconomic.arrow"), s, compress=:zstd)
     return nothing
 end
+#=
 node = "Agincourt"
 df = householdsocioeconomic(settings.Databases[node], node, settings.BaseDirectory)
 node = "DIMAMO"
 df = householdsocioeconomic(settings.Databases[node], node, settings.BaseDirectory)
 node = "AHRI"
 df = householdsocioeconomic(settings.Databases[node], node, settings.BaseDirectory)
+=#
+function maritalstatus(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+    con = ODBC.Connection(db)
+    sql = """SELECT
+      UPPER(CONVERT(varchar(50),IndividualUid)) IndividualUid
+    , CONVERT(date, EO.EventDate) ObservationDate
+    , MaritalStatus
+    FROM dbo.IndividualObservations IO
+        JOIN dbo.Events EO ON IO.ObservationUid=EO.EventUid
+    WHERE NOT MaritalStatus IS NULL
+      AND MaritalStatus > 0
+    """
+    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    DBInterface.close!(con)
+    @info "Read $(nrow(s)) $(node) marital statuses from database"
+    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    si = innerjoin(s, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
+    @info "$(nrow(si)) $(node) marital statuses after individual map"
+    select!(si,[:IndividualId, :ObservationDate, :MaritalStatus])
+    individualbounds = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualBounds.arrow")) |> DataFrame
+    m = leftjoin(si, individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
+    insertcols!(m,:OutsideBounds => false)
+    for i=1:nrow(m)
+        if (!ismissing(m[i,:EarliestDate]) && m[i,:ObservationDate] < m[i,:EarliestDate]) || (m[i,:ObservationDate] < leftcensor)
+            m[i,:OutsideBounds]=true
+        end
+        if (!ismissing(m[i,:LatestDate]) && m[i,:ObservationDate] > m[i,:LatestDate]) || (m[i,:ObservationDate] > periodend)
+            m[i,:OutsideBounds]=true
+        end
+    end
+    #filter if outside bounds
+    filter!([:OutsideBounds] => x -> !x, m)
+    @info "$(nrow(m)) $(node) marital statuses inside bounds"
+    a = freqtable(m,:MaritalStatus)
+    @info "Marital Status breakdown for $(node)" a
+    select!(m,[:IndividualId, :ObservationDate, :MaritalStatus])
+    disallowmissing!(m,:ObservationDate)
+    sort!(m, [:IndividualId, :ObservationDate])
+    Arrow.write(joinpath(basedirectory, node, "Staging", "MaritalStatus.arrow"), m, compress=:zstd)
+    return nothing
+end
+#=
+node = "Agincourt"
+maritalstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+flush(io)
+node = "DIMAMO"
+maritalstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+flush(io)
+node = "AHRI"
+maritalstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+flush(io)
+=#
+function labourstatus(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+    con = ODBC.Connection(db)
+    sql = """SELECT
+      UPPER(CONVERT(varchar(50),IndividualUid)) IndividualUid
+    , CONVERT(date, EO.EventDate) ObservationDate
+    , CurrentEmployment
+    , EmploymentSector
+    , EmploymentType
+    , Employer
+    FROM dbo.IndividualObservations IO
+        JOIN dbo.Events EO ON IO.ObservationUid=EO.EventUid  
+    --WHERE NOT (CurrentEmployment IN (0,100)
+    --AND EmploymentSector IN (0,100)
+    --AND EmploymentType   IN (0,200)
+    --AND Employer IN (0,300));
+    """
+    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    DBInterface.close!(con)
+    @info "Read $(nrow(s)) $(node) labour statuses from database"
+    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    si = innerjoin(s, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
+    @info "$(nrow(si)) $(node) labour statuses after individual map"
+    select!(si,[:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer])
+    individualbounds = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualBounds.arrow")) |> DataFrame
+    m = leftjoin(si, individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
+    insertcols!(m,:OutsideBounds => false)
+    for i=1:nrow(m)
+        if (!ismissing(m[i,:EarliestDate]) && m[i,:ObservationDate] < m[i,:EarliestDate]) || (m[i,:ObservationDate] < leftcensor)
+            m[i,:OutsideBounds]=true
+        end
+        if (!ismissing(m[i,:LatestDate]) && m[i,:ObservationDate] > m[i,:LatestDate]) || (m[i,:ObservationDate] > periodend)
+            m[i,:OutsideBounds]=true
+        end
+    end
+    #filter if outside bounds
+    filter!([:OutsideBounds] => x -> !x, m)
+    select!(m,[:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer])
+    disallowmissing!(m,:ObservationDate)
+    @info "Read $(nrow(m)) $(node) labour statuses inside bounds"
+    a = freqtable(m,:CurrentEmployment)
+    @info "CurrentEmployment breakdown for $(node)" a
+    a = freqtable(m,:EmploymentSector)
+    @info "EmploymentSector breakdown for $(node)" a
+    a = freqtable(m,:EmploymentType)
+    @info "EmploymentType breakdown for $(node)" a
+    a = freqtable(m,:Employer)
+    @info "Employer breakdown for $(node)" a
+    sort!(m, [:IndividualId, :ObservationDate])
+    Arrow.write(joinpath(basedirectory, node, "Staging", "LabourStatus.arrow"), m, compress=:zstd)
+    return nothing
+end
+node = "Agincourt"
+labourstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+flush(io)
+node = "DIMAMO"
+labourstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+flush(io)
+node = "AHRI"
+labourstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+flush(io)
 #endregion
 #region clean up
 close(io)
