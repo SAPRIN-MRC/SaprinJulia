@@ -8,52 +8,86 @@ using XLSX
 using CategoricalArrays
 
 
-function labourstatus(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function readindividuals(db::String, node::String, basedirectory::String)
     con = ODBC.Connection(db)
     sql = """SELECT
-      UPPER(CONVERT(varchar(50),IndividualUid)) IndividualUid
-    , CONVERT(date, EO.EventDate) ObservationDate
-    , CurrentEmployment
-    , EmploymentSector
-    , EmploymentType
-    , Employer
-    FROM dbo.IndividualObservations IO
-        JOIN dbo.Events EO ON IO.ObservationUid=EO.EventUid  
-    WHERE NOT (CurrentEmployment IN (0,100)
-    AND EmploymentSector IN (0,100)
-    AND EmploymentType   IN (0,200)
-    AND Employer IN (0,300));
-    """
-    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+        UPPER(CONVERT(nvarchar(50),I.IndividualUid)) IndividualUid,
+        I.Sex,
+        CONVERT(date,SE.EventDate) DoB,
+        CASE
+        WHEN EE.EventTypeId=7 THEN CONVERT(date,EE.EventDate)
+        ELSE NULL
+        END DoD,
+        UPPER(CONVERT(nvarchar(50),I.MotherUid)) MotherUid,
+        UPPER(CONVERT(nvarchar(50),I.FatherUid)) FatherUid,
+        I.MotherDoD,
+        I.FatherDoD
+    FROM dbo.Individuals I
+        JOIN dbo.Events SE ON I.BirthEventUid=SE.EventUid
+        JOIN dbo.Events EE ON I.EndEventUid=EE.EventUid
+    """    
+    individuals = DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    @info "Read $(nrow(individuals)) $(node) individuals"
+    sex = freqtable(individuals, :Sex)
+    @info "Sex breakdown $(node)" sex
+    sort!(individuals, :IndividualUid)
+    sql = """SELECT
+        UPPER(CONVERT(nvarchar(50),WomanUid)) WomanUid
+        , UPPER(CONVERT(nvarchar(50),I.IndividualUid)) ChildUid
+        FROM dbo.Pregnancies P
+            JOIN dbo.Individuals I ON P.OutcomeEventUid=I.BirthEventUid
+    """  
+    pregnancies = DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
-    println("Read $(nrow(s)) $(node) labour statuses from database")
-    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
-    si = innerjoin(s, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
-    println("$(nrow(si)) $(node) labour statuses after individual map")
-    select!(si,[:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer])
-    individualbounds = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualBounds.arrow")) |> DataFrame
-    m = leftjoin(si, individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
-    insertcols!(m,:OutsideBounds => false)
-    for i=1:nrow(m)
-        if (!ismissing(m[i,:EarliestDate]) && m[i,:ObservationDate] < m[i,:EarliestDate]) || (m[i,:ObservationDate] < leftcensor)
-            m[i,:OutsideBounds]=true
-        end
-        if (!ismissing(m[i,:LatestDate]) && m[i,:ObservationDate] > m[i,:LatestDate]) || (m[i,:ObservationDate] > periodend)
-            m[i,:OutsideBounds]=true
+    @info "Read $(nrow(pregnancies)) $(node) pregnancies"
+    pregnancies = unique!(pregnancies, :ChildUid)
+    @info "Read $(nrow(pregnancies)) $(node) unique children"
+    # Add MotherUid from pregnancies
+    individuals = leftjoin(individuals, pregnancies, on=:IndividualUid => :ChildUid, makeunique=true, matchmissing=:equal)
+    for i = 1:nrow(individuals)
+        if ismissing(individuals[i,:MotherUid]) && !ismissing(individuals[i,:WomanUid])
+            individuals[i,:MotherUid] = individuals[i,:WomanUid]
         end
     end
-    #filter if outside bounds
-    filter!([:OutsideBounds] => x -> !x, m)
-    @info "Read $(nrow(m)) $(node) labour statuses inside bounds"
-    a = freqtable(m,:CurrentEmployment)
-    println("CurrentEmployment breakdown for $(node)")
-    show(a)
-    println()
-    select!(m,[:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer])
-    disallowmissing!(m,:ObservationDate)
-    sort!(m, [:IndividualId, :ObservationDate])
-    Arrow.write(joinpath(basedirectory, node, "Staging", "LabourStatus.arrow"), m, compress=:zstd)
-    return nothing
-end
+    individuals.IndividualId = 1:nrow(individuals)
+    # Convert gui ids to integer ids
+    map = individuals[!,[:IndividualUid,:IndividualId]]
+    # Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualMap.arrow"), map, compress=:zstd)
+    # Convert mother and father uids to corresponding integer ids
+    individuals = leftjoin(individuals, map, on=:MotherUid => :IndividualUid, makeunique=true, matchmissing=:equal)
+    individuals = leftjoin(individuals, map, on=:FatherUid => :IndividualUid, makeunique=true, matchmissing=:equal)
+    # Select and rename final columns
+    select!(individuals, [:IndividualId,:Sex,:DoB,:DoD,:IndividualId_1,:IndividualId_2,:MotherDoD,:FatherDoD])
+    rename!(individuals, :IndividualId_1 => :MotherId, :IndividualId_2 => :FatherId)
+    # Fix parent DoDs
+    # Mother DoD
+    mothers = select(individuals,[:MotherId])
+    dropmissing!(mothers)
+    unique!(mothers)
+    mothers = innerjoin(mothers,individuals, on = :MotherId => :IndividualId, makeunique=true, matchmissing=:equal)
+    select!(mothers,[:MotherId, :DoD])
+    rename!(mothers,:DoD => :MotherDoD)
+    # Father DoD
+    fathers = select(individuals,[:FatherId])
+    dropmissing!(fathers)
+    unique!(fathers)
+    fathers = innerjoin(fathers,individuals, on = :FatherId => :IndividualId, makeunique=true, matchmissing=:equal)
+    select!(fathers,[:FatherId, :DoD])
+    rename!(fathers,:DoD => :FatherDoD)
+    individuals = leftjoin(individuals, mothers, on=:MotherId => :MotherId, makeunique=true, matchmissing=:equal)
+    individuals = leftjoin(individuals, fathers, on=:FatherId => :FatherId, makeunique=true, matchmissing=:equal)
+    for i = 1:nrow(individuals)
+        if !ismissing(individuals[i,:MotherDoD_1])
+            individuals[i,:MotherDoD] = individuals[i,:MotherDoD_1]
+        end
+        if !ismissing(individuals[i,:FatherDoD_1])
+            individuals[i,:FatherDoD] = individuals[i,:FatherDoD_1]
+        end
+    end
+    select!(individuals,[:IndividualId, :Sex, :DoB, :DoD, :MotherId, :MotherDoD, :FatherId, :FatherDoD])
+    disallowmissing!(individuals, [:IndividualId, :Sex, :DoB])
+    #Arrow.write(joinpath(basedirectory, node, "Staging", "Individuals.arrow"), individuals, compress=:zstd)
+    return individuals
+end # readindividuals
 node = "AHRI"
-df = labourstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+readindividuals(settings.Databases[node],node,settings.BaseDirectory)

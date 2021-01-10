@@ -7,7 +7,6 @@ using JSON
 using Logging
 using FreqTables
 using Arrow
-using Query
 using DataValues
 using TimerOutputs
 using ShiftedArrays
@@ -104,8 +103,11 @@ function readindividuals(db::String, node::String, basedirectory::String)
     @info "Read $(nrow(pregnancies)) $(node) unique children"
     # Add MotherUid from pregnancies
     individuals = leftjoin(individuals, pregnancies, on=:IndividualUid => :ChildUid, makeunique=true, matchmissing=:equal)
-    individuals = individuals |> @mutate(MotherUid = isna(_.MotherUid) ? _.WomanUid : _.MotherUid) |> @select(-:WomanUid) |> DataFrame
-    # ids::Array{Int32} = collect(1:nrow(individuals)) #does not result in smaller file size
+    for i = 1:nrow(individuals)
+        if ismissing(individuals[i,:MotherUid]) && !ismissing(individuals[i,:WomanUid])
+            individuals[i,:MotherUid] = individuals[i,:WomanUid]
+        end
+    end
     individuals.IndividualId = 1:nrow(individuals)
     # Convert gui ids to integer ids
     map = individuals[!,[:IndividualUid,:IndividualId]]
@@ -117,14 +119,34 @@ function readindividuals(db::String, node::String, basedirectory::String)
     select!(individuals, [:IndividualId,:Sex,:DoB,:DoD,:IndividualId_1,:IndividualId_2,:MotherDoD,:FatherDoD])
     rename!(individuals, :IndividualId_1 => :MotherId, :IndividualId_2 => :FatherId)
     # Fix parent DoDs
-    mothers = individuals |> @select(:MotherId) |> @filter(!isna(_.MotherId)) |> @unique() |> DataFrame
-    fathers = individuals |> @select(:FatherId) |> @filter(!isna(_.FatherId)) |> @unique() |> DataFrame
-    mothers = mothers |> @join(individuals,get(_.MotherId),_.IndividualId,{_.MotherId,__.DoD}) |> @rename(:DoD => :MotherDoD) |> DataFrame
-    fathers = fathers |> @join(individuals,get(_.FatherId),_.IndividualId,{_.FatherId,__.DoD}) |> @rename(:DoD => :FatherDoD) |> DataFrame
+    # Mother DoD
+    mothers = select(individuals,[:MotherId])
+    dropmissing!(mothers)
+    unique!(mothers)
+    mothers = innerjoin(mothers,individuals, on = :MotherId => :IndividualId, makeunique=true, matchmissing=:equal)
+    select!(mothers,[:MotherId, :DoD])
+    rename!(mothers,:DoD => :MotherDoD)
+    # Father DoD
+    fathers = select(individuals,[:FatherId])
+    dropmissing!(fathers)
+    unique!(fathers)
+    fathers = innerjoin(fathers,individuals, on = :FatherId => :IndividualId, makeunique=true, matchmissing=:equal)
+    select!(fathers,[:FatherId, :DoD])
+    rename!(fathers,:DoD => :FatherDoD)
     individuals = leftjoin(individuals, mothers, on=:MotherId => :MotherId, makeunique=true, matchmissing=:equal)
     individuals = leftjoin(individuals, fathers, on=:FatherId => :FatherId, makeunique=true, matchmissing=:equal)
-    individuals = individuals |> @mutate(MotherDoD = isna(_.MotherDoD_1) ? _.MotherDoD : _.MotherDoD_1, FatherDoD = isna(_.FatherDoD_1) ? _.FatherDoD : _.FatherDoD_1) |> @select(-:MotherDoD_1,-:FatherDoD_1) |> DataFrame
+    for i = 1:nrow(individuals)
+        if !ismissing(individuals[i,:MotherDoD_1])
+            individuals[i,:MotherDoD] = individuals[i,:MotherDoD_1]
+        end
+        if !ismissing(individuals[i,:FatherDoD_1])
+            individuals[i,:FatherDoD] = individuals[i,:FatherDoD_1]
+        end
+    end
+    select!(individuals,[:IndividualId, :Sex, :DoB, :DoD, :MotherId, :MotherDoD, :FatherId, :FatherDoD])
+    disallowmissing!(individuals, [:IndividualId, :Sex, :DoB])
     Arrow.write(joinpath(basedirectory, node, "Staging", "Individuals.arrow"), individuals, compress=:zstd)
+    @info "Wrote $(nrow(individuals)) $(node) individuals"
     return nothing
 end # readindividuals
 function readindividuals(s::Settings)
