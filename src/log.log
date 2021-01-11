@@ -916,71 +916,1390 @@ EndType  │
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:814
 ┌ Info: ========== Finished readhouseholdmemberships at 2021-01-11 08:44:47
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:54
-┌ Info: Execution started 2021-01-11 09:57
+┌ Info: Execution started 2021-01-11 12:29
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
 ┌ Info: Node Agincourt Batch size 10000 Minimum id 1, maximum Id 218775, idrange 218775, batches 22
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:913
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:911
+┌ Info: Batch 5 from 40001 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 9 from 80001 to 90000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 17 from 160001 to 170000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
 ┌ Info: Batch 1 from 1 to 10000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:917
-┌ Info: Batch 4 from 30001 to 40000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:917
-┌ Info: Batch 16 from 150001 to 160000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:917
-┌ Info: Batch 21 from 200001 to 210000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:917
-┌ Info: Batch 19 from 180001 to 190000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:917
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 20 from 190001 to 200000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
 ┌ Info: Batch 13 from 120001 to 130000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:917
-┌ Info: Batch 10 from 90001 to 100000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:917
-┌ Info: Batch 7 from 60001 to 70000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:917
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 36458868 from 1 to 10000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 36373777 from 160001 to 170000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 37500795 from 190001 to 200000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 37177829 from 40001 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 36911397 from 80001 to 90000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
 ┌ Info: Unique membership days 36707808 from 120001 to 130000
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
-┌ Info: Unique membership days 35862880 from 60001 to 70000
+┌ Info: Unique relationship days 36458868 from 1 to 10000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 37500795 from 190001 to 200000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 36373777 from 160001 to 170000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 37177829 from 40001 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 36707808 from 120001 to 130000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 36911397 from 80001 to 90000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 37177829 Agincourt day rows in batch 5
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 36707808 Agincourt day rows in batch 13
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 36373777 Agincourt day rows in batch 17
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 36458868 Agincourt day rows in batch 1
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 37500795 Agincourt day rows in batch 20
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 36911397 Agincourt day rows in batch 9
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 14099 Agincourt individual membership episodes in batch 5
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 6 from 50001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 13988 Agincourt individual membership episodes in batch 1
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 2 from 10001 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 14148 Agincourt individual membership episodes in batch 17
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 18 from 170001 to 180000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 36244260 from 10001 to 20000
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Wrote 14070 Agincourt individual membership episodes in batch 13
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 14 from 130001 to 140000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 37106084 from 50001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Wrote 14227 Agincourt individual membership episodes in batch 9
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 10 from 90001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 14251 Agincourt individual membership episodes in batch 20
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 21 from 200001 to 210000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 36847167 from 170001 to 180000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 36789433 from 130001 to 140000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique relationship days 36244260 from 10001 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 37106084 from 50001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
 ┌ Info: Unique membership days 36978646 from 90001 to 100000
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
 ┌ Info: Unique membership days 36870555 from 200001 to 210000
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
-┌ Info: Unique membership days 36458868 from 1 to 10000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
-┌ Info: Unique membership days 36101407 from 150001 to 160000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
-┌ Info: Unique membership days 37028764 from 180001 to 190000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
-┌ Info: Unique membership days 36740598 from 30001 to 40000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
-┌ Info: Unique relationship days 36101407 from 150001 to 160000
+┌ Info: 36244260 Agincourt day rows in batch 2
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 37106084 Agincourt day rows in batch 6
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique relationship days 36847167 from 170001 to 180000
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
-┌ Info: Unique relationship days 36458868 from 1 to 10000
+┌ Info: Unique relationship days 36789433 from 130001 to 140000
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
-┌ Info: Unique relationship days 37028764 from 180001 to 190000
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
-┌ Info: Unique relationship days 35862880 from 60001 to 70000
+┌ Info: 36847167 Agincourt day rows in batch 18
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique relationship days 36978646 from 90001 to 100000
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
 ┌ Info: Unique relationship days 36870555 from 200001 to 210000
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
-┌ Info: Unique relationship days 36978646 from 90001 to 100000
+┌ Info: 36789433 Agincourt day rows in batch 14
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 36978646 Agincourt day rows in batch 10
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 36870555 Agincourt day rows in batch 21
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 14206 Agincourt individual membership episodes in batch 2
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 3 from 20001 to 30000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 13999 Agincourt individual membership episodes in batch 6
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 7 from 60001 to 70000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 36501212 from 20001 to 30000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 35862880 from 60001 to 70000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique relationship days 36501212 from 20001 to 30000
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
-┌ Info: Unique relationship days 36707808 from 120001 to 130000
+┌ Info: 36501212 Agincourt day rows in batch 3
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique relationship days 35862880 from 60001 to 70000
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Wrote 14083 Agincourt individual membership episodes in batch 18
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 19 from 180001 to 190000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 14126 Agincourt individual membership episodes in batch 14
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 15 from 140001 to 150000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: 35862880 Agincourt day rows in batch 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 14084 Agincourt individual membership episodes in batch 21
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 22 from 210001 to 218775
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 14313 Agincourt individual membership episodes in batch 10
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 11 from 100001 to 110000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 37028764 from 180001 to 190000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 36229356 from 140001 to 150000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 32190725 from 210001 to 218775
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 36429763 from 100001 to 110000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique relationship days 37028764 from 180001 to 190000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 36229356 from 140001 to 150000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 37028764 Agincourt day rows in batch 19
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 36229356 Agincourt day rows in batch 15
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique relationship days 32190725 from 210001 to 218775
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 36429763 from 100001 to 110000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 32190725 Agincourt day rows in batch 22
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 36429763 Agincourt day rows in batch 11
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 14310 Agincourt individual membership episodes in batch 3
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 4 from 30001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 13844 Agincourt individual membership episodes in batch 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 8 from 70001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 36740598 from 30001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 36256427 from 70001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Wrote 12271 Agincourt individual membership episodes in batch 22
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
 ┌ Info: Unique relationship days 36740598 from 30001 to 40000
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
-┌ Info: 36707808 Agincourt day rows in batch 13
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:864
-┌ Info: 36101407 Agincourt day rows in batch 16
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:864
-┌ Info: 36978646 Agincourt day rows in batch 10
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:864
-┌ Info: 36458868 Agincourt day rows in batch 1
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:864
-┌ Info: 36870555 Agincourt day rows in batch 21
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:864
-┌ Info: 35862880 Agincourt day rows in batch 7
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:864
-┌ Info: 37028764 Agincourt day rows in batch 19
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:864
+┌ Info: Unique relationship days 36256427 from 70001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
 ┌ Info: 36740598 Agincourt day rows in batch 4
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:864
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 36256427 Agincourt day rows in batch 8
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 14003 Agincourt individual membership episodes in batch 15
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 16 from 150001 to 160000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 14191 Agincourt individual membership episodes in batch 19
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Unique membership days 36101407 from 150001 to 160000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Wrote 14034 Agincourt individual membership episodes in batch 11
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 12 from 110001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique relationship days 36101407 from 150001 to 160000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique membership days 37130239 from 110001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: 36101407 Agincourt day rows in batch 16
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique relationship days 37130239 from 110001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 37130239 Agincourt day rows in batch 12
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 14132 Agincourt individual membership episodes in batch 8
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Wrote 13996 Agincourt individual membership episodes in batch 4
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Wrote 14132 Agincourt individual membership episodes in batch 16
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Wrote 14091 Agincourt individual membership episodes in batch 12
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Final individual membership rows 308598 for Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:897
+┌ Info: ========== Finished readindividualmemberships Agincourt at 2021-01-11 12:57:55
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:60
+┌ Info: Node DIMAMO Batch size 10000 Minimum id 1, maximum Id 125436, idrange 125436, batches 13
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:911
+┌ Info: Batch 4 from 30001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 6 from 50001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 1 from 1 to 10000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 12 from 110001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 8 from 70001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 10 from 90001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 12625679 from 70001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 12504821 from 30001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 12718534 from 1 to 10000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 12828810 from 110001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 12952227 from 90001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 12682141 from 50001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique relationship days 12719857 from 70001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 12841347 from 1 to 10000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 12609216 from 30001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 12945503 from 110001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 13076970 from 90001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 12779606 from 50001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 12625679 DIMAMO day rows in batch 8
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 12504821 DIMAMO day rows in batch 4
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 12718534 DIMAMO day rows in batch 1
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 12828810 DIMAMO day rows in batch 12
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 12952227 DIMAMO day rows in batch 10
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 12682141 DIMAMO day rows in batch 6
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 9888 DIMAMO individual membership episodes in batch 4
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 5 from 40001 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 9844 DIMAMO individual membership episodes in batch 1
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 2 from 10001 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 12549730 from 40001 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 12857772 from 10001 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Wrote 9884 DIMAMO individual membership episodes in batch 8
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 9 from 80001 to 90000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 9864 DIMAMO individual membership episodes in batch 12
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 13 from 120001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique relationship days 12625592 from 40001 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 12987158 from 10001 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Wrote 9856 DIMAMO individual membership episodes in batch 6
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 7 from 60001 to 70000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 9878 DIMAMO individual membership episodes in batch 10
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 11 from 100001 to 110000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 12706497 from 80001 to 90000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 6688567 from 120001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: 12549730 DIMAMO day rows in batch 5
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 12857772 DIMAMO day rows in batch 2
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique relationship days 6761561 from 120001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique membership days 12646625 from 100001 to 110000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 12862566 from 60001 to 70000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique relationship days 12845092 from 80001 to 90000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 6688567 DIMAMO day rows in batch 13
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 12706497 DIMAMO day rows in batch 9
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique relationship days 12757206 from 100001 to 110000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 12981370 from 60001 to 70000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 12646625 DIMAMO day rows in batch 11
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 12862566 DIMAMO day rows in batch 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 5361 DIMAMO individual membership episodes in batch 13
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Wrote 9863 DIMAMO individual membership episodes in batch 5
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Wrote 9855 DIMAMO individual membership episodes in batch 2
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 3 from 20001 to 30000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 12681678 from 20001 to 30000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique relationship days 12808122 from 20001 to 30000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Wrote 9862 DIMAMO individual membership episodes in batch 9
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Wrote 9878 DIMAMO individual membership episodes in batch 11
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: 12681678 DIMAMO day rows in batch 3
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 9847 DIMAMO individual membership episodes in batch 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Wrote 9861 DIMAMO individual membership episodes in batch 3
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Final individual membership rows 123741 for DIMAMO
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:897
+┌ Info: ========== Finished readindividualmemberships DIMAMO at 2021-01-11 13:04:39
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:63
+┌ Info: Node AHRI Batch size 10000 Minimum id 1, maximum Id 239252, idrange 239252, batches 24
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:911
+┌ Info: Batch 5 from 40001 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 1 from 1 to 10000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 17 from 160001 to 170000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 9 from 80001 to 90000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 21 from 200001 to 210000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Batch 13 from 120001 to 130000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 29984604 from 40001 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 29403787 from 1 to 10000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 30024534 from 160001 to 170000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 29820760 from 120001 to 130000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 30170313 from 200001 to 210000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 30274803 from 80001 to 90000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique relationship days 29117639 from 1 to 10000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 29717984 from 40001 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 29679522 from 160001 to 170000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 29541529 from 120001 to 130000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 29403787 AHRI day rows in batch 1
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 29984604 AHRI day rows in batch 5
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 30024534 AHRI day rows in batch 17
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 29820760 AHRI day rows in batch 13
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique relationship days 29865500 from 200001 to 210000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 29943145 from 80001 to 90000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 30170313 AHRI day rows in batch 21
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 30274803 AHRI day rows in batch 9
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 13631 AHRI individual membership episodes in batch 1
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 2 from 10001 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 13502 AHRI individual membership episodes in batch 5
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 6 from 50001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 30189091 from 10001 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 29820045 from 50001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique relationship days 29943569 from 10001 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Wrote 13612 AHRI individual membership episodes in batch 17
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 18 from 170001 to 180000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 13580 AHRI individual membership episodes in batch 13
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 14 from 130001 to 140000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique relationship days 29441348 from 50001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 30189091 AHRI day rows in batch 2
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique membership days 30503226 from 170001 to 180000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 30231615 from 130001 to 140000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: 29820045 AHRI day rows in batch 6
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 13800 AHRI individual membership episodes in batch 21
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 22 from 210001 to 220000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique relationship days 30164655 from 170001 to 180000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 29857891 from 130001 to 140000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Wrote 13492 AHRI individual membership episodes in batch 9
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 10 from 90001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 29458823 from 210001 to 220000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: 30503226 AHRI day rows in batch 18
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 30231615 AHRI day rows in batch 14
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique membership days 29697495 from 90001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique relationship days 29128757 from 210001 to 220000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 29307637 from 90001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 29458823 AHRI day rows in batch 22
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 29697495 AHRI day rows in batch 10
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 13583 AHRI individual membership episodes in batch 2
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 3 from 20001 to 30000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 13525 AHRI individual membership episodes in batch 6
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 7 from 60001 to 70000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 30125912 from 20001 to 30000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 29693928 from 60001 to 70000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique relationship days 29876368 from 20001 to 30000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 29344711 from 60001 to 70000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 30125912 AHRI day rows in batch 3
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 29693928 AHRI day rows in batch 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 13753 AHRI individual membership episodes in batch 14
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 15 from 140001 to 150000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 13844 AHRI individual membership episodes in batch 18
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 19 from 180001 to 190000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 13568 AHRI individual membership episodes in batch 22
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 23 from 220001 to 230000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 30426087 from 180001 to 190000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 30417310 from 140001 to 150000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 29914268 from 220001 to 230000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Wrote 13462 AHRI individual membership episodes in batch 10
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 11 from 100001 to 110000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique relationship days 30014420 from 180001 to 190000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 29963369 from 140001 to 150000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 30426087 AHRI day rows in batch 19
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 30417310 AHRI day rows in batch 15
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique membership days 29779547 from 100001 to 110000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique relationship days 29544412 from 220001 to 230000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 29914268 AHRI day rows in batch 23
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique relationship days 29374636 from 100001 to 110000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 29779547 AHRI day rows in batch 11
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 13705 AHRI individual membership episodes in batch 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 8 from 70001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 13747 AHRI individual membership episodes in batch 3
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 4 from 30001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 29944645 from 70001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 30410156 from 30001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique relationship days 29626394 from 70001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 30117492 from 30001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 29944645 AHRI day rows in batch 8
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 30410156 AHRI day rows in batch 4
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 13842 AHRI individual membership episodes in batch 19
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 20 from 190001 to 200000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 13697 AHRI individual membership episodes in batch 15
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 16 from 150001 to 160000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Wrote 13871 AHRI individual membership episodes in batch 23
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 24 from 230001 to 239252
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique membership days 29641167 from 190001 to 200000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 30388182 from 150001 to 160000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Unique membership days 27389996 from 230001 to 239252
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: Wrote 13695 AHRI individual membership episodes in batch 11
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Batch 12 from 110001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:915
+┌ Info: Unique relationship days 29350080 from 190001 to 200000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 30078624 from 150001 to 160000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique relationship days 27129044 from 230001 to 239252
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: Unique membership days 29775956 from 110001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:837
+┌ Info: 29641167 AHRI day rows in batch 20
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 30388182 AHRI day rows in batch 16
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: 27389996 AHRI day rows in batch 24
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Unique relationship days 29460692 from 110001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:854
+┌ Info: 29775956 AHRI day rows in batch 12
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:862
+┌ Info: Wrote 13732 AHRI individual membership episodes in batch 8
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Wrote 13687 AHRI individual membership episodes in batch 4
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Wrote 12406 AHRI individual membership episodes in batch 24
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Wrote 13718 AHRI individual membership episodes in batch 20
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Wrote 13780 AHRI individual membership episodes in batch 16
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Wrote 13647 AHRI individual membership episodes in batch 12
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:880
+┌ Info: Final individual membership rows 326879 for AHRI
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:897
+┌ Info: ========== Finished readindividualmemberships AHRI at 2021-01-11 13:44:47
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:66
+┌ Info: Execution started 2021-01-11 14:28
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: Read 2125658 Agincourt education statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:940
+┌ Info: Read 2001873 Agincourt education statuses inside bounds
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:956
+┌ Info: Read 1230913 Agincourt education statuses not missing
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:958
+┌ Info: ========== Finished Agincourt readeducationstatuses at 2021-01-11 14:29:02
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:69
+┌ Info: Read 695105 DIMAMO education statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:940
+┌ Info: Read 563061 DIMAMO education statuses inside bounds
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:956
+┌ Info: Read 496829 DIMAMO education statuses not missing
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:958
+┌ Info: ========== Finished DIMAMO readeducationstatuses at 2021-01-11 14:29:06
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:72
+┌ Info: Read 5909057 AHRI education statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:940
+┌ Info: Read 5206668 AHRI education statuses inside bounds
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:956
+┌ Info: Read 1128655 AHRI education statuses not missing
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:958
+┌ Info: ========== Finished AHRI readeducationstatuses at 2021-01-11 14:29:35
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:75
+┌ Info: Read 3000064 Agincourt asset statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:983
+┌ Info: 2201150 Agincourt grouped asset statuses
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:992
+┌ Info: 1229518 Agincourt present asset statuses
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:994
+┌ Info: 374331 Agincourt asset groups
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:996
+┌ Info: Modern asset breakdown for Agincourt
+│   a = 10-element Named Array{Int64,1}
+Modern  │ 
+────────┼──────
+0       │  6596
+1       │ 12999
+2       │ 14266
+3       │ 19562
+4       │ 36475
+5       │ 59837
+6       │ 32535
+7       │ 15854
+8       │  1959
+9       │   161
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1003
+┌ Info: Livestock asset breakdown for Agincourt
+│   a = 3-element Named Array{Int64,1}
+Livestock  │ 
+───────────┼───────
+0          │  19561
+1          │    459
+2          │ 180224
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1005
+┌ Info: Read 227002 Agincourt HSE observations from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1036
+┌ Info: Read 227002 Agincourt HSE observations after household map
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1039
+┌ Info: Watersource breakdown for Agincourt
+│   a = 9-element Named Array{Int64,1}
+WaterSource  │ 
+─────────────┼───────
+0            │  26800
+1            │  73844
+2            │ 110386
+3            │   4293
+4            │    166
+5            │   1715
+6            │    257
+8            │   6495
+11           │   3046
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1044
+┌ Info: Watersource breakdown for Agincourt after recode
+│   a = 5-element Named Array{Int64,1}
+WaterSource  │ 
+─────────────┼───────
+0            │  26800
+1            │  11679
+2            │   4293
+3            │ 110386
+4            │  73844
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1047
+┌ Info: Toilet breakdown for Agincourt
+│   a = 4-element Named Array{Int64,1}
+Toilet  │ 
+────────┼───────
+0       │  58967
+1       │   1953
+2       │  16499
+3       │ 149583
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1049
+┌ Info: Toilet breakdown for Agincourt after recode
+│   a = 4-element Named Array{Int64,1}
+Toilet  │ 
+────────┼───────
+0       │  58967
+1       │ 149583
+2       │  16499
+3       │   1953
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1052
+┌ Info: CookingFuel breakdown for Agincourt
+│   a = 6-element Named Array{Int64,1}
+CookingFuel  │ 
+─────────────┼───────
+0            │  27193
+1            │ 104871
+2            │   1452
+4            │  90866
+5            │   2374
+6            │    246
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1054
+┌ Info: CookingFuel breakdown for Agincourt after recode
+│   a = 5-element Named Array{Int64,1}
+CookingFuel  │ 
+─────────────┼───────
+0            │  27193
+1            │ 104871
+3            │   2620
+4            │   1452
+5            │  90866
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1057
+┌ Info: WallMaterial breakdown for Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1059
+┌ Info: WallMaterial breakdown for Agincourt after recode
+│   a = 5-element Named Array{Int64,1}
+WallMaterial  │ 
+──────────────┼───────
+0             │  26706
+1             │   5431
+2             │   4532
+3             │    510
+4             │ 189823
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1062
+┌ Info: FloorMaterial breakdown for Agincourt
+│   a = 10-element Named Array{Int64,1}
+FloorMaterial  │ 
+───────────────┼───────
+0              │      5
+1              │  26752
+2              │ 169653
+6              │     72
+8              │  26679
+9              │    300
+10             │    136
+11             │   2302
+12             │    141
+13             │    962
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1064
+┌ Info: FloorMaterial breakdown for Agincourt after recode
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1067
+┌ Info: Bedrooms breakdown for Agincourt
+│   a = 34-element Named Array{Int64,1}
+Bedrooms  │ 
+──────────┼──────
+-2        │     1
+0         │   796
+1         │ 39363
+2         │ 66902
+3         │ 54298
+4         │ 30237
+5         │  6852
+6         │  1652
+7         │   325
+8         │   111
+9         │    33
+10        │    12
+11        │     2
+12        │     3
+13        │     1
+14        │     2
+20        │     1
+21        │     7
+22        │     7
+23        │     3
+25        │     4
+30        │    15
+32        │     1
+33        │     2
+36        │     4
+44        │     2
+54        │     1
+56        │     1
+58        │     1
+93        │     1
+201       │     1
+202       │     2
+2014      │     1
+missing   │ 26358
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1069
+┌ Info: Bedrooms breakdown for Agincourt after recode
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1071
+┌ Info: ConnectedToGrid breakdown for Agincourt
+│   a = 3-element Named Array{Int64,1}
+ConnectedToGrid  │ 
+─────────────────┼───────
+false            │  12616
+true             │ 187606
+missing          │  26780
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1073
+┌ Info: ConnectedToGrid for Agincourt after recode
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1076
+┌ Info: ========== Finished Agincourt readhouseholdsocioeconomic at 2021-01-11 14:29:53
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:78
+┌ Info: Read 186372 DIMAMO asset statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:983
+┌ Info: 123510 DIMAMO grouped asset statuses
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:992
+┌ Info: 83880 DIMAMO present asset statuses
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:994
+┌ Info: 24928 DIMAMO asset groups
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:996
+┌ Info: Modern asset breakdown for DIMAMO
+│   a = 10-element Named Array{Int64,1}
+Modern  │ 
+────────┼─────
+0       │   26
+1       │  308
+2       │  379
+3       │  594
+4       │ 1655
+5       │ 5327
+6       │ 2036
+7       │  782
+8       │  145
+9       │   22
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1003
+┌ Info: Livestock asset breakdown for DIMAMO
+│   a = 3-element Named Array{Int64,1}
+Livestock  │ 
+───────────┼─────
+0          │ 8444
+1          │ 2240
+2          │  590
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1005
+┌ Info: Read 11634 DIMAMO HSE observations from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1036
+┌ Info: Read 11634 DIMAMO HSE observations after household map
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1039
+┌ Info: Watersource breakdown for DIMAMO
+│   a = 10-element Named Array{Int64,1}
+WaterSource  │ 
+─────────────┼─────
+0            │  333
+1            │ 5619
+2            │ 4867
+3            │  171
+4            │   42
+6            │  152
+7            │   21
+8            │  233
+10           │  187
+11           │    9
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1044
+┌ Info: Watersource breakdown for DIMAMO after recode
+│   a = 5-element Named Array{Int64,1}
+WaterSource  │ 
+─────────────┼─────
+0            │  333
+1            │  457
+2            │  358
+3            │ 4867
+4            │ 5619
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1047
+┌ Info: Toilet breakdown for DIMAMO
+│   a = 6-element Named Array{Int64,1}
+Toilet  │ 
+────────┼─────
+0       │  374
+1       │  357
+2       │ 7851
+3       │ 2950
+4       │   86
+5       │   16
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1049
+┌ Info: Toilet breakdown for DIMAMO after recode
+│   a = 4-element Named Array{Int64,1}
+Toilet  │ 
+────────┼─────
+0       │  374
+1       │ 3036
+2       │ 7867
+3       │  357
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1052
+┌ Info: CookingFuel breakdown for DIMAMO
+│   a = 6-element Named Array{Int64,1}
+CookingFuel  │ 
+─────────────┼─────
+0            │  396
+1            │ 1082
+2            │   77
+3            │   20
+4            │ 9525
+5            │  534
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1054
+┌ Info: CookingFuel breakdown for DIMAMO after recode
+│   a = 6-element Named Array{Int64,1}
+CookingFuel  │ 
+─────────────┼─────
+0            │  396
+1            │ 1082
+2            │   20
+3            │  534
+4            │   77
+5            │ 9525
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1057
+┌ Info: WallMaterial breakdown for DIMAMO
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1059
+┌ Info: WallMaterial breakdown for DIMAMO after recode
+│   a = 5-element Named Array{Int64,1}
+WallMaterial  │ 
+──────────────┼──────
+0             │   309
+1             │   173
+2             │    76
+3             │   343
+4             │ 10733
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1062
+┌ Info: FloorMaterial breakdown for DIMAMO
+│   a = 9-element Named Array{Int64,1}
+FloorMaterial  │ 
+───────────────┼─────
+0              │  284
+2              │ 8658
+3              │  346
+6              │    3
+8              │ 2175
+9              │   27
+11             │  101
+12             │   26
+13             │   14
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1064
+┌ Info: FloorMaterial breakdown for DIMAMO after recode
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1067
+┌ Info: Bedrooms breakdown for DIMAMO
+│   a = 27-element Named Array{Int64,1}
+Bedrooms  │ 
+──────────┼─────
+0         │    2
+1         │  567
+2         │ 1533
+3         │ 2320
+4         │ 2376
+5         │ 1350
+6         │ 1074
+7         │  777
+8         │  572
+9         │  337
+10        │  207
+11        │   91
+12        │   78
+13        │   40
+14        │   19
+15        │   19
+16        │    8
+17        │    2
+18        │    3
+19        │    2
+20        │    2
+25        │    1
+33        │    1
+36        │    1
+81        │    1
+91        │    1
+missing   │  250
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1069
+┌ Info: Bedrooms breakdown for DIMAMO after recode
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1071
+┌ Info: ConnectedToGrid breakdown for DIMAMO
+│   a = 3-element Named Array{Int64,1}
+ConnectedToGrid  │ 
+─────────────────┼──────
+false            │   677
+true             │ 10551
+missing          │   406
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1073
+┌ Info: ConnectedToGrid for DIMAMO after recode
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1076
+┌ Info: ========== Finished DIMAMO readhouseholdsocioeconomic at 2021-01-11 14:29:54
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:81
+┌ Info: Read 305963 AHRI asset statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:983
+┌ Info: 234616 AHRI grouped asset statuses
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:992
+┌ Info: 81036 AHRI present asset statuses
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:994
+┌ Info: 40287 AHRI asset groups
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:996
+┌ Info: Modern asset breakdown for AHRI
+│   a = 10-element Named Array{Int64,1}
+Modern  │ 
+────────┼─────
+0       │   40
+1       │ 6571
+2       │ 5869
+3       │ 4224
+4       │ 3220
+5       │ 2046
+6       │  944
+7       │  331
+8       │   53
+9       │    1
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1003
+┌ Info: Livestock asset breakdown for AHRI
+│   a = 3-element Named Array{Int64,1}
+Livestock  │ 
+───────────┼──────
+0          │ 23193
+1          │   102
+2          │     4
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1005
+┌ Info: Read 193862 AHRI HSE observations from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1036
+┌ Info: Read 193862 AHRI HSE observations after household map
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1039
+┌ Info: Watersource breakdown for AHRI
+│   a = 9-element Named Array{Int64,1}
+WaterSource  │ 
+─────────────┼──────
+0            │ 10637
+1            │ 32993
+2            │ 88871
+3            │ 17404
+4            │  6096
+5            │ 15531
+6            │  8226
+7            │  1462
+8            │ 12642
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1044
+┌ Info: Watersource breakdown for AHRI after recode
+│   a = 5-element Named Array{Int64,1}
+WaterSource  │ 
+─────────────┼──────
+0            │ 10637
+1            │ 43957
+2            │ 17404
+3            │ 88871
+4            │ 32993
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1047
+┌ Info: Toilet breakdown for AHRI
+│   a = 6-element Named Array{Int64,1}
+Toilet  │ 
+────────┼───────
+0       │  34045
+1       │  19538
+2       │  30945
+3       │ 105714
+4       │   1215
+5       │   2405
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1049
+┌ Info: Toilet breakdown for AHRI after recode
+│   a = 4-element Named Array{Int64,1}
+Toilet  │ 
+────────┼───────
+0       │  34045
+1       │ 106929
+2       │  33350
+3       │  19538
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1052
+┌ Info: CookingFuel breakdown for AHRI
+│   a = 6-element Named Array{Int64,1}
+CookingFuel  │ 
+─────────────┼───────
+0            │  25051
+1            │  41294
+2            │   8023
+3            │    285
+4            │ 116964
+5            │   2245
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1054
+┌ Info: CookingFuel breakdown for AHRI after recode
+│   a = 6-element Named Array{Int64,1}
+CookingFuel  │ 
+─────────────┼───────
+0            │  25051
+1            │  41294
+2            │    285
+3            │   2245
+4            │   8023
+5            │ 116964
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1057
+┌ Info: WallMaterial breakdown for AHRI
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1059
+┌ Info: WallMaterial breakdown for AHRI after recode
+│   a = 5-element Named Array{Int64,1}
+WallMaterial  │ 
+──────────────┼───────
+0             │ 139857
+1             │   2147
+2             │    906
+3             │   1802
+4             │  49150
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1062
+┌ Info: FloorMaterial breakdown for AHRI
+│   a = 1-element Named Array{Int64,1}
+FloorMaterial  │ 
+───────────────┼───────
+0              │ 193862
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1064
+┌ Info: FloorMaterial breakdown for AHRI after recode
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1067
+┌ Info: Bedrooms breakdown for AHRI
+│   a = 38-element Named Array{Int64,1}
+Bedrooms  │ 
+──────────┼───────
+1         │   4427
+2         │  10804
+3         │  14409
+4         │  10505
+5         │   7311
+6         │   4031
+7         │   1672
+8         │   1260
+9         │    657
+10        │    382
+11        │    190
+12        │    136
+13        │     62
+14        │     50
+15        │     39
+16        │     13
+17        │     13
+18        │     14
+19        │      9
+20        │      2
+21        │      1
+22        │      1
+24        │      1
+25        │      1
+26        │      2
+27        │      1
+30        │      1
+32        │      3
+33        │      1
+34        │      1
+40        │      1
+52        │      1
+54        │      2
+82        │      1
+83        │      6
+84        │      1
+86        │      1
+missing   │ 137850
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1069
+┌ Info: Bedrooms breakdown for AHRI after recode
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1071
+┌ Info: ConnectedToGrid breakdown for AHRI
+│   a = 2-element Named Array{Int64,1}
+ConnectedToGrid  │ 
+─────────────────┼───────
+false            │  43491
+true             │ 150371
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1073
+┌ Info: ConnectedToGrid for AHRI after recode
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1076
+┌ Info: ========== Finished AHRI readhouseholdsocioeconomic at 2021-01-11 14:29:58
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:84
+┌ Info: Read 2125540 Agincourt marital statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1108
+┌ Info: 2125540 Agincourt marital statuses after individual map
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1111
+┌ Info: 2001755 Agincourt marital statuses inside bounds
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1126
+┌ Info: Marital Status breakdown for Agincourt
+│   a = 4-element Named Array{Int64,1}
+MaritalStatus  │ 
+───────────────┼────────
+1              │ 1754173
+2              │  182276
+4              │   30731
+5              │   34575
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1128
+┌ Info: ========== Finished Agincourt readmaritalstatuses at 2021-01-11 14:30:08
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:87
+┌ Info: Read 271726 DIMAMO marital statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1108
+┌ Info: 271726 DIMAMO marital statuses after individual map
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1111
+┌ Info: 169592 DIMAMO marital statuses inside bounds
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1126
+┌ Info: Marital Status breakdown for DIMAMO
+│   a = 5-element Named Array{Int64,1}
+MaritalStatus  │ 
+───────────────┼───────
+1              │ 111460
+2              │  38568
+3              │     53
+4              │   4068
+5              │  15443
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1128
+┌ Info: ========== Finished DIMAMO readmaritalstatuses at 2021-01-11 14:30:09
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:90
+┌ Info: Read 3018022 AHRI marital statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1108
+┌ Info: 3018022 AHRI marital statuses after individual map
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1111
+┌ Info: 2698947 AHRI marital statuses inside bounds
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1126
+┌ Info: Marital Status breakdown for AHRI
+│   a = 5-element Named Array{Int64,1}
+MaritalStatus  │ 
+───────────────┼────────
+1              │ 2112148
+2              │  345248
+3              │   42261
+4              │   27706
+5              │  171584
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1128
+┌ Info: ========== Finished AHRI readmaritalstatuses at 2021-01-11 14:30:24
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:93
+┌ Info: Read 2125658 Agincourt labour statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1158
+┌ Info: 2125658 Agincourt labour statuses after individual map
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1161
+┌ Info: Read 2001873 Agincourt labour statuses inside bounds
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1178
+┌ Info: CurrentEmployment breakdown for Agincourt
+│   a = 10-element Named Array{Int64,1}
+CurrentEmployment  │ 
+───────────────────┼────────
+0                  │ 1614036
+1                  │  161104
+3                  │    8867
+4                  │   23873
+5                  │    3180
+11                 │   21095
+12                 │   64819
+13                 │  101319
+14                 │    3259
+202                │     321
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1180
+┌ Info: EmploymentSector breakdown for Agincourt
+│   a = 10-element Named Array{Int64,1}
+EmploymentSector  │ 
+──────────────────┼────────
+100               │ 1902933
+101               │    6610
+102               │    5957
+103               │    4460
+105               │    4389
+106               │   10770
+107               │    9257
+301               │   11801
+305               │   43535
+306               │    2161
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1182
+┌ Info: EmploymentType breakdown for Agincourt
+│   a = 4-element Named Array{Int64,1}
+EmploymentType  │ 
+────────────────┼────────
+200             │ 1981369
+201             │   15423
+202             │     665
+203             │    4416
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1184
+┌ Info: Employer breakdown for Agincourt
+│   a = 5-element Named Array{Int64,1}
+Employer  │ 
+──────────┼────────
+201       │  108997
+300       │ 1878256
+305       │     483
+307       │   13461
+308       │     676
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1186
+┌ Info: ========== Finished Agincourt readlabourstatuses at 2021-01-11 14:30:39
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:96
+┌ Info: Read 695105 DIMAMO labour statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1158
+┌ Info: 695105 DIMAMO labour statuses after individual map
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1161
+┌ Info: Read 563061 DIMAMO labour statuses inside bounds
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1178
+┌ Info: CurrentEmployment breakdown for DIMAMO
+│   a = 4-element Named Array{Int64,1}
+CurrentEmployment  │ 
+───────────────────┼───────
+0                  │ 562663
+1                  │    102
+2                  │     23
+4                  │    273
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1180
+┌ Info: EmploymentSector breakdown for DIMAMO
+│   a = 2-element Named Array{Int64,1}
+EmploymentSector  │ 
+──────────────────┼───────
+0                 │ 531703
+100               │  31358
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1182
+┌ Info: EmploymentType breakdown for DIMAMO
+│   a = 3-element Named Array{Int64,1}
+EmploymentType  │ 
+────────────────┼───────
+0               │ 562934
+201             │    119
+202             │      8
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1184
+┌ Info: Employer breakdown for DIMAMO
+│   a = 8-element Named Array{Int64,1}
+Employer  │ 
+──────────┼───────
+0         │ 562942
+301       │     10
+302       │      4
+303       │      1
+304       │     30
+305       │     64
+306       │      5
+308       │      5
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1186
+┌ Info: ========== Finished DIMAMO readlabourstatuses at 2021-01-11 14:30:44
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:99
+┌ Info: Read 5909057 AHRI labour statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1158
+┌ Info: 5909057 AHRI labour statuses after individual map
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1161
+┌ Info: Read 5206668 AHRI labour statuses inside bounds
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1178
+┌ Info: CurrentEmployment breakdown for AHRI
+│   a = 5-element Named Array{Int64,1}
+CurrentEmployment  │ 
+───────────────────┼────────
+0                  │ 4591302
+1                  │  210866
+2                  │   35285
+12                 │  302924
+13                 │   66291
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1180
+┌ Info: EmploymentSector breakdown for AHRI
+│   a = 18-element Named Array{Int64,1}
+EmploymentSector  │ 
+──────────────────┼────────
+0                 │  933766
+100               │ 4243787
+101               │    3223
+102               │     705
+103               │    3358
+104               │     522
+105               │    2799
+106               │    4110
+107               │    1196
+108               │    1887
+109               │     268
+110               │    1942
+111               │     798
+112               │     904
+113               │     196
+114               │    5499
+115               │     626
+116               │    1082
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1182
+┌ Info: EmploymentType breakdown for AHRI
+│   a = 2-element Named Array{Int64,1}
+EmploymentType  │ 
+────────────────┼────────
+0               │  933766
+200             │ 4272902
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1184
+┌ Info: Employer breakdown for AHRI
+│   a = 10-element Named Array{Int64,1}
+Employer  │ 
+──────────┼────────
+0         │  933766
+300       │ 4241989
+301       │    1029
+302       │    2703
+303       │     478
+304       │    2166
+305       │   16990
+306       │     827
+307       │    3135
+308       │    3585
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1186
+┌ Info: ========== Finished AHRI readlabourstatuses at 2021-01-11 14:31:25
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:102

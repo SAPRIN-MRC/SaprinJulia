@@ -12,6 +12,7 @@ using DataValues
 using ShiftedArrays
 using XLSX
 using Statistics
+using CategoricalArrays
 
 export readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses
@@ -876,7 +877,7 @@ function individualmemberships(basedirectory::String, node::String, fromId::Int6
     end
     memberships = combine(groupby(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :Episode]), :DayDate => minimum => :StartDate, :StartType => first => :StartType,
                                                                                             :DayDate => maximum => :EndDate, :EndType => last => :EndType)
-    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualMemberships$(batch).arrow"), memberships, compress=:zstd)
+    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualMemberships$(batch).arrow"), memberships)
     @info "Wrote $(nrow(memberships)) $(node) individual membership episodes in batch $(batch)"
     return nothing
 end #individualmemberships
@@ -966,8 +967,8 @@ end
 #region household socio-economic
 "Read and save household socio-economic data"
 function readhouseholdsocioeconomic(node::String)
-    householdassets(settings.Databases[node], node, settings.basedirectory)
-    householdsocioeconomic(settings.Databases[node], node, settings.basedirectory)
+    householdassets(settings.Databases[node], node, settings.BaseDirectory)
+    householdsocioeconomic(settings.Databases[node], node, settings.BaseDirectory)
 end
 function householdassets(db::String, node::String, basedirectory::String)
     con = ODBC.Connection(db)

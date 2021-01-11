@@ -55,15 +55,51 @@ readhouseholdmemberships("AHRI")
 @info "========== Finished readhouseholdmemberships at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
 #endregion
-=#
-@time readindividualmemberships("Agincourt", 10000)
+readindividualmemberships("Agincourt", 10000)
 @info "========== Finished readindividualmemberships Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-@time readindividualmemberships("DIMAMO", 10000)
+readindividualmemberships("DIMAMO", 10000)
 @info "========== Finished readindividualmemberships DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-@time readindividualmemberships("AHRI", 10000)
+readindividualmemberships("AHRI", 10000)
 @info "========== Finished readindividualmemberships AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+flush(io)
+=#
+readeducationstatuses("Agincourt")
+@info "========== Finished Agincourt readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+flush(io)
+readeducationstatuses("DIMAMO")
+@info "========== Finished DIMAMO readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+flush(io)
+readeducationstatuses("AHRI")
+@info "========== Finished AHRI readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+flush(io)
+readhouseholdsocioeconomic("Agincourt")
+@info "========== Finished Agincourt readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+flush(io)
+readhouseholdsocioeconomic("DIMAMO")
+@info "========== Finished DIMAMO readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+flush(io)
+readhouseholdsocioeconomic("AHRI")
+@info "========== Finished AHRI readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+flush(io)
+readmaritalstatuses("Agincourt")
+@info "========== Finished Agincourt readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+flush(io)
+readmaritalstatuses("DIMAMO")
+@info "========== Finished DIMAMO readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+flush(io)
+readmaritalstatuses("AHRI")
+@info "========== Finished AHRI readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+flush(io)
+readlabourstatuses("Agincourt")
+@info "========== Finished Agincourt readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+flush(io)
+readlabourstatuses("DIMAMO")
+@info "========== Finished DIMAMO readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+flush(io)
+readlabourstatuses("AHRI")
+@info "========== Finished AHRI readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
 #region clean up
 close(io)
