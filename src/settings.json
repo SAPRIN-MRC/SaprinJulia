@@ -1,9 +1,8 @@
 {
-  "NodeId": 3,
   "PeriodEnd": "2018-12-31T23:59:59",
-  "Node": "AHRI",
   "BaseDirectory": "D:\\Data\\SAPRIN_Data",
   "Server":"localhost",
   "Databases":{"Agincourt":"SaprinDb_Agincourt202012","DIMAMO":"SaprinDb_DIMAMO202012","AHRI":"SaprinDb_AHRI202012"},
-  "LeftCensorDates":{"Agincourt":"1992-03-01","DIMAMO":"1995-01-26","AHRI":"2000-01-01"}
+  "LeftCensorDates":{"Agincourt":"1992-03-01","DIMAMO":"1995-01-26","AHRI":"2000-01-01"},
+  "Nodes":{"1":"Agincourt","2":"DIMAMO","3":"AHRI"}
 }
