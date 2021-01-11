@@ -11,6 +11,7 @@ using Arrow
 using DataValues
 using ShiftedArrays
 using XLSX
+using Statistics
 
 export readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses
@@ -78,7 +79,7 @@ end
 "Read individuals and anonimise for specified node specified and save individual data, id map and bounds to to arrow files"
 function readindividuals(node::String)
     readindividuals_internal(settings.Databases[node], node, settings.BaseDirectory)
-    individualobservationbounds(settings.Databases[node], node, settings.basedirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+    individualobservationbounds(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
 end
 
 "Read individuals and anonimise for node specified in settings and save id map and individual data to to arrow files"
@@ -239,7 +240,7 @@ end # readlocations
 #region residencies
 "Retrieve and save residence episodes, assumes individual and locations have been read"
 function readresidences(node::String)
-    readresidences_internal(settings.Databases[node], node, settings.basedirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+    readresidences_internal(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
     if node in ["Agincourt", "DIMAMO"]
         eliminateresidenceoverlaps(node, settings.BaseDirectory)
         readresidencestatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
@@ -402,12 +403,10 @@ function eliminateresidenceoverlaps(node::String, basedirectory::String)
         ttf.End = ttf.DayDate .== ttf.EndDate
         append!(s, ttf, cols=:union)
     end
-    n = nrow(s)
-    @info "$(n) day rows for $(node)"
+    @info "$(nrow(s)) day rows for $(node)"
     sort!(s, [:IndividualId,:DayDate,order(:ResidentIndex, rev=true), :StartDate, order(:EndDate, rev=true)]);
     unique!(s, [:IndividualId,:DayDate]);
-    n = nrow(s)
-    @info "$(n) unique day rows for $(node)"
+    @info "$(nrow(s)) unique day rows for $(node)"
     lastindividual = -1
     gap = 0
     n = nrow(s)
@@ -856,9 +855,7 @@ function getrelationshipdays(basedirectory::String, node::String, fromId::Int64,
     return r
 end #getrelationshipdays
 function individualmemberships(basedirectory::String, node::String, fromId::Int64, toId::Int64, batch::Int64)
-    m = getmembershipdays(basedirectory,node,fromId,toId)
-    r = getrelationshipdays(basedirectory,node,fromId,toId)
-    mr = leftjoin(m, r, on = [:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
+    mr = leftjoin(getmembershipdays(basedirectory,node,fromId,toId), getrelationshipdays(basedirectory,node,fromId,toId), on = [:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
     select!(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :Episode])
     replace!(mr.HHRelationshipTypeId, missing => 12)
     disallowmissing!(mr,[:HHRelationshipTypeId, :DayDate])
