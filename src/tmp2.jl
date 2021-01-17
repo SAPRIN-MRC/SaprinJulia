@@ -45,15 +45,9 @@ function processmembershipdays(startdate, enddate, starttype, endtype)
 
     return (daydate = res_daydate, startdate = res_startdate, enddate = res_enddate, starttype = res_starttype, endtype = res_endtype, episode = res_episode)
 end
-function getmembershipdays(basedirectory::String, node::String, fromId::Int64, toId::Int64)
-    memberships = open(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow")) do io
-        return Arrow.Table(io) |> DataFrame
-    end
-    f = filter([:IndividualId] => id -> id >= fromId && id <= toId, memberships)
-    select!(f,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType])
+function getmembershipdays(f)
     s = combine(groupby(sort(f, [:StartDate, order(:EndDate, rev=true)]), [:IndividualId, :HouseholdId], sort=true), [:StartDate, :EndDate, :StartType, :EndType] => processmembershipdays => AsTable)
-    @info "Unique membership days $(nrow(s)) from $(fromId) to $(toId)"
-    rename!(s,Dict(:daydate=>"DayDate",:episode=>"Episode",:startdate=>"StartDate",:enddate => "EndDate",:starttype => "StartType",:endtype => "EndType"))
+     rename!(s,Dict(:daydate=>"DayDate",:episode=>"Episode",:startdate=>"StartDate",:enddate => "EndDate",:starttype => "StartType",:endtype => "EndType"))
     return s
 end #getmembershipdays
 function processrelationshipdays(startdate, enddate, starttype, endtype, hhrelationtype)
@@ -95,19 +89,13 @@ function processrelationshipdays(startdate, enddate, starttype, endtype, hhrelat
 
     return (daydate = res_daydate, startdate = res_startdate, enddate = res_enddate, starttype = res_starttype, endtype = res_endtype, hhrelationtype = res_relation ,episode = res_episode)
 end
-function getrelationshipdays(basedirectory::String, node::String, fromId::Int64, toId::Int64)
-    relationships = open(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow")) do io
-        return Arrow.Table(io) |> DataFrame
-    end
-    f =filter([:IndividualId] => id -> id >= fromId && id <= toId, relationships)
-    select!(f,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType, :HHRelationshipTypeId])
+function getrelationshipdays(f)
     s = combine(groupby(sort(f, [:StartDate, order(:EndDate, rev=true)]), [:IndividualId, :HouseholdId], sort=true), [:StartDate, :EndDate, :StartType, :EndType, :HHRelationshipTypeId] => processrelationshipdays => AsTable)
-    @info "Unique relationship days $(nrow(s)) from $(fromId) to $(toId)"
     rename!(s,Dict(:daydate=>"DayDate",:episode=>"Episode",:startdate=>"StartDate",:enddate => "EndDate",:starttype => "StartType",:endtype => "EndType",:hhrelationtype => "HHRelationshipTypeId"))
     return s
 end #getrelationshipdays
-function individualmemberships(basedirectory::String, node::String, fromId::Int64, toId::Int64, batch::Int64)
-    mr = leftjoin(getmembershipdays(basedirectory,node,fromId,toId), getrelationshipdays(basedirectory,node,fromId,toId), on = [:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
+function individualmemberships(basedirectory::String, node::String, m, r, batch::Int64)
+    mr = leftjoin(getmembershipdays(m), getrelationshipdays(r), on = [:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
     select!(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :Episode])
     replace!(mr.HHRelationshipTypeId, missing => 12)
     disallowmissing!(mr,[:HHRelationshipTypeId, :DayDate])
@@ -161,17 +149,29 @@ function batchmemberships(basedirectory::String, node::String, batchsize::Int64)
     idrange = (maxId - minId) + 1
     batches = ceil(Int32, idrange / batchsize)
     @info "Node $(node) Batch size $(batchsize) Minimum id $(minId), maximum Id $(maxId), idrange $(idrange), batches $(batches)"
-    Threads.@threads for i = 1:batches
+    relationships = open(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow")) do io
+        return Arrow.Table(io) |> DataFrame
+    end
+    select!(relationships,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType, :HHRelationshipTypeId])
+    @info "Node $(node) $(nrow(relationships)) relationship episodes"
+    memberships = open(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow")) do io
+        return Arrow.Table(io) |> DataFrame
+    end
+    select!(memberships,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType])
+    @info "Node $(node) $(nrow(memberships)) memberships episodes"
+     Threads.@threads for i = 1:batches
         fromId = minId + batchsize * (i-1)
         toId = min(maxId, (minId + batchsize * i)-1)
         @info "Batch $(i) from $(fromId) to $(toId)"
-        individualmemberships(basedirectory,node,fromId,toId,i)
+        m = filter([:IndividualId] => id -> id >= fromId && id <= toId, memberships)
+        r = filter([:IndividualId] => id -> id >= fromId && id <= toId, relationships)
+        individualmemberships(basedirectory,node,m,r,i)
     end
     combinemembershipbatch(basedirectory,node,batches)
     return nothing
 end #batchmemberships
 @info "Started execution $(now())"
 t = now()
-readindividualmemberships("DIMAMO", 25000)
+readindividualmemberships("AHRI", 25000)
 d = now()-t
 @info "Started execution $(now()) duration $(round(d, Dates.Second)) seconds"

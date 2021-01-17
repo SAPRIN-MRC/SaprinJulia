@@ -376,6 +376,8 @@ function readresidences_internal(db::String, node::String, basedirectory::String
     filter!([:StartDate,:EndDate] => (s, e) -> s <= e, df) # start date must be smaller or equal to end date
     select!(df, [:ResidenceId, :IndividualId, :LocationId, :StartDate,:StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate, :ResidentIndex])
     disallowmissing!(df, [:StartDate,:StartType,:EndDate,:EndType,:ResidentIndex])
+    # filter!(:IndividualId => x -> x < 100, df)
+    transform!(groupby(sort(df,[:IndividualId, :StartDate]), :IndividualId), :IndividualId => eachindex => :Episode, nrow => :Episodes)
     Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualResidencies.arrow"), df, compress=:zstd)
     years = Dates.year.(residences.StartDate) 
     a = freqtable(years)
@@ -389,10 +391,70 @@ function readresidences_internal(db::String, node::String, basedirectory::String
     @info "End types $(node)" a
     return nothing
 end
+"Decompose residency episodes into days and eliminate overlaps"
+function processresidencedays(startdate, enddate, starttype, endtype, residentidx, locationid)
+    start = startdate[1]
+    stop = enddate[1]
+    startt = starttype[1]
+    endt = endtype[1]
+    idx = residentidx[1]
+    location = locationid[1]
+    res_daydate = collect(start:Day(1):stop)
+    res_startdate = fill(start, length(res_daydate))
+    res_enddate = fill(stop, length(res_daydate))
+    res_starttype = fill(startt, length(res_daydate))
+    res_endtype = fill(endt, length(res_daydate))
+    res_residentidx = fill(idx, length(res_daydate))
+    res_locationid = fill(location, length(res_daydate))
+    episode = 1
+    res_episode = fill(episode, length(res_daydate))
+    for i in 2:length(startdate)
+        if startdate[i] > res_daydate[end]
+            start = startdate[i]
+        elseif enddate[i] > res_daydate[end]
+            start = res_daydate[end] + Day(1)
+        else
+            continue #this episode is contained within the previous episode
+        end
+        episode = episode + 1
+        stop = enddate[i]
+        startt = starttype[i]
+        endt = endtype[i]
+        idx = residentidx[i]
+        location = locationid[i]
+        new_daydate = start:Day(1):stop
+        append!(res_daydate, new_daydate)
+        append!(res_startdate, fill(startdate[i], length(new_daydate)))
+        append!(res_enddate, fill(stop, length(new_daydate)))
+        append!(res_starttype, fill(startt, length(new_daydate)))
+        append!(res_endtype, fill(endt, length(new_daydate)))
+        append!(res_residentidx, fill(idx, length(new_daydate)))
+        append!(res_locationid, fill(location, length(new_daydate)))
+        append!(res_episode, fill(episode, length(new_daydate)))
+    end
+
+    return (daydate = res_daydate, startdate = res_startdate, enddate = res_enddate, starttype = res_starttype, endtype = res_endtype, residentidx = res_residentidx, locationid = res_locationid, episode = res_episode)
+end
 "Decompose residences into days and eliminate overlaps"
 function eliminateresidenceoverlaps(node::String, basedirectory::String)
     residences = Arrow.Table(joinpath(basedirectory, node, "Staging", "IndividualResidencies.arrow")) |> DataFrame
-    @info "Node $(node) $(nrow(residences)) episodes before overlap elimination"
+    @info "Node $(node) $(nrow(residences)) episodes before overlap elimination at $(now())"
+    select!(residences, [:ResidenceId, :IndividualId, :LocationId, :StartDate,:StartType, :EndDate, :EndType, :ResidentIndex])
+    insertcols!(residences, :ResidentIndex, :GapStart => 0, :GapEnd => 0, :Gap => 0)
+    s = combine(groupby(sort(residences, [:StartDate, order(:EndDate, rev=true)]), :IndividualId, sort=true), [:StartDate, :EndDate, :StartType, :EndType, :ResidentIndex, :LocationId] => processresidencedays => AsTable)
+    @info "$(nrow(s)) day rows for $(node) at $(now())"
+    df = combine(groupby(s, [:IndividualId,:episode,:locationid]), :daydate => minimum => :StartDate, :starttype => first => :StartType, 
+                                                               :daydate => maximum => :EndDate, :endtype => last => :EndType, 
+                                                               :residentidx => mean => :ResidentIndex, :episode => maximum => :episodes)
+    @info "Node $(node) $(nrow(df)) episodes after overlap elimination at $(now())"
+    rename!(df,Dict(:episode=>"Episode",:locationid=>"LocationId",:episodes => "Episodes"))
+    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualResidenciesIntermediate.arrow"), df, compress=:zstd)
+    return nothing
+end
+
+function eliminateresidenceoverlaps_old(node::String, basedirectory::String)
+    residences = Arrow.Table(joinpath(basedirectory, node, "Staging", "IndividualResidencies.arrow")) |> DataFrame
+    @info "Node $(node) $(nrow(residences)) episodes before overlap elimination at $(now())"
     select!(residences, [:ResidenceId, :IndividualId, :LocationId, :StartDate,:StartType, :EndDate, :EndType, :ResidentIndex])
     insertcols!(residences, :ResidentIndex, :GapStart => 0, :GapEnd => 0, :Gap => 0)
     s = similar(residences, 0)
@@ -404,10 +466,10 @@ function eliminateresidenceoverlaps(node::String, basedirectory::String)
         ttf.End = ttf.DayDate .== ttf.EndDate
         append!(s, ttf, cols=:union)
     end
-    @info "$(nrow(s)) day rows for $(node)"
+    @info "$(nrow(s)) day rows for $(node) at $(now())"
     sort!(s, [:IndividualId,:DayDate,order(:ResidentIndex, rev=true), :StartDate, order(:EndDate, rev=true)]);
     unique!(s, [:IndividualId,:DayDate]);
-    @info "$(nrow(s)) unique day rows for $(node)"
+    @info "$(nrow(s)) unique day rows for $(node) at $(now())"
     lastindividual = -1
     gap = 0
     n = nrow(s)
@@ -435,7 +497,7 @@ function eliminateresidenceoverlaps(node::String, basedirectory::String)
                                                                :DayDate => maximum => :EndDate, :EndType => last => :EndType, 
                                                                :GapStart => maximum => :GapStart, :GapEnd => maximum => :GapEnd,
                                                                :ResidentIndex => mean => :ResidentIndex)
-    @info "Node $(node) $(nrow(df)) episodes after overlap elimination"
+    @info "Node $(node) $(nrow(df)) episodes after overlap elimination at $(now())"
     Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualResidenciesIntermediate.arrow"), df, compress=:zstd)
     return nothing
 end
@@ -508,27 +570,28 @@ end # readresidencestatus
 function dropnonresidentepisodes(basedirectory::String, node::String)
     r = Arrow.Table(joinpath(basedirectory, node, "Staging", "IndividualResidenciesIntermediate.arrow")) |> DataFrame
     @info "$(nrow(r)) $(node) residence rows"
-    rs = Arrow.Table(joinpath(basedirectory, node, "Staging", "ResidentStatus.arrow")) |> DataFrame
+    rs = open(joinpath(basedirectory, node, "Staging", "ResidentStatus.arrow")) do io
+        return Arrow.Table(io) |> DataFrame
+    end
     @info "$(nrow(rs)) $(node) residence status rows"
-
     s = outerjoin(r, rs, on=[:IndividualId => :IndividualId, :LocationId => :LocationId])
     # eliminate records that didn't join properly
     dropmissing!(s, :LocationId, disallowmissing=true)
-    dropmissing!(s, :Gap, disallowmissing=true)
+    dropmissing!(s, :Episode, disallowmissing=true)
     replace!(s.ResidentStatus, missing => 1)
-    disallowmissing!(s, [:IndividualId,:StartDate,:StartType,:EndDate,:EndType, :GapStart, :GapEnd, :ResidentIndex, :ResidentStatus])
+    disallowmissing!(s, [:IndividualId,:StartDate,:StartType,:EndDate,:EndType, :Episode, :Episodes, :ResidentIndex, :ResidentStatus])
     
     for i = 1:nrow(s)
-        od = s[i,:ObservationDate]
-        if ismissing(od)
+       # od = s[i,:ObservationDate]
+        if ismissing(s[i,:ObservationDate])
             s[i,:ObservationDate] = s[i,:StartDate]
         end
     end
             
     s = s[((s.ObservationDate .>= s.StartDate) .& (s.ObservationDate .<= s.EndDate)), :] # drop records where observation date is out of bounds
-    df = combine(groupby(s, :IndividualId), :LocationId, :StartDate, :StartType, :EndDate, :EndType, :ResidentIndex, :Gap, :GapStart, :GapEnd, :ObservationDate, :ResidentStatus,
+    df = combine(groupby(s, :IndividualId), :LocationId, :StartDate, :StartType, :EndDate, :EndType, :ResidentIndex, :Episode, :Episodes, :ObservationDate, :ResidentStatus,
                 :ResidentStatus => Base.Fix2(lag, 1) => :LastResidentStatus, 
-                :LocationId => Base.Fix2(lag, 1) => :LastLocationId, :Gap => Base.Fix2(lag, 1) => :LastGap)
+                :LocationId => Base.Fix2(lag, 1) => :LastLocationId, :Episode => Base.Fix2(lag, 1) => :LastEpisode)
     insertcols!(df, :episode => 0)
     episode = 0
     for i = 1:nrow(df)
@@ -538,9 +601,9 @@ function dropnonresidentepisodes(basedirectory::String, node::String)
         else
             location = df[i,:LocationId]
             lastlocation = df[i,:LastLocationId]
-            gap = df[i,:Gap]
-            lastgap = df[i,:LastGap]
-            if location != lastlocation || gap != lastgap
+            e = df[i,:Episode]
+            laste = df[i,:LastEpisode]
+            if location != lastlocation || e != laste
                 episode = episode + 1
                 df[i,:episode] = episode
             else
@@ -557,12 +620,10 @@ function dropnonresidentepisodes(basedirectory::String, node::String)
     end
     s = combine(groupby(df, [:IndividualId,:LocationId,:episode]), :StartDate => first => :StartDate, :StartType => first => :StartType, 
                 :EndDate => first => :EndDate, :EndType => first => :EndType, 
-                :Gap => first => :Gap,
-                :GapStart => first => :GapStart, :GapEnd => first => :GapEnd,
                 :ResidentStatus => first => :ResidentStatus, :ResidentIndex => mean => :ResidentIndex,
                 :ObservationDate => minimum => :StartObservationDate, :ObservationDate => maximum => :EndObservationDate)
     @info "Node $(node) $(nrow(s)) episodes after resident split"
-    df = combine(groupby(s, :IndividualId), :LocationId, :episode, :StartDate, :StartType, :EndDate, :EndType, :Gap, :GapStart, :GapEnd, :ResidentStatus, :StartObservationDate, :EndObservationDate, :ResidentIndex,
+    df = combine(groupby(s, :IndividualId), :LocationId, :episode, :StartDate, :StartType, :EndDate, :EndType, :ResidentStatus, :StartObservationDate, :EndObservationDate, :ResidentIndex,
                 :ResidentStatus => Base.Fix2(lead, 1) => :NextResidentStatus, 
                 :ResidentStatus => Base.Fix2(lag, 1) => :LastResidentStatus, 
                 :StartObservationDate => Base.Fix2(lead, 1) => :NextStartObsDate,
@@ -580,8 +641,9 @@ function dropnonresidentepisodes(basedirectory::String, node::String)
     filter!(:ResidentStatus => s -> s == 1, df)
     @info "Node $(node) $(nrow(df)) episodes after dropping non-resident episodes"
     df.ResidenceId = 1:nrow(df)
-    select!(df, [:ResidenceId, :IndividualId, :LocationId, :StartDate,:StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate, :ResidentIndex])
+    select!(df, [:ResidenceId, :IndividualId, :LocationId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate, :ResidentIndex])
     mv(joinpath(basedirectory, node, "Staging", "IndividualResidencies.arrow"), joinpath(basedirectory, node, "Staging", "IndividualResidencies_old.arrow"), force=true)
+    transform!(groupby(sort(df,[:IndividualId, :StartDate]),:IndividualId), :IndividualId => eachindex => :Episode, nrow => :Episodes)
     Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualResidencies.arrow"), df, compress=:zstd)
     return nothing
 end # dropnonresidentepisodes
@@ -754,8 +816,8 @@ function readhouseholdmemberships_internal(db::String, node::String, basedirecto
     filter!([:StartDate,:EndDate] => (s, e) -> s <= e, m) # start date must be smaller or equal to end date
     sort!(m,[:IndividualId,:HouseholdId,:StartDate])
     m.MembershipId = 1:nrow(m)
-    transform!(groupby(m,[:IndividualId,:HouseholdId]), :IndividualId => eachindex => :Episode)
-    select!(m,[:MembershipId, :IndividualId, :HouseholdId, :StartDate, :StartType, :StartObservationDate, :EndDate, :EndType, :EndObservationDate, :Episode])
+    transform!(groupby(m,[:IndividualId,:HouseholdId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
+    select!(m,[:MembershipId, :IndividualId, :HouseholdId, :StartDate, :StartType, :StartObservationDate, :EndDate, :EndType, :EndObservationDate, :Episode, :Episodes])
     Arrow.write(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow"), m, compress=:zstd)
     @info "Wrote $(nrow(m)) $(node) membership episodes"
     return nothing
@@ -809,8 +871,8 @@ function readhouseholdheadrelationships(db::String, node::String, basedirectory:
     filter!([:StartDate,:EndDate] => (s, e) -> s <= e, m) # start date must be smaller or equal to end date
     sort!(m,[:IndividualId,:HouseholdId, :StartDate, :HHRelationshipTypeId])
     m.RelationshipId = 1:nrow(m)
-    transform!(groupby(m,[:IndividualId,:HouseholdId]), :IndividualId => eachindex => :Episode)
-    select!(m,[:RelationshipId, :IndividualId, :HouseholdId, :HHRelationshipTypeId, :StartDate, :StartType, :StartObservationDate, :EndDate, :EndType, :EndObservationDate, :Episode])
+    transform!(groupby(m,[:IndividualId,:HouseholdId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
+    select!(m,[:RelationshipId, :IndividualId, :HouseholdId, :HHRelationshipTypeId, :StartDate, :StartType, :StartObservationDate, :EndDate, :EndType, :EndObservationDate, :Episode, :Episodes])
     Arrow.write(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow"), m, compress=:zstd)
     @info "Wrote $(nrow(m)) $(node) relationships episodes"
     return nothing
@@ -821,42 +883,92 @@ end #readhouseholdheadrelationships
 function readindividualmemberships(node::String, batchsize::Int64)
     batchmemberships(settings.BaseDirectory, node, batchsize)
 end
-function getmembershipdays(basedirectory::String, node::String, fromId::Int64, toId::Int64)
-    memberships =Arrow.Table(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow")) |> DataFrame
-    f = filter([:IndividualId] => id -> id >= fromId && id <= toId, memberships)
-    select!(f,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType])
-    m = similar(f,0)
-    for row in eachrow(f)
-        tf = DataFrame(row)
-        ttf=repeat(tf, Dates.value.(row.EndDate-row.StartDate) + 1)
-        ttf.DayDate = ttf.StartDate .+ Dates.Day.(0:nrow(ttf)-1)
-        ttf.Start = ttf.DayDate .== ttf.StartDate
-        ttf.End = ttf.DayDate .== ttf.EndDate
-        append!(m, ttf, cols = :union)
+function processmembershipdays(startdate, enddate, starttype, endtype)
+    start = startdate[1]
+    stop = enddate[1]
+    startt = starttype[1]
+    endt = endtype[1]
+    res_daydate = collect(start:Day(1):stop)
+    res_startdate = fill(start, length(res_daydate))
+    res_enddate = fill(stop, length(res_daydate))
+    res_starttype = fill(startt, length(res_daydate))
+    res_endtype = fill(endt, length(res_daydate))
+    episode = 1
+    res_episode = fill(episode, length(res_daydate))
+    for i in 2:length(startdate)
+        if startdate[i] > res_daydate[end]
+            start = startdate[i]
+        elseif enddate[i] > res_daydate[end]
+            start = res_daydate[end] + Day(1)
+        else
+            continue #this episode is contained within the previous episode
+        end
+        episode = episode + 1
+        stop = enddate[i]
+        startt = starttype[i]
+        endt = endtype[i]
+        new_daydate = start:Day(1):stop
+        append!(res_daydate, new_daydate)
+        append!(res_startdate, fill(startdate[i], length(new_daydate)))
+        append!(res_enddate, fill(stop, length(new_daydate)))
+        append!(res_starttype, fill(startt, length(new_daydate)))
+        append!(res_endtype, fill(endt, length(new_daydate)))
+        append!(res_episode, fill(episode, length(new_daydate)))
     end
-    unique!(m,[:IndividualId,:HouseholdId,:DayDate])
-    @info "Unique membership days $(nrow(m)) from $(fromId) to $(toId)"
-    return m
+
+    return (daydate = res_daydate, startdate = res_startdate, enddate = res_enddate, starttype = res_starttype, endtype = res_endtype, episode = res_episode)
+end
+function getmembershipdays(f)
+    s = combine(groupby(sort(f, [:StartDate, order(:EndDate, rev=true)]), [:IndividualId, :HouseholdId], sort=true), [:StartDate, :EndDate, :StartType, :EndType] => processmembershipdays => AsTable)
+     rename!(s,Dict(:daydate=>"DayDate",:episode=>"Episode",:startdate=>"StartDate",:enddate => "EndDate",:starttype => "StartType",:endtype => "EndType"))
+    return s
 end #getmembershipdays
-function getrelationshipdays(basedirectory::String, node::String, fromId::Int64, toId::Int64)
-    relationships = Arrow.Table(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow")) |> DataFrame
-    f =filter([:IndividualId] => id -> id >= fromId && id <= toId, relationships)
-    select!(f,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType, :HHRelationshipTypeId])
-    r = similar(relationships,0)
-    for row in eachrow(f)
-        tf = DataFrame(row)
-        ttf=repeat(tf, Dates.value.(row.EndDate-row.StartDate) + 1)
-        ttf.DayDate = ttf.StartDate .+ Dates.Day.(0:nrow(ttf)-1)
-        ttf.Start = ttf.DayDate .== ttf.StartDate
-        ttf.End = ttf.DayDate .== ttf.EndDate
-        append!(r, ttf, cols = :union)
+function processrelationshipdays(startdate, enddate, starttype, endtype, hhrelationtype)
+    start = startdate[1]
+    stop = enddate[1]
+    startt = starttype[1]
+    endt = endtype[1]
+    relation = hhrelationtype[1]
+    res_daydate = collect(start:Day(1):stop)
+    res_startdate = fill(start, length(res_daydate))
+    res_enddate = fill(stop, length(res_daydate))
+    res_starttype = fill(startt, length(res_daydate))
+    res_endtype = fill(endt, length(res_daydate))
+    res_relation = fill(relation, length(res_daydate))
+    episode = 1
+    res_episode = fill(episode, length(res_daydate))
+    for i in 2:length(startdate)
+        if startdate[i] > res_daydate[end]
+            start = startdate[i]
+        elseif enddate[i] > res_daydate[end]
+            start = res_daydate[end] + Day(1)
+        else
+            continue #this episode is contained within the previous episode
+        end
+        episode = episode + 1
+        stop = enddate[i]
+        startt = starttype[i]
+        endt = endtype[i]
+        relation = hhrelationtype[i]
+        new_daydate = start:Day(1):stop
+        append!(res_daydate, new_daydate)
+        append!(res_startdate, fill(startdate[i], length(new_daydate)))
+        append!(res_enddate, fill(stop, length(new_daydate)))
+        append!(res_starttype, fill(startt, length(new_daydate)))
+        append!(res_endtype, fill(endt, length(new_daydate)))
+        append!(res_relation, fill(relation, length(new_daydate)))
+        append!(res_episode, fill(episode, length(new_daydate)))
     end
-    unique!(r,[:IndividualId,:HouseholdId,:DayDate])
-    @info "Unique relationship days $(nrow(r)) from $(fromId) to $(toId)"
-    return r
+
+    return (daydate = res_daydate, startdate = res_startdate, enddate = res_enddate, starttype = res_starttype, endtype = res_endtype, hhrelationtype = res_relation ,episode = res_episode)
+end
+function getrelationshipdays(f)
+    s = combine(groupby(sort(f, [:StartDate, order(:EndDate, rev=true)]), [:IndividualId, :HouseholdId], sort=true), [:StartDate, :EndDate, :StartType, :EndType, :HHRelationshipTypeId] => processrelationshipdays => AsTable)
+    rename!(s,Dict(:daydate=>"DayDate",:episode=>"Episode",:startdate=>"StartDate",:enddate => "EndDate",:starttype => "StartType",:endtype => "EndType",:hhrelationtype => "HHRelationshipTypeId"))
+    return s
 end #getrelationshipdays
-function individualmemberships(basedirectory::String, node::String, fromId::Int64, toId::Int64, batch::Int64)
-    mr = leftjoin(getmembershipdays(basedirectory,node,fromId,toId), getrelationshipdays(basedirectory,node,fromId,toId), on = [:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
+function individualmemberships(basedirectory::String, node::String, m, r, batch::Int64)
+    mr = leftjoin(getmembershipdays(m), getrelationshipdays(r), on = [:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
     select!(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :Episode])
     replace!(mr.HHRelationshipTypeId, missing => 12)
     disallowmissing!(mr,[:HHRelationshipTypeId, :DayDate])
@@ -910,11 +1022,23 @@ function batchmemberships(basedirectory::String, node::String, batchsize::Int64)
     idrange = (maxId - minId) + 1
     batches = ceil(Int32, idrange / batchsize)
     @info "Node $(node) Batch size $(batchsize) Minimum id $(minId), maximum Id $(maxId), idrange $(idrange), batches $(batches)"
-    Threads.@threads for i = 1:batches
+    relationships = open(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow")) do io
+        return Arrow.Table(io) |> DataFrame
+    end
+    select!(relationships,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType, :HHRelationshipTypeId])
+    @info "Node $(node) $(nrow(relationships)) relationship episodes"
+    memberships = open(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow")) do io
+        return Arrow.Table(io) |> DataFrame
+    end
+    select!(memberships,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType])
+    @info "Node $(node) $(nrow(memberships)) memberships episodes"
+     Threads.@threads for i = 1:batches
         fromId = minId + batchsize * (i-1)
         toId = min(maxId, (minId + batchsize * i)-1)
         @info "Batch $(i) from $(fromId) to $(toId)"
-        individualmemberships(basedirectory,node,fromId,toId,i)
+        m = filter([:IndividualId] => id -> id >= fromId && id <= toId, memberships)
+        r = filter([:IndividualId] => id -> id >= fromId && id <= toId, relationships)
+        individualmemberships(basedirectory,node,m,r,i)
     end
     combinemembershipbatch(basedirectory,node,batches)
     return nothing

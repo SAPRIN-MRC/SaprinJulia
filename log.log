@@ -4,3 +4,6 @@
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:25
 ┌ Info: Execution started 2021-01-11 11:15
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Warning: Some Julia code in the VS Code extension crashed with
+│   e = UndefVarError(:main)
+└ @ VSCodeDebugger c:\Users\kobus\.vscode\extensions\julialang.language-julia-1.0.10\scripts\error_handler.jl:5

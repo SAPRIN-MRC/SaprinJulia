@@ -6,7 +6,7 @@ using Dates
 l = open("log.log", "a+")
 io = IOContext(l, :displaysize=>(100,100))
 logger = SimpleLogger(io)
-global_logger(logger)
+old_logger = global_logger(logger)
 @info "Execution started $(Dates.format(now(), "yyyy-mm-dd HH:MM"))" 
 flush(io)
 #endregion
@@ -55,16 +55,17 @@ readhouseholdmemberships("AHRI")
 @info "========== Finished readhouseholdmemberships at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
 #endregion
-readindividualmemberships("Agincourt", 10000)
+readindividualmemberships("Agincourt", 25000)
+=#
 @info "========== Finished readindividualmemberships Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-readindividualmemberships("DIMAMO", 10000)
+readindividualmemberships("DIMAMO", 25000)
 @info "========== Finished readindividualmemberships DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+#=
 flush(io)
-readindividualmemberships("AHRI", 10000)
+readindividualmemberships("AHRI", 25000)
 @info "========== Finished readindividualmemberships AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-=#
 readeducationstatuses("Agincourt")
 @info "========== Finished Agincourt readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
@@ -101,6 +102,8 @@ flush(io)
 readlabourstatuses("AHRI")
 @info "========== Finished AHRI readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
+=#
 #region clean up
+global_logger(old_logger)
 close(io)
 #endregion
