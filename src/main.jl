@@ -10,7 +10,6 @@ old_logger = global_logger(logger)
 @info "Execution started $(Dates.format(now(), "yyyy-mm-dd HH:MM"))" 
 flush(io)
 #endregion
-#=
 #region Staging
 # Individuals
 @info "========== Start readindividuals at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -135,7 +134,6 @@ t = now()
 extracthhresidencydays("AHRI", 10000)
 d = now()-t
 @info "AHRI extraction complete $(now()) duration $(round(d, Dates.Second))"
-=#
 @info "========== Start Agincourt extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 extractmembershipdays("Agincourt", 30000)
