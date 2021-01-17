@@ -2939,3 +2939,297 @@ EndType  │
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:1010
 ┌ Info: ========== Finished readindividualmemberships DIMAMO at 2021-01-17 03:15:57
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:63
+┌ Info: Execution started 2021-01-17 07:59
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start Agincourt extractresidencydays at 2021-01-17 07:59:01
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:104
+┌ Info: Node Agincourt Batch size 50000 Minimum id 1, maximum Id 218775, idrange 218775, batches 5
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:83
+┌ Info: Node Agincourt 294342 residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:88
+┌ Info: Batch 3 from 100001 to 150000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Batch 1 from 1 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Batch 2 from 50001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Batch 4 from 150001 to 200000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Batch 5 from 200001 to 218775
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Final individual residency day rows 632943733 for Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:69
+┌ Info: Agincourt extraction complete 2021-01-17T08:01:50.279 duration 168 seconds seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:108
+┌ Info: ========== Start DIMAMO extractresidencydays at 2021-01-17 08:01:51
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:109
+┌ Info: Node DIMAMO Batch size 50000 Minimum id 1, maximum Id 125436, idrange 125436, batches 3
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:83
+┌ Info: Node DIMAMO 127163 residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:88
+┌ Info: Batch 3 from 100001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Batch 1 from 1 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Batch 2 from 50001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Final individual residency day rows 136660884 for DIMAMO
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:69
+┌ Info: DIMAMO extraction complete 2021-01-17T08:02:29.68 duration 38 seconds seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:113
+┌ Info: ========== Start AHRI extractresidencydays at 2021-01-17 08:02:29
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:114
+┌ Info: Node AHRI Batch size 50000 Minimum id 1, maximum Id 239252, idrange 239252, batches 5
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:83
+┌ Info: Node AHRI 309779 residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:88
+┌ Info: Batch 1 from 1 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Batch 3 from 100001 to 150000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Batch 4 from 150001 to 200000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Batch 2 from 50001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Batch 5 from 200001 to 239252
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:92
+┌ Info: Final individual residency day rows 493453092 for AHRI
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:69
+┌ Info: AHRI extraction complete 2021-01-17T08:04:33.019 duration 123 seconds seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:118
+┌ Info: Execution started 2021-01-17 12:06
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Finished readresidences AHRI at 2021-01-17 12:06:48
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:41
+┌ Info: Execution started 2021-01-17 12:08
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Finished readresidences AHRI at 2021-01-17 12:08:35
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:41
+┌ Info: Execution started 2021-01-17 12:09
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Finished readresidences AHRI at 2021-01-17 12:09:37
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:41
+┌ Info: Read 32767 Agincourt households
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:594
+┌ Info: Read 32767 Agincourt household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:623
+┌ Info: Read 314452 Agincourt household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:651
+┌ Info: Grouped 32331 Agincourt households from household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:653
+┌ Info: Household residences 32767 Agincourt after episode counts
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:657
+┌ Info: Household residences 32524 Agincourt after right censor
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:676
+┌ Info: Wrote 32524 Agincourt household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:711
+┌ Info: Read 21558 DIMAMO households
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:594
+┌ Info: Read 21558 DIMAMO household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:623
+┌ Info: Read 132498 DIMAMO household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:651
+┌ Info: Grouped 21558 DIMAMO households from household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:653
+┌ Info: Household residences 21558 DIMAMO after episode counts
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:657
+┌ Info: Household residences 21541 DIMAMO after right censor
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:676
+┌ Info: Wrote 21541 DIMAMO household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:711
+┌ Info: Read 36453 AHRI households
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:594
+┌ Info: Read 38732 AHRI household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:623
+┌ Info: Read 318914 AHRI household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:651
+┌ Info: Grouped 35356 AHRI households from household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:653
+┌ Info: Household residences 38732 AHRI after episode counts
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:657
+┌ Info: Household residences 38053 AHRI after right censor
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:676
+┌ Info: Wrote 38053 AHRI household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:711
+┌ Info: ========== Finished readhouseholds at 2021-01-17 12:10:22
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:48
+┌ Info: Execution started 2021-01-17 12:13
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Finished readresidences AHRI at 2021-01-17 12:13:11
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:41
+┌ Info: Execution started 2021-01-17 12:14
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Finished readresidences AHRI at 2021-01-17 12:14:08
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:41
+┌ Info: Read 32767 Agincourt households
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:594
+┌ Info: Read 32767 Agincourt household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:623
+┌ Info: Read 314452 Agincourt household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:651
+┌ Info: Grouped 32331 Agincourt households from household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:653
+┌ Info: Household residences 32767 Agincourt after episode counts
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:657
+┌ Info: Household residences 32524 Agincourt after right censor
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:676
+┌ Info: Wrote 32524 Agincourt household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:711
+┌ Info: Read 21558 DIMAMO households
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:594
+┌ Info: Read 21558 DIMAMO household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:623
+┌ Info: Read 132498 DIMAMO household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:651
+┌ Info: Grouped 21558 DIMAMO households from household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:653
+┌ Info: Household residences 21558 DIMAMO after episode counts
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:657
+┌ Info: Household residences 21541 DIMAMO after right censor
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:676
+┌ Info: Wrote 21541 DIMAMO household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:711
+┌ Info: Read 36453 AHRI households
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:594
+┌ Info: Read 38732 AHRI household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:623
+┌ Info: Read 318914 AHRI household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:651
+┌ Info: Grouped 35356 AHRI households from household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:653
+┌ Info: Household residences 38732 AHRI after episode counts
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:657
+┌ Info: Household residences 38053 AHRI after right censor
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:676
+┌ Info: Wrote 38052 AHRI household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:711
+┌ Info: ========== Finished readhouseholds at 2021-01-17 12:14:43
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:48
+┌ Info: Execution started 2021-01-17 12:52
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start Agincourt extract household residencydays at 2021-01-17 12:52:37
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:122
+┌ Info: Node Agincourt Batch size 10000 Minimum id 1, maximum Id 32767, idrange 32767, batches 4
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:92
+┌ Info: Node Agincourt 32524 household residency episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:97
+┌ Info: Batch 2 from 10001 to 20000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:101
+┌ Info: Batch 1 from 1 to 10000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:101
+┌ Info: Batch 4 from 30001 to 32767
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:101
+┌ Info: Batch 3 from 20001 to 30000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:101
+┌ Info: Final household residency day rows 141978952 for Agincourt
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:78
+┌ Info: Agincourt extraction complete 2021-01-17T12:53:10.853 duration 34 seconds seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:126
+┌ Info: ========== Start DIMAMO extract household residencydays at 2021-01-17 12:53:10
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:127
+┌ Info: Node DIMAMO Batch size 10000 Minimum id 1, maximum Id 21558, idrange 21558, batches 3
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:92
+┌ Info: Node DIMAMO 21541 household residency episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:97
+┌ Info: Batch 1 from 1 to 10000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:101
+┌ Info: Batch 2 from 10001 to 20000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:101
+┌ Info: Batch 3 from 20001 to 21558
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:101
+┌ Info: Final household residency day rows 29028485 for DIMAMO
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:78
+┌ Info: DIMAMO extraction complete 2021-01-17T12:53:19.552 duration 9 seconds seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:131
+┌ Info: ========== Start AHRI extract household residencydays at 2021-01-17 12:53:19
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:132
+┌ Info: Node AHRI Batch size 10000 Minimum id 1, maximum Id 36453, idrange 36453, batches 4
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:92
+┌ Info: Node AHRI 38052 household residency episodes
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:97
+┌ Info: Batch 2 from 10001 to 20000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:101
+┌ Info: Batch 3 from 20001 to 30000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:101
+┌ Info: Batch 1 from 1 to 10000
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:101
+┌ Info: Batch 4 from 30001 to 36453
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:101
+┌ Info: Final household residency day rows 96437721 for AHRI
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\tmp.jl:78
+┌ Info: AHRI extraction complete 2021-01-17T12:53:42.835 duration 23 seconds seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:136
+┌ Info: Execution started 2021-01-17 13:20
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start Agincourt extract household membership days at 2021-01-17 13:20:39
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:139
+┌ Info: Node Agincourt Batch size 30000 Minimum id 1, maximum Id 218775, idrange 218775, batches 8
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:280
+┌ Info: Node Agincourt 308400 individual membership episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:284
+┌ Info: Batch 6 from 150001 to 180000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 1 from 1 to 30000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 3 from 60001 to 90000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 7 from 180001 to 210000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 8 from 210001 to 218775
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 5 from 120001 to 150000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 2 from 30001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 4 from 90001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Final household membership day rows 802437990 for Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:266
+┌ Info: Agincourt extraction complete 2021-01-17T13:24:14.459 duration 215 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:143
+┌ Info: ========== Start DIMAMO extract household membership days at 2021-01-17 13:24:14
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:145
+┌ Info: Node DIMAMO Batch size 30000 Minimum id 1, maximum Id 125436, idrange 125436, batches 5
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:280
+┌ Info: Node DIMAMO 123728 individual membership episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:284
+┌ Info: Batch 3 from 60001 to 90000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 1 from 1 to 30000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 2 from 30001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 4 from 90001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 5 from 120001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Final household membership day rows 159308606 for DIMAMO
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:266
+┌ Info: DIMAMO extraction complete 2021-01-17T13:24:58.587 duration 44 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:149
+┌ Info: ========== Start AHRI extract household membership days at 2021-01-17 13:24:58
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:151
+┌ Info: Node AHRI Batch size 30000 Minimum id 1, maximum Id 239252, idrange 239252, batches 8
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:280
+┌ Info: Node AHRI 326877 individual membership episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:284
+┌ Info: Batch 1 from 1 to 30000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 3 from 60001 to 90000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 5 from 120001 to 150000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 7 from 180001 to 210000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 8 from 210001 to 239252
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 6 from 150001 to 180000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 2 from 30001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Batch 4 from 90001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:288
+┌ Info: Final household membership day rows 719142664 for AHRI
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:266
+┌ Info: AHRI extraction complete 2021-01-17T13:28:04.281 duration 186 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:155
