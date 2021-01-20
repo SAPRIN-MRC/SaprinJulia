@@ -10,6 +10,7 @@ old_logger = global_logger(logger)
 @info "Execution started $(Dates.format(now(), "yyyy-mm-dd HH:MM"))" 
 flush(io)
 #endregion
+#=
 #region Staging
 # Individuals
 @info "========== Start readindividuals at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -98,7 +99,9 @@ readlabourstatuses("AHRI")
 @info "========== Finished AHRI readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
 #endregion
+=#
 #region Day Extraction
+#=
 @info "========== Start Agincourt extractresidencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 extractresidencydays("Agincourt", 50000)
@@ -117,23 +120,25 @@ extractresidencydays("AHRI", 50000)
 d = now()-t
 @info "AHRI extraction complete $(now()) duration $(round(d, Dates.Second))"
 flush(io)
+=#
 @info "========== Start Agincourt extract household residencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
-extracthhresidencydays("Agincourt", 10000)
+extracthhresidencydays("Agincourt")
 d = now()-t
 @info "Agincourt extraction complete $(now()) duration $(round(d, Dates.Second))"
 flush(io)
 @info "========== Start DIMAMO extract household residencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
-extracthhresidencydays("DIMAMO", 10000)
+extracthhresidencydays("DIMAMO")
 d = now()-t
 @info "DIMAMO extraction complete $(now()) duration $(round(d, Dates.Second))"
 flush(io)
 @info "========== Start AHRI extract household residencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
-extracthhresidencydays("AHRI", 10000)
+extracthhresidencydays("AHRI")
 d = now()-t
 @info "AHRI extraction complete $(now()) duration $(round(d, Dates.Second))"
+#=
 @info "========== Start Agincourt extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 extractmembershipdays("Agincourt", 30000)
@@ -151,6 +156,7 @@ t = now()
 extractmembershipdays("AHRI", 30000)
 d = now()-t
 @info "AHRI extraction complete $(now()) duration $(round(d, Dates.Second))"
+=#
 #endregion
 #region clean up
 global_logger(old_logger)

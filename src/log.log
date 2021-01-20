@@ -2047,3 +2047,29 @@ Employer  │
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:266
 ┌ Info: AHRI extraction complete 2021-01-17T19:33:17.527 duration 188 seconds
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:153
+┌ Info: Execution started 2021-01-19 12:03
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start Agincourt extract household residencydays at 2021-01-19 12:03:05
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:124
+┌ Info: Node Agincourt 32524 household residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:175
+┌ Info: Node Agincourt 142064080 household residency days
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:180
+┌ Info: Agincourt extraction complete 2021-01-19T12:03:59.777 duration 54 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:128
+┌ Info: ========== Start DIMAMO extract household residencydays at 2021-01-19 12:03:59
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:130
+┌ Info: Node DIMAMO 21541 household residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:175
+┌ Info: Node DIMAMO 29277695 household residency days
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:180
+┌ Info: DIMAMO extraction complete 2021-01-19T12:04:09.863 duration 10 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:134
+┌ Info: ========== Start AHRI extract household residencydays at 2021-01-19 12:04:09
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:136
+┌ Info: Node AHRI 38052 household residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:175
+┌ Info: Node AHRI 96678958 household residency days
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:180
+┌ Info: AHRI extraction complete 2021-01-19T12:04:42.111 duration 32 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:140

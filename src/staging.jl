@@ -751,7 +751,10 @@ function readhouseholdmemberships_internal(db::String, node::String, basedirecto
     @info "Read $(nrow(m)) $(node) membership episodes after individual bounds join"
     #adjust start and end dates
     for i = 1:nrow(m)
-        if m[i,:StartDate] < leftcensor && !ismissing(m[i,:EarliestDate])
+        if ismissing(m[i,:EarliestDate])
+            m[i,:EarliestDate] = leftcensor
+        end
+        if m[i,:StartDate] < leftcensor
             m[i,:StartDate] = m[i,:EarliestDate]
             m[i,:StartObservationDate] = m[i,:EarliestDate]
             m[i,:StartType] = 1
