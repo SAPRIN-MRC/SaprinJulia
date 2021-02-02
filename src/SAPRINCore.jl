@@ -16,7 +16,7 @@ using CategoricalArrays
 
 export readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
-       extractresidencydays, extracthhresidencydays, extractmembershipdays
+       extractresidencydays, extracthhresidencydays, extractmembershipdays, combinedaybatch, preferredhousehold
 
 #region Settings
 function readsettings(f)
@@ -76,6 +76,20 @@ function convertanytoint(a)
 end
 function convertanytostr(a)
     return string(a)
+end
+function individualbatch(basedirectory, node, batchsize)
+    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    minId = minimum(individualmap[!,:IndividualId])
+    maxId = maximum(individualmap[!,:IndividualId])
+    idrange = (maxId - minId) + 1
+    batches = ceil(Int32, idrange / batchsize)
+    @info "Node $(node) Batch size $(batchsize) Minimum id $(minId), maximum Id $(maxId), idrange $(idrange), batches $(batches)"
+    return minId, maxId, batches
+end
+function nextidrange(minId, maxId, batchsize, i)
+    fromId = minId + batchsize * (i-1)
+    toId = min(maxId, (minId + batchsize * i)-1)
+    return fromId, toId
 end
 #endregion
 

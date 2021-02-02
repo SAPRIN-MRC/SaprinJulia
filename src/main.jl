@@ -104,24 +104,23 @@ flush(io)
 #=
 @info "========== Start Agincourt extractresidencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
-extractresidencydays("Agincourt", 50000)
+extractresidencydays("Agincourt", 20000)
 d = now()-t
 @info "Agincourt extraction complete $(now()) duration $(round(d, Dates.Second))"
 flush(io)
 @info "========== Start DIMAMO extractresidencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
-extractresidencydays("DIMAMO", 50000)
+extractresidencydays("DIMAMO", 20000)
 d = now()-t
 @info "DIMAMO extraction complete $(now()) duration $(round(d, Dates.Second))"
 flush(io)
 @info "========== Start AHRI extractresidencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
-extractresidencydays("AHRI", 50000)
+extractresidencydays("AHRI", 20000)
 d = now()-t
 @info "AHRI extraction complete $(now()) duration $(round(d, Dates.Second))"
 flush(io)
-=#
-@info "========== Start Agincourt extract household residencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+info "========== Start Agincourt extract household residencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 extracthhresidencydays("Agincourt")
 d = now()-t
@@ -138,22 +137,23 @@ t = now()
 extracthhresidencydays("AHRI")
 d = now()-t
 @info "AHRI extraction complete $(now()) duration $(round(d, Dates.Second))"
-#=
 @info "========== Start Agincourt extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
-extractmembershipdays("Agincourt", 30000)
+extractmembershipdays("Agincourt", 20000)
 d = now()-t
 @info "Agincourt extraction complete $(now()) duration $(round(d, Dates.Second))"
 flush(io)
+=#
 @info "========== Start DIMAMO extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
-extractmembershipdays("DIMAMO", 30000)
+extractmembershipdays("DIMAMO", 20000)
 d = now()-t
 @info "DIMAMO extraction complete $(now()) duration $(round(d, Dates.Second))"
+#=
 flush(io)
 @info "========== Start AHRI extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
-extractmembershipdays("AHRI", 30000)
+extractmembershipdays("AHRI", 20000)
 d = now()-t
 @info "AHRI extraction complete $(now()) duration $(round(d, Dates.Second))"
 =#

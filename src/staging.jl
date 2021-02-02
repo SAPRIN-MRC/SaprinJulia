@@ -968,12 +968,6 @@ function combinemembershipbatch(basedirectory::String, node::String, batches)
 end #combinemembershipbatch
 "Normalise memberships in batches"
 function batchmemberships(basedirectory::String, node::String, batchsize::Int64)
-    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
-    minId = minimum(individualmap[!,:IndividualId])
-    maxId = maximum(individualmap[!,:IndividualId])
-    idrange = (maxId - minId) + 1
-    batches = ceil(Int32, idrange / batchsize)
-    @info "Node $(node) Batch size $(batchsize) Minimum id $(minId), maximum Id $(maxId), idrange $(idrange), batches $(batches)"
     relationships = open(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow")) do io
         return Arrow.Table(io) |> DataFrame
     end
@@ -984,12 +978,12 @@ function batchmemberships(basedirectory::String, node::String, batchsize::Int64)
     end
     select!(memberships,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType])
     @info "Node $(node) $(nrow(memberships)) memberships episodes"
-     Threads.@threads for i = 1:batches
-        fromId = minId + batchsize * (i-1)
-        toId = min(maxId, (minId + batchsize * i)-1)
+    minId, maxId, batches = individualbatch(basedirectory, node, batchsize)
+    Threads.@threads for i = 1:batches
+        fromId, toId = nextidrange(minId, maxId, batchsize, i)
         @info "Batch $(i) from $(fromId) to $(toId)"
-        m = filter([:IndividualId] => id -> id >= fromId && id <= toId, memberships)
-        r = filter([:IndividualId] => id -> id >= fromId && id <= toId, relationships)
+        m = filter([:IndividualId] => id -> fromId <= id <= toId, memberships)
+        r = filter([:IndividualId] => id -> fromId <= id <= toId, relationships)
         individualmemberships(basedirectory,node,m,r,i)
     end
     combinemembershipbatch(basedirectory,node,batches)

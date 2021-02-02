@@ -5,41 +5,45 @@ using Statistics
 using ShiftedArrays
 using Missings
 using CategoricalArrays
+using TableOperations
+using Tables
 
-function consolidatepreferredhousehold(basedirectory::String, node::String)
-    memberships = Arrow.Table(joinpath(basedirectory, node, "DayExtraction", "HouseholdMembershipDays.arrow")) |> DataFrame
-    hhresidencies = Arrow.Table(joinpath(basedirectory, node, "DayExtraction", "HouseholdResidencyDays.arrow")) |> DataFrame
-    println("$(node) read $(nrow(memberships)) membership days $(nrow(hhresidencies)) residency days at $(now())")
-    hm = innerjoin(memberships,hhresidencies, on = [:HouseholdId, :DayDate], makeunique = true)
-    select!(hm,[:HouseholdId, :DayDate, :IndividualId, :LocationId, :StartType, :EndType, :Start, :End, :HHRelationshipTypeId])
-    rename!(hm, [:LocationId =>:HHResLocationId, :StartType => :HHMemStartType, :EndType => :HHMemEndType, :Start => :HHMemStart, :End => :HHMemEnd])
-    residencydays = Arrow.Table(joinpath(basedirectory, node, "DayExtraction", "IndividualResidencyDays.arrow")) |> DataFrame
-    rename!(residencydays,[:LocationId => :IndResLocationId, :StartType => :IndResStartType, :EndType => :IndResEndType, :Start => :IndResStart, :End => :IndResEnd])
-    rd = outerjoin(hm, residencydays, on = [:IndividualId, :DayDate], makeunique=true, indicator=:result)
-    Arrow.write(joinpath(basedirectory, node, "DayExtraction", "ResDaysNoMember.arrow"), 
-                select(filter(x -> x.result == "right_only", rd), [:IndividualId,:DayDate,:IndResLocationId,:IndResStartType,:IndResEndType, :IndResStart, :IndResEnd]), compress=:zstd)
-    filter!(x -> x.result != "right_only", rd)
-    insertcols!(rd,:HHRelationshipTypeId, :HHRank => 999)
-    for i = 1:nrow(rd)
-        if ismissing(rd[i,:IndResLocationId])
-            rd[i,:HHRank] = rd[i,:HHRelationshipTypeId] + 100
-        elseif rd[i,:IndResLocationId]==rd[i,:HHResLocationId]
-            rd[i,:HHRank] = rd[i,:HHRelationshipTypeId]
-        else
-            rd[i,:HHRank] = rd[i,:HHRelationshipTypeId] + 100
-        end
+function individualbatch(basedirectory, node, batchsize)
+    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    minId = minimum(individualmap[!,:IndividualId])
+    maxId = maximum(individualmap[!,:IndividualId])
+    idrange = (maxId - minId) + 1
+    batches = ceil(Int32, idrange / batchsize)
+    @info "Node $(node) Batch size $(batchsize) Minimum id $(minId), maximum Id $(maxId), idrange $(idrange), batches $(batches)"
+    return minId, maxId, batches
+end
+function nextidrange(minId, maxId, batchsize, i)
+    fromId = minId + batchsize * (i-1)
+    toId = min(maxId, (minId + batchsize * i)-1)
+    return fromId, toId
+end
+function batchonindividualid(basedirectory, node, file, batchsize)
+    minId, maxId, numbatches = individualbatch(basedirectory, node, batchsize)
+    df = Arrow.Table(joinpath(basedirectory,node,"DayExtraction","$(file).arrow"))
+    println("Read memberships arrow table", now())
+    partitions = Array{TableOperations.Filter}(undef, 0)
+    for i = 1:numbatches 
+        fromId, toId = nextidrange(minId, maxId, batchsize, i)
+        println("Batch $(i) from $(fromId) to $(toId)")
+        push!(partitions, TableOperations.filter(x -> fromId <= x.IndividualId <= toId, df))
     end
-    sort!(rd,[:IndividualId,:DayDate,:HHRank])
-    unique!(rd,[:IndividualId,:DayDate])
-    Arrow.write(joinpath(basedirectory, node, "DayExtraction", "IndividualPreferredHHDays.arrow"), rd, compress=:zstd)
-    println("$(node) wrote $(nrow(rd)) preferred household days at $(now())")
-    return nothing
+    println("Starting to write")
+    open(joinpath(basedirectory,node,"DayExtraction","$(file)_batched.arrow"),"a"; lock = true) do io
+        Arrow.write(io, Tables.partitioner(partitions), compress=:zstd)
+    end
 end
 
 @info "Started execution $(now())"
 t = now()
-consolidatepreferredhousehold("D:\\Data\\SAPRIN_Data","Agincourt")
-#consolidatepreferredhousehold("D:\\Data\\SAPRIN_Data","DIMAMO")
-#consolidatepreferredhousehold("D:\\Data\\SAPRIN_Data","AHRI")
+batchonindividualid("D:\\Data\\SAPRIN_Data","Agincourt", "IndividualResidencyDays", 20000)
+@info "Finished Agincourt $(now())"
+batchonindividualid("D:\\Data\\SAPRIN_Data","DIMAMO", "IndividualResidencyDays", 20000)
+@info "Finished DIMAMO $(now())"
+batchonindividualid("D:\\Data\\SAPRIN_Data","AHRI", "IndividualResidencyDays", 20000)
 d = now()-t
 @info "Stopped execution $(now()) duration $(round(d, Dates.Second))"

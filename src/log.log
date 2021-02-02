@@ -2073,3 +2073,197 @@ Employer  │
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:180
 ┌ Info: AHRI extraction complete 2021-01-19T12:04:42.111 duration 32 seconds
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:140
+┌ Info: Execution started 2021-02-01 05:37
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: Execution started 2021-02-01 05:42
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start DIMAMO extractresidencydays at 2021-02-01 05:42:11
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:112
+┌ Info: Node DIMAMO Batch size 20000 Minimum id 1, maximum Id 125436, idrange 125436, batches 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:270
+┌ Info: Node DIMAMO 127163 residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:81
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: Batch 7 from 120001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: DIMAMO extraction complete 2021-02-01T05:44:26.66 duration 135 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:116
+┌ Info: Execution started 2021-02-01 05:47
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start DIMAMO extractresidencydays at 2021-02-01 05:47:13
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:112
+┌ Info: Node DIMAMO Batch size 20000 Minimum id 1, maximum Id 125436, idrange 125436, batches 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:86
+┌ Info: Node DIMAMO 127163 residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:81
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: Batch 7 from 120001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:84
+┌ Info: DIMAMO extraction complete 2021-02-01T05:49:26.203 duration 132 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:116
+┌ Info: Execution started 2021-02-01 05:59
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start DIMAMO extractresidencydays at 2021-02-01 05:59:51
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:112
+┌ Info: Node DIMAMO Batch size 20000 Minimum id 1, maximum Id 125436, idrange 125436, batches 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:86
+┌ Info: Node DIMAMO 127163 residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:83
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 7 from 120001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: DIMAMO extraction complete 2021-02-01T06:02:05.142 duration 134 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:116
+┌ Info: Execution started 2021-02-01 06:06
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start DIMAMO extractresidencydays at 2021-02-01 06:06:40
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:112
+┌ Info: Node DIMAMO Batch size 20000 Minimum id 1, maximum Id 125436, idrange 125436, batches 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:86
+┌ Info: Node DIMAMO 127163 residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:83
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 7 from 120001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: DIMAMO extraction complete 2021-02-01T06:07:16.646 duration 36 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:116
+┌ Info: Execution started 2021-02-01 11:04
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start DIMAMO extractresidencydays at 2021-02-01 11:04:47
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:112
+┌ Info: Node DIMAMO Batch size 20000 Minimum id 1, maximum Id 125436, idrange 125436, batches 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:86
+┌ Info: Node DIMAMO 127163 residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:83
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 7 from 120001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:86
+┌ Info: DIMAMO extraction complete 2021-02-01T11:05:17.551 duration 30 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:116
+┌ Info: Execution started 2021-02-01 11:13
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start DIMAMO extractresidencydays at 2021-02-01 11:13:23
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:112
+┌ Info: Node DIMAMO Batch size 20000 Minimum id 1, maximum Id 125436, idrange 125436, batches 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:86
+┌ Info: Node DIMAMO 127163 residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:88
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: Batch 7 from 120001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: DIMAMO extraction complete 2021-02-01T11:15:35.352 duration 132 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:116
+┌ Info: Execution started 2021-02-01 11:25
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start DIMAMO extractresidencydays at 2021-02-01 11:25:27
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:112
+┌ Info: Node DIMAMO Batch size 20000 Minimum id 1, maximum Id 125436, idrange 125436, batches 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:86
+┌ Info: Node DIMAMO 127163 residency episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:88
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: Batch 7 from 120001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:91
+┌ Info: DIMAMO extraction complete 2021-02-01T11:27:33.031 duration 125 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:116
+┌ Info: Execution started 2021-02-01 11:46
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start DIMAMO extract household membership days at 2021-02-01 11:46:00
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:147
+┌ Info: Node DIMAMO Batch size 20000 Minimum id 1, maximum Id 125436, idrange 125436, batches 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:86
+┌ Info: Node DIMAMO 123728 individual membership episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:236
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:239
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:239
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:239
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:239
+┌ Info: Batch 7 from 120001 to 125436
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:239
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:239
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:239
+┌ Info: DIMAMO extraction complete 2021-02-01T11:49:51.298 duration 230 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:151
