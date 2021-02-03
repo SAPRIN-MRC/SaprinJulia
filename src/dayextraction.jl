@@ -272,7 +272,7 @@ function batchmembershipdayswithlocation(basedirectory::String, node::String)
         open(joinpath(basedirectory,node,"DayExtraction","HouseholdMembershipDaysWithLocation$(batch).arrow"),"w"; lock = true) do io
             Arrow.write(io, hm, compress=:zstd)
         end
-        @info "Wrote $(nrow(df)) membership with location rows, batch $(i) for node $(node)"
+        @info "Wrote $(nrow(hm)) membership with location rows, batch $(batch) for node $(node)"
         batch = batch + 1
     end
     combinedaybatch(basedirectory,node,"HouseholdMembershipDaysWithLocation", batch-1)
@@ -324,10 +324,10 @@ function consolidatepreferredhousehold(basedirectory::String, node::String)
     combinedaybatch(basedirectory,node,"IndividualPreferredHHDays", i-1)
     return nothing
 end
-function preferredhousehold(basedirectory::String, node::String)
+function preferredhousehold(node::String)
     @info "Started preferredhousehold execution for node $(node) at $(now())"
-    batchmembershipdayswithlocation(basedirectory,node)
-    consolidatepreferredhousehold(basedirectory,node)
+    batchmembershipdayswithlocation(settings.BaseDirectory, node)
+    consolidatepreferredhousehold(settings.BaseDirectory, node)
     @info "Finished preferredhousehold execution for node $(node) at $(now())"
 end
 #endregion

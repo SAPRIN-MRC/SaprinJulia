@@ -143,13 +143,11 @@ extractmembershipdays("Agincourt", 20000)
 d = now()-t
 @info "Agincourt extraction complete $(now()) duration $(round(d, Dates.Second))"
 flush(io)
-=#
 @info "========== Start DIMAMO extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 extractmembershipdays("DIMAMO", 20000)
 d = now()-t
 @info "DIMAMO extraction complete $(now()) duration $(round(d, Dates.Second))"
-#=
 flush(io)
 @info "========== Start AHRI extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
@@ -157,6 +155,21 @@ extractmembershipdays("AHRI", 20000)
 d = now()-t
 @info "AHRI extraction complete $(now()) duration $(round(d, Dates.Second))"
 =#
+@info "========== Start Agincourt extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+preferredhousehold("Agincourt")
+d = now()-t
+@info "Agincourt extraction complete $(now()) duration $(round(d, Dates.Second))"
+@info "========== Start DIMAMO extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+preferredhousehold("DIMAMO")
+d = now()-t
+@info "DIMAMO extraction complete $(now()) duration $(round(d, Dates.Second))"
+@info "========== Start AHRI extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+preferredhousehold("AHRI")
+d = now()-t
+@info "AHRI extraction complete $(now()) duration $(round(d, Dates.Second))"
 #endregion
 #region clean up
 global_logger(old_logger)
