@@ -8,42 +8,29 @@ using CategoricalArrays
 using TableOperations
 using Tables
 
-function individualbatch(basedirectory, node, batchsize)
-    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
-    minId = minimum(individualmap[!,:IndividualId])
-    maxId = maximum(individualmap[!,:IndividualId])
-    idrange = (maxId - minId) + 1
-    batches = ceil(Int32, idrange / batchsize)
-    @info "Node $(node) Batch size $(batchsize) Minimum id $(minId), maximum Id $(maxId), idrange $(idrange), batches $(batches)"
-    return minId, maxId, batches
+"Recreate membership days for residency days without a membership"
+function recoverresidentdays(basedirectory::String, node::String)
+    hhresidencies = Arrow.Table(joinpath(basedirectory, node, "DayExtraction", "HouseholdResidencyDays.arrow")) |> DataFrame
+    println("Read $(nrow(hhresidencies)) rows for Household Residency Days")
+    resdaysnomembership = Arrow.Table(joinpath(basedirectory, node, "DayExtraction", "ResDaysNoMember_batched.arrow")) |> DataFrame
+    println("Read $(nrow(resdaysnomembership)) rows for resdays no membership")
+    df = innerjoin(resdaysnomembership,hhresidencies; on = [:DayDate =>:DayDate , :IndResLocationId => :LocationId], makeunique = true)
+    insertcols!(df, :HHRelationshipTypeId => Int32(12), :HHRank =>  Int32(12))
+    rename!(df, Dict(:StartType => "HHMemStartType", :EndType => "HHMemEndType", :Start => "HHMemStart", :End => "HHMemEnd"))
+    select!(df,)
+    return df
 end
-function nextidrange(minId, maxId, batchsize, i)
-    fromId = minId + batchsize * (i-1)
-    toId = min(maxId, (minId + batchsize * i)-1)
-    return fromId, toId
-end
-function batchonindividualid(basedirectory, node, file, batchsize)
-    minId, maxId, numbatches = individualbatch(basedirectory, node, batchsize)
-    df = Arrow.Table(joinpath(basedirectory,node,"DayExtraction","$(file).arrow"))
-    println("Read memberships arrow table", now())
-    partitions = Array{TableOperations.Filter}(undef, 0)
-    for i = 1:numbatches 
-        fromId, toId = nextidrange(minId, maxId, batchsize, i)
-        println("Batch $(i) from $(fromId) to $(toId)")
-        push!(partitions, TableOperations.filter(x -> fromId <= x.IndividualId <= toId, df))
-    end
-    println("Starting to write")
-    open(joinpath(basedirectory,node,"DayExtraction","$(file)_batched.arrow"),"a"; lock = true) do io
-        Arrow.write(io, Tables.partitioner(partitions), compress=:zstd)
-    end
+"Consolidate daily exposure for an individual to a single preferred household based on relationship to household head"
+function consolidatepreferredhousehold(basedirectory::String, node::String)
+    rd = recoverresidentdays(basedirectory, node)
 end
 
 @info "Started execution $(now())"
 t = now()
-batchonindividualid("D:\\Data\\SAPRIN_Data","Agincourt", "IndividualResidencyDays", 20000)
-@info "Finished Agincourt $(now())"
-batchonindividualid("D:\\Data\\SAPRIN_Data","DIMAMO", "IndividualResidencyDays", 20000)
-@info "Finished DIMAMO $(now())"
-batchonindividualid("D:\\Data\\SAPRIN_Data","AHRI", "IndividualResidencyDays", 20000)
+# consolidatepreferredhousehold("D:\\Data\\SAPRIN_Data","Agincourt")
+# @info "Finished Agincourt $(now())"
+df = consolidatepreferredhousehold("D:\\Data\\SAPRIN_Data","DIMAMO")
+# @info "Finished DIMAMO $(now())"
+# consolidatepreferredhousehold("D:\\Data\\SAPRIN_Data","AHRI")
 d = now()-t
 @info "Stopped execution $(now()) duration $(round(d, Dates.Second))"

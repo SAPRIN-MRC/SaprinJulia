@@ -296,13 +296,15 @@ function processconsolidatehhbatch(basedirectory::String, node::String, md, rd, 
             df[i,:HHRank] = df[i,:HHRelationshipTypeId] + Int32(100)
         end
     end
-    sort!(df, [:IndividualId,:DayDate,:HHRank])
-    unique!(df,[:IndividualId,:DayDate])
-    select!(df,[:IndividualId,:HouseholdId,:DayDate,:HHResLocationId,:IndResLocationId,:HHMemStartType, :HHMemEndType, :HHMemStart, :HHMemEnd, :IndResStartType, :IndResEndType, :Episode, :IndResStart, :IndResEnd, :HHRank, :HHRelationshipTypeId])
+    s = transform!(groupby(sort(df, [:IndividualId,:DayDate,:HHRank]),[:IndividualId,:DayDate]), :IndividualId => eachindex => :rank, nrow => :Memberships)
+    filter!(x -> x.rank == 1, s)
+    # sort!(df, [:IndividualId,:DayDate,:HHRank])
+    # unique!(df,[:IndividualId,:DayDate])
+    select!(s,[:IndividualId,:HouseholdId,:DayDate,:HHResLocationId,:IndResLocationId,:HHMemStartType, :HHMemEndType, :HHMemStart, :HHMemEnd, :IndResStartType, :IndResEndType, :Episode, :IndResStart, :IndResEnd, :HHRank, :HHRelationshipTypeId, :Memberships])
     open(joinpath(basedirectory, node, "DayExtraction", "IndividualPreferredHHDays$(batch).arrow"),"w"; lock = true) do io
-        Arrow.write(io, df, compress=:zstd)
+        Arrow.write(io, s, compress=:zstd)
     end
-    @info "$(node) batch $(batch) wrote $(nrow(df)) preferred household days at $(now())"
+    @info "$(node) batch $(batch) wrote $(nrow(s)) preferred household days at $(now())"
 end
 function consolidatepreferredhousehold(basedirectory::String, node::String)
     membershipbatches = Arrow.Stream(joinpath(basedirectory, node, "DayExtraction", "HouseholdMembershipDaysWithLocation_batched.arrow"))

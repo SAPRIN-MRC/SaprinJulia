@@ -160,11 +160,13 @@ t = now()
 preferredhousehold("Agincourt")
 d = now()-t
 @info "Agincourt extraction complete $(now()) duration $(round(d, Dates.Second))"
+flush(io)
 @info "========== Start DIMAMO extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 preferredhousehold("DIMAMO")
 d = now()-t
 @info "DIMAMO extraction complete $(now()) duration $(round(d, Dates.Second))"
+flush(io)
 @info "========== Start AHRI extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 preferredhousehold("AHRI")

@@ -2455,3 +2455,65 @@ Employer  │
 └ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:331
 ┌ Info: AHRI extraction complete 2021-02-03T03:45:54.89 duration 6964 seconds
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:172
+┌ Info: Execution started 2021-02-03 18:07
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: Execution started 2021-02-03 18:10
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: Execution started 2021-02-04 07:54
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
+┌ Info: ========== Start Agincourt extract household membership days at 2021-02-04 07:54:45
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:158
+┌ Info: Started preferredhousehold execution for node Agincourt at 2021-02-04T07:54:45.887
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:330
+┌ Info: Agincourt read 142064080 household residency days at 2021-02-04T08:00:29.643
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:264
+┌ Info: Wrote 72703128 membership with location rows, batch 1 for node Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:275
+┌ Info: Wrote 73241810 membership with location rows, batch 2 for node Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:275
+┌ Info: Wrote 74283913 membership with location rows, batch 3 for node Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:275
+┌ Info: Wrote 72119307 membership with location rows, batch 4 for node Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:275
+┌ Info: Wrote 73890043 membership with location rows, batch 5 for node Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:275
+┌ Info: Wrote 73560002 membership with location rows, batch 6 for node Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:275
+┌ Info: Wrote 73497241 membership with location rows, batch 7 for node Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:275
+┌ Info: Wrote 72330763 membership with location rows, batch 8 for node Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:275
+┌ Info: Wrote 73220944 membership with location rows, batch 9 for node Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:275
+┌ Info: Wrote 74529559 membership with location rows, batch 10 for node Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:275
+┌ Info: Wrote 69061280 membership with location rows, batch 11 for node Agincourt
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:275
+┌ Info: Completed writing membership with location on 2021-02-04T08:54:30.901
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:279
+┌ Info: Agincourt batch 1 wrote 72684774 preferred household days at 2021-02-04T09:03:13.789
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:307
+┌ Info: Agincourt batch 2 wrote 73229131 preferred household days at 2021-02-04T09:11:42.504
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:307
+┌ Info: Agincourt batch 3 wrote 74264341 preferred household days at 2021-02-04T09:20:26.848
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:307
+┌ Info: Agincourt batch 4 wrote 72098880 preferred household days at 2021-02-04T09:28:48.271
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:307
+┌ Info: Agincourt batch 5 wrote 73874678 preferred household days at 2021-02-04T09:37:39.746
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:307
+┌ Info: Agincourt batch 6 wrote 73536822 preferred household days at 2021-02-04T09:46:19.575
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:307
+┌ Info: Agincourt batch 7 wrote 73480676 preferred household days at 2021-02-04T09:54:58.726
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:307
+┌ Info: Agincourt batch 8 wrote 72322195 preferred household days at 2021-02-04T10:03:26.88
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:307
+┌ Info: Agincourt batch 9 wrote 73204144 preferred household days at 2021-02-04T10:11:58.604
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:307
+┌ Info: Agincourt batch 10 wrote 74513634 preferred household days at 2021-02-04T10:20:54.877
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:307
+┌ Info: Agincourt batch 11 wrote 69043664 preferred household days at 2021-02-04T10:29:09.941
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:307
+┌ Info: Finished preferredhousehold execution for node Agincourt at 2021-02-04T11:08:49.504
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:333
+┌ Info: Agincourt extraction complete 2021-02-04T11:08:49.618 duration 11644 seconds
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:162
