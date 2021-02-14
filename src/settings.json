@@ -1,5 +1,6 @@
 {
   "PeriodEnd": "2018-12-31T23:59:59",
+  "LTFCutOff": "2018-01-01T00:00:00",
   "BaseDirectory": "D:\\Data\\SAPRIN_Data",
   "Server":"localhost",
   "Databases":{"Agincourt":"SaprinDb_Agincourt202012","DIMAMO":"SaprinDb_DIMAMO202012","AHRI":"SaprinDb_AHRI202012"},

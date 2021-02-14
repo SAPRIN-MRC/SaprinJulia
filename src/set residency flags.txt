@@ -1,0 +1,87 @@
+Name	Variable	Type	Format	Length	Precision	Currency	Decimal	Group	Trim type
+LTFCutOff	${LTFCutOff}	Date	yyyy-MM-dd						none
+
+New field	Java expression	Value type	Length	Precision	Replace value
+LocationUid	IndResLocationId==null?HHResLocationId:IndResLocationId	String			
+Resident	IndResLocationId==null?0:1	Integer			
+StartType	IndResStartType==null?HHMemStartType:IndResStartType	Integer			
+EndType	IndResEndType==null?HHMemEndType:IndResEndType	Integer			
+
+New Field Name	Subject	Type	N
+NextStart	StartType	LEAD "N" rows FORWARD and get Subject	1
+NextDay	DayDate	LEAD "N" rows FORWARD and get Subject	1
+PrevDay	DayDate	LAG "N" rows BACKWARD in get Subject	1
+PrevEnd	EndType	LAG "N" rows BACKWARD in get Subject	1
+PrevStart	StartType	LAG "N" rows BACKWARD in get Subject	1
+PrevResident	Resident	LAG "N" rows BACKWARD in get Subject	1
+NextResident	Resident	LEAD "N" rows FORWARD and get Subject	1
+PrevLocation	LocationUid	LAG "N" rows BACKWARD in get Subject	1
+NextLocation	LocationUid	LEAD "N" rows FORWARD and get Subject	1
+PrevHousehold	HouseholdUid	LAG "N" rows BACKWARD in get Subject	1
+NextHousehold	HouseholdUid	LEAD "N" rows FORWARD and get Subject	1
+
+New field	Formula	Value type	Length	Precision	Replace value
+GapStart	IF(ISBLANK([NextDay]);0;IF(DATEDIF([DayDate];[NextDay];"d")>1;1;0))	Integer			
+GapEnd	IF(ISBLANK([PrevDay]);0;IF(DATEDIF([PrevDay];[DayDate];"d")>1;1;0))	Integer			
+
+Fieldname	Rename to	Length	Precision
+NodeId			
+IndividualUid			
+DayDate			
+HouseholdUid			
+LocationUid			
+Resident			
+Gap			
+Enumeration			
+Born			
+Participation			
+InMigration			
+LocationEntry			
+ExtResStart			
+Died			
+Refusal			
+LostToFollowUp			
+Current			
+OutMigration			
+LocationExit			
+ExtResEnd			
+MembershipStart			
+MembershipEnd			
+HHRelationshipTypeId			
+Memberships			
+GapStart			
+GapEnd			
+
+EventTypeId	EventTypeName	EventTypeDescription
+0	NUL	Null event or missing event
+1	ENU	Enumeration - Starting event for individuals present at the baseline census of a surveillance area
+2	BTH	The birth of an individual to a resident female
+3	IMG	In-migration - The event of taking up residence in the surveillance area.
+4	OMG	Out-migration - The event of migrating out of the surveillance area (terminating residence)
+5	EXT	Location exit - The event of leaving a residential location within the surveillance area to take up residence in another residential location within the surveillance area
+6	ENT	Location entry - The event of taking up residence in a residential location within the surveillance area following a location exit event (same date as corresponding EXT event)
+7	DTH	The death of the individual under surveillance. The date of death is the event date
+9	OBE	Observation end - right censoring at an arbitrary date
+10	DLV	Delivery - The event of a pregnancy ending after 28 weeks of gestation, which may or may not result in the birth (BTH event) of one or more individuals
+18	OBS	Observation - a data collection event
+19	OBL	An event indicating the last point in time that this individual was observed to be present in the surveillance population. Event date equals observation date in this instance
+20	IPT	Imputed date of change in status recorded when the exact date of change is not known
+30	PER	An event that marks the change from one period to the next
+40	AGE	An event that marks the change from one age group to the next
+100	HFM	Household formation
+101	HDS	Household dissolution
+102	HMS	Household membership start
+103	HME	Household membership end
+104	HRC	Household head relationship change
+200	CRS	Union (conjugal relationship) start
+201	CRE	Union (conjugal relationship) end
+202	CRI	Informal union start
+203	MAR	Marriage start
+204	RMA	Remarried after union end
+205	DIV	Union end through divorce
+206	SEP	Union end through separation
+207	PDT	Partner died
+300	RFS	Refused participation in surveillance
+301	RFE	End of refusal - agree to participate in surveillance again
+400	EPS	Generic episode start
+401	EPE	Generic episode end

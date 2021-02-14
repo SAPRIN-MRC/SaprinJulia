@@ -14,16 +14,22 @@ using XLSX
 using Statistics
 using CategoricalArrays
 
-export readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships,
+export BatchSize, individualbatch, nextidrange, 
+       readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
-       extractresidencydays, extracthhresidencydays, extractmembershipdays, combinedaybatch, preferredhousehold
+       extractresidencydays, extracthhresidencydays, extractmembershipdays, combinedaybatch, 
+       preferredhousehold, setresidencyflags
 
+#region Constants
+const BatchSize = 20000
+#endregion
 #region Settings
 function readsettings(f)
     return JSON.parsefile(f; dicttype=Dict, inttype=Int32, use_mmap=false)
 end
 @with_kw struct Settings 
     PeriodEnd::DateTime = DateTime(s["PeriodEnd"])
+    LTFCutOff::DateTime = DateTime(s["LTFCutOff"])
     BaseDirectory::String = s["BaseDirectory"]
     Server::String = s["Server"]
     Databases = s["Databases"]
@@ -58,6 +64,7 @@ s = readsettings("settings.json")
 settings = Settings()
 createdirectories(settings.BaseDirectory, "Staging")
 createdirectories(settings.BaseDirectory, "DayExtraction")
+createdirectories(settings.BaseDirectory, "Episodes")
 #endregion
 #region Utility functions
 "Constrain date a to be no larger than b"
@@ -77,7 +84,7 @@ end
 function convertanytostr(a)
     return string(a)
 end
-function individualbatch(basedirectory, node, batchsize)
+function individualbatch(basedirectory, node, batchsize::Int64 = BatchSize)
     individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
     minId = minimum(individualmap[!,:IndividualId])
     maxId = maximum(individualmap[!,:IndividualId])
@@ -86,7 +93,7 @@ function individualbatch(basedirectory, node, batchsize)
     @info "Node $(node) Batch size $(batchsize) Minimum id $(minId), maximum Id $(maxId), idrange $(idrange), batches $(batches)"
     return minId, maxId, batches
 end
-function nextidrange(minId, maxId, batchsize, i)
+function nextidrange(minId, maxId, i, batchsize::Int64 = BatchSize)
     fromId = minId + batchsize * (i-1)
     toId = min(maxId, (minId + batchsize * i)-1)
     return fromId, toId

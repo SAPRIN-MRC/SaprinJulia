@@ -832,7 +832,7 @@ end #readhouseholdheadrelationships
 #endregion
 #region IndividualMemberships
 "Decompose household memberships to days and combine with houeshold relationships and produced consolidated individual hosuehold membership episodes with household head relationship"
-function readindividualmemberships(node::String, batchsize::Int64)
+function readindividualmemberships(node::String, batchsize::Int64 = BatchSize)
     batchmemberships(settings.BaseDirectory, node, batchsize)
 end
 function processmembershipdays(startdate, enddate, starttype, endtype)
@@ -967,7 +967,7 @@ function combinemembershipbatch(basedirectory::String, node::String, batches)
     return nothing
 end #combinemembershipbatch
 "Normalise memberships in batches"
-function batchmemberships(basedirectory::String, node::String, batchsize::Int64)
+function batchmemberships(basedirectory::String, node::String, batchsize::Int64 = BatchSize)
     relationships = open(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow")) do io
         return Arrow.Table(io) |> DataFrame
     end
@@ -980,7 +980,7 @@ function batchmemberships(basedirectory::String, node::String, batchsize::Int64)
     @info "Node $(node) $(nrow(memberships)) memberships episodes"
     minId, maxId, batches = individualbatch(basedirectory, node, batchsize)
     Threads.@threads for i = 1:batches
-        fromId, toId = nextidrange(minId, maxId, batchsize, i)
+        fromId, toId = nextidrange(minId, maxId, i, batchsize)
         @info "Batch $(i) from $(fromId) to $(toId)"
         m = filter([:IndividualId] => id -> fromId <= id <= toId, memberships)
         r = filter([:IndividualId] => id -> fromId <= id <= toId, relationships)
