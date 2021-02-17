@@ -1,102 +1,337 @@
-┌ Info: Execution started 2021-02-13 12:45
+┌ Info: Execution started 2021-02-16 08:23
 └ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:10
-┌ Info: ========== Start Agincourt set residency flags at 2021-02-13 12:45:50
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:175
-┌ Info: Node Agincourt batch 1 at 2021-02-13T12:49:22.126
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node Agincourt batch 1 completed after 1204 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node Agincourt batch 2 at 2021-02-13T13:09:25.828
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node Agincourt batch 2 completed after 1205 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node Agincourt batch 3 at 2021-02-13T13:29:30.795
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node Agincourt batch 3 completed after 1215 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node Agincourt batch 4 at 2021-02-13T13:49:45.695
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node Agincourt batch 4 completed after 1187 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node Agincourt batch 5 at 2021-02-13T14:09:33.051
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node Agincourt batch 5 completed after 1217 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node Agincourt batch 6 at 2021-02-13T14:29:49.93
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node Agincourt batch 6 completed after 1206 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node Agincourt batch 7 at 2021-02-13T14:49:56.33
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node Agincourt batch 7 completed after 1209 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node Agincourt batch 8 at 2021-02-13T15:10:05.13
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node Agincourt batch 8 completed after 1189 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node Agincourt batch 9 at 2021-02-13T15:29:53.862
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node Agincourt batch 9 completed after 1211 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node Agincourt batch 10 at 2021-02-13T15:50:04.718
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node Agincourt batch 10 completed after 1209 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node Agincourt batch 11 at 2021-02-13T16:10:13.65
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node Agincourt batch 11 completed after 938 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Agincourt extraction complete 2021-02-13T17:16:34.739 duration 16244 seconds
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:179
-┌ Info: ========== Start AHRI set residency flags at 2021-02-13 17:16:34
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:187
-┌ Info: Node AHRI batch 1 at 2021-02-13T17:18:45.468
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node AHRI batch 1 completed after 905 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node AHRI batch 2 at 2021-02-13T17:33:50.286
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node AHRI batch 2 completed after 911 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node AHRI batch 3 at 2021-02-13T17:49:00.836
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node AHRI batch 3 completed after 903 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node AHRI batch 4 at 2021-02-13T18:04:03.66
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node AHRI batch 4 completed after 903 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node AHRI batch 5 at 2021-02-13T18:19:06.941
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node AHRI batch 5 completed after 905 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node AHRI batch 6 at 2021-02-13T18:34:11.452
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node AHRI batch 6 completed after 897 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node AHRI batch 7 at 2021-02-13T18:49:08.17
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node AHRI batch 7 completed after 908 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node AHRI batch 8 at 2021-02-13T19:04:16.195
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node AHRI batch 8 completed after 910 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node AHRI batch 9 at 2021-02-13T19:19:25.918
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node AHRI batch 9 completed after 909 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node AHRI batch 10 at 2021-02-13T19:34:34.988
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node AHRI batch 10 completed after 904 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node AHRI batch 11 at 2021-02-13T19:49:38.645
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node AHRI batch 11 completed after 890 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: Node AHRI batch 12 at 2021-02-13T20:04:29.002
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:542
-┌ Info: Node AHRI batch 12 completed after 742 seconds
-└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\dayextraction.jl:572
-┌ Info: AHRI extraction complete 2021-02-13T20:51:43.947 duration 12909 seconds
-└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:191
+┌ Info: ========== Start readindividuals at 2021-02-16 08:23:02
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:15
+┌ Info: Read 239252 AHRI individuals
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:28
+┌ Info: Sex breakdown AHRI
+│   sex = 3-element Named Array{Int64,1}
+Sex  │ 
+─────┼───────
+0    │      5
+1    │ 111845
+2    │ 127402
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:30
+┌ Info: Read 75505 AHRI pregnancies
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:40
+┌ Info: Read 75505 AHRI unique children
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:42
+┌ Info: Wrote 239252 AHRI individuals
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:88
+┌ Info: Read 4803601 AHRI individual observations
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:102
+┌ Info: Read 4296392 AHRI individual observations after bounds
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:105
+┌ Info: Read 218379 AHRI individuals after group
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:108
+┌ Info: Wrote 218379 AHRI individual bounds
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:114
+┌ Info: ========== Finished readindividuals at 2021-02-16 08:23:34
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:21
+┌ Info: Read 32172 AHRI locations
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:143
+┌ Info: Area breakdown for AHRI
+│   a = 32-element Named Array{Int64,1}
+AreaId  │ 
+────────┼─────
+1       │ 1123
+2       │  973
+3       │ 1071
+4       │ 1257
+5       │ 1049
+6       │ 2790
+7       │ 1214
+8       │  868
+9       │ 1209
+10      │ 2051
+11      │  308
+12      │  329
+13      │  623
+14      │ 3028
+15      │  503
+16      │  825
+17      │ 1591
+18      │  148
+19      │ 1110
+20      │ 1103
+21      │  734
+22      │  403
+23      │  834
+24      │  458
+25      │  562
+26      │ 4102
+27      │  664
+28      │  375
+29      │  855
+30      │    3
+31      │    1
+missing │    8
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:159
+┌ Info: ========== Finished readlocations at 2021-02-16 08:23:38
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:29
+┌ Info: Read 321496 AHRI residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:234
+┌ Info: Start types AHRI before normalisation
+│   a = 6-element Named Array{Int64,1}
+StartType  │ 
+───────────┼───────
+1          │ 108340
+3          │ 120929
+6          │  58217
+10         │  33861
+102        │    108
+300        │     41
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:241
+┌ Info: Start years breakdown AHRI before normalisation
+│   a = 22-element Named Array{Int64,1}
+Dim1  │ 
+──────┼──────
+1798  │     1
+2000  │ 70465
+2001  │ 11779
+2002  │ 14168
+2003  │ 11846
+2004  │ 10630
+2005  │ 10865
+2006  │ 11214
+2007  │ 10930
+2008  │ 11125
+2009  │ 12878
+2010  │ 13139
+2011  │ 11632
+2012  │  9811
+2013  │  8767
+2014  │  8272
+2015  │  8611
+2016  │  9230
+2017  │ 55332
+2018  │  9101
+2019  │  8233
+2020  │  3467
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:244
+┌ Info: End types AHRI before normalisation
+│   a = 6-element Named Array{Int64,1}
+EndType  │ 
+─────────┼───────
+4        │ 136718
+5        │  64491
+7        │  16287
+18       │ 101048
+103      │    216
+300      │   2736
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:246
+┌ Info: End years breakdown AHRI before normalisation
+│   a = 23-element Named Array{Int64,1}
+Dim1  │ 
+──────┼──────
+1797  │     5
+1798  │     6
+2000  │  4390
+2001  │  9701
+2002  │ 14830
+2003  │ 13211
+2004  │ 11133
+2005  │ 10611
+2006  │ 10201
+2007  │ 10802
+2008  │ 10271
+2009  │ 11217
+2010  │ 12688
+2011  │ 11697
+2012  │ 11422
+2013  │  9422
+2014  │  8419
+2015  │  9200
+2016  │ 11428
+2017  │ 11442
+2018  │ 13435
+2019  │ 25093
+2020  │ 90872
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:249
+┌ Info: Start years breakdown AHRI
+│   a = 19-element Named Array{Int64,1}
+Dim1  │ 
+──────┼──────
+2000  │ 70463
+2001  │ 11779
+2002  │ 14168
+2003  │ 11846
+2004  │ 10630
+2005  │ 10865
+2006  │ 11214
+2007  │ 10928
+2008  │ 11123
+2009  │ 12877
+2010  │ 13139
+2011  │ 11631
+2012  │  9811
+2013  │  8766
+2014  │  8272
+2015  │  8610
+2016  │  9230
+2017  │ 55331
+2018  │  9101
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:306
+┌ Info: End years breakdown AHRI
+│   a = 19-element Named Array{Int64,1}
+Dim1  │ 
+──────┼───────
+2000  │   4390
+2001  │   9701
+2002  │  14830
+2003  │  13211
+2004  │  11133
+2005  │  10611
+2006  │  10201
+2007  │  10802
+2008  │  10271
+2009  │  11217
+2010  │  12688
+2011  │  11697
+2012  │  11422
+2013  │   9422
+2014  │   8419
+2015  │   9200
+2016  │  11428
+2017  │  11442
+2018  │ 117699
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:309
+┌ Info: Start types AHRI
+│   a = 5-element Named Array{Int64,1}
+StartType  │ 
+───────────┼───────
+1          │ 108338
+3          │ 112862
+6          │  57061
+10         │  31483
+300        │     40
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:311
+┌ Info: End types AHRI
+│   a = 6-element Named Array{Int64,1}
+EndType  │ 
+─────────┼───────
+4        │ 125089
+5        │  59796
+7        │  15222
+9        │ 104264
+18       │   2738
+300      │   2675
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:313
+┌ Info: ========== Finished readresidences AHRI at 2021-02-16 08:23:57
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:39
+┌ Info: Read 36453 AHRI households
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:594
+┌ Info: Read 38732 AHRI household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:623
+┌ Info: Read 318914 AHRI household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:651
+┌ Info: Grouped 35356 AHRI households from household relationships
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:653
+┌ Info: Household residences 38732 AHRI after episode counts
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:657
+┌ Info: Household residences 38053 AHRI after right censor
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:676
+┌ Info: Wrote 38052 AHRI household residences
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:711
+┌ Info: ========== Finished readhouseholds at 2021-02-16 08:24:08
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:46
+┌ Info: Read 294434 AHRI membership episodes from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:742
+┌ Info: Read 294434 AHRI membership episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:745
+┌ Info: Read 294434 AHRI membership episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:748
+┌ Info: Read 294434 AHRI membership episodes after individual bounds join
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:751
+┌ Info: Wrote 286986 AHRI membership episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:774
+┌ Info: Read 318338 AHRI relationships episodes from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:800
+┌ Info: Read 318338 AHRI relationships episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:803
+┌ Info: Read 318338 AHRI relationships episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:806
+┌ Info: Read 318338 AHRI relationships episodes after individual bounds join
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:809
+┌ Info: Wrote 305417 AHRI relationships episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:829
+┌ Info: ========== Finished readhouseholdmemberships at 2021-02-16 08:24:19
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:53
+┌ Info: Node AHRI 305417 relationship episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:975
+┌ Info: Node AHRI 286986 memberships episodes
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:980
+┌ Info: Node AHRI Batch size 25000 Minimum id 1, maximum Id 239252, idrange 239252, batches 10
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\SAPRINCore.jl:93
+┌ Info: Batch 5 from 100001 to 125000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:984
+┌ Info: Batch 9 from 200001 to 225000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:984
+┌ Info: Batch 3 from 50001 to 75000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:984
+┌ Info: Batch 1 from 1 to 25000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:984
+┌ Info: Batch 10 from 225001 to 239252
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:984
+┌ Info: Batch 7 from 150001 to 175000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:984
+┌ Info: 42099289 AHRI day rows in batch 10
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:927
+┌ Info: 74445911 AHRI day rows in batch 1
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:927
+┌ Info: 74834111 AHRI day rows in batch 9
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:927
+┌ Info: 74143440 AHRI day rows in batch 5
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:927
+┌ Info: 74517424 AHRI day rows in batch 3
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:927
+┌ Info: 75580851 AHRI day rows in batch 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:927
+┌ Info: Wrote 19277 AHRI individual membership episodes in batch 10
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:945
+┌ Info: Wrote 33998 AHRI individual membership episodes in batch 1
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:945
+┌ Info: Batch 2 from 25001 to 50000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:984
+┌ Info: Wrote 34082 AHRI individual membership episodes in batch 5
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:945
+┌ Info: Batch 6 from 125001 to 150000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:984
+┌ Info: Wrote 34084 AHRI individual membership episodes in batch 3
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:945
+┌ Info: Batch 4 from 75001 to 100000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:984
+┌ Info: Wrote 34368 AHRI individual membership episodes in batch 9
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:945
+┌ Info: Wrote 34227 AHRI individual membership episodes in batch 7
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:945
+┌ Info: Batch 8 from 175001 to 200000
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:984
+┌ Info: 75667639 AHRI day rows in batch 2
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:927
+┌ Info: 75807970 AHRI day rows in batch 6
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:927
+┌ Info: 74913492 AHRI day rows in batch 4
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:927
+┌ Info: 75402345 AHRI day rows in batch 8
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:927
+┌ Info: Wrote 34152 AHRI individual membership episodes in batch 2
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:945
+┌ Info: Wrote 33832 AHRI individual membership episodes in batch 4
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:945
+┌ Info: Wrote 34289 AHRI individual membership episodes in batch 6
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:945
+┌ Info: Wrote 34568 AHRI individual membership episodes in batch 8
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:945
+┌ Info: Final individual membership rows 326877 for AHRI
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:962
+┌ Info: ========== Finished readindividualmemberships AHRI at 2021-02-16 08:57:09
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:62
+┌ Info: Read 4803601 AHRI education statuses from database
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:1011
+┌ Info: Read 4296392 AHRI education statuses inside bounds
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:1027
+┌ Info: Read 1132139 AHRI education statuses not missing
+└ @ SAPRINCore c:\Users\kobus\.julia\dev\SAPRINCore\src\staging.jl:1029
+┌ Info: ========== Finished AHRI readeducationstatuses at 2021-02-16 08:57:34
+└ @ Main c:\Users\kobus\.julia\dev\SAPRINCore\src\main.jl:71

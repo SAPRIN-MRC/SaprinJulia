@@ -1065,7 +1065,7 @@ function householdassets(db::String, node::String, basedirectory::String)
     @info "$(nrow(g)) $(node) present asset statuses"
     gg = combine(groupby(g,[:HouseholdObservationUid,:AssetGroup]), :AssetStatus => sum => :Idx)
     @info "$(nrow(gg)) $(node) asset groups"
-    filter!([:AssetGroup] => x -> x != "0",gg)
+    filter!([:AssetGroup] => x -> x != "0", gg)
     w = unstack(gg, :HouseholdObservationUid, :AssetGroup, :Idx)
     replace!(w.Modern, missing => 0)
     replace!(w.Livestock, missing => 0)
