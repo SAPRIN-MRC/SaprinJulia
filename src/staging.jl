@@ -1031,6 +1031,12 @@ function educationstatus(db::String, node::String, basedirectory::String, period
     select!(m,[:IndividualId,:ObservationDate,:CurrentEducation, :HighestSchoolLevel, :HighestNonSchoolLevel])
     sort!(m,[:IndividualId,:ObservationDate])
     Arrow.write(joinpath(basedirectory, node, "Staging", "EducationStatuses.arrow"), m, compress=:zstd)
+    a = freqtable(m,:CurrentEducation)
+    @info "Current Education breakdown for $(node)" a
+    a = freqtable(m,:HighestSchoolLevel)
+    @info "Highest School Level breakdown for $(node)" a
+    a = freqtable(m,:HighestNonSchoolLevel)
+    @info "Highest Non-School Level breakdown for $(node)" a
     return nothing
 end
 #endregion
