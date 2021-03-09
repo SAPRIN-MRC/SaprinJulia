@@ -7,55 +7,48 @@ using Missings
 using CategoricalArrays
 using TableOperations
 using Tables
+using Statistics
 using SAPRINCore
+using XLSX
+function addsheet!(path, df, sheetname)
+    XLSX.openxlsx(path, mode ="rw") do xf
+        sheet = XLSX.addsheet!(xf, sheetname)
+        data = collect(eachcol(df))
+        cnames = DataFrames.names(df)
+        XLSX.writetable!(sheet, data, cnames)
+    end
+end
+function basicepisodeQA(basedirectory, node)
+    df = Arrow.Table(joinpath(basedirectory, node, "Episodes", "SurveillanceEpisodesBasic_batched.arrow")) |> DataFrame
+    sf = combine(groupby(df, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart]), nrow => :n)
+    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    sort!(sf)
+    XLSX.writetable(joinpath(basedirectory, node, "Episodes","QC", "EpisodesQA.xlsx"), collect(eachcol(sf)),names(sf),overwrite=true,sheetname="StartFlags")
+    sf = combine(groupby(df, [:Died, :OutMigration, :LocationExit, :ExtResEnd, :Refusal, :LostToFollowUp, :Current, :MembershipEnd]), nrow => :n)
+    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    sort!(sf)
+    addsheet!(joinpath(basedirectory, node, "Episodes","QC", "EpisodesQA.xlsx"), sf, "EndFlags")
+    sf = filter(r -> r.Episode < r.Episodes & r.Current == 1, df)
+    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    addsheet!(joinpath(basedirectory, node, "Episodes","QC", "EpisodesQA.xlsx"), sf, "CurrentBeforeEnd")
+    sf = filter(r -> r.Episode == 1, df) #Start episodes only
+    sf = combine(groupby(sf, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart]), nrow => :n)
+    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    sort!(sf)
+    addsheet!(joinpath(basedirectory, node, "Episodes","QC", "EpisodesQA.xlsx"), sf, "Episode1StartFlags")
+    sf = filter(r -> r.Episode == r.Episodes, df) #Last episodes only
+    sf = combine(groupby(df, [:Died, :OutMigration, :LocationExit, :ExtResEnd, :Refusal, :LostToFollowUp, :Current, :MembershipEnd]), nrow => :n)
+    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    sort!(sf)
+    addsheet!(joinpath(basedirectory, node, "Episodes","QC", "EpisodesQA.xlsx"), sf, "LastEpisodeEndFlags")
+   return nothing
+end
 
-function setparentstatus!(r)
-    if ismissing(r.MotherDoD)
-        r.MotherDead = Int8(-1)
-    elseif r.MotherDoD <= r.DayDate
-        r.MotherDead = Int8(1)
-    end
-    if ismissing(r.FatherDoD)
-        r.FatherDead = Int8(-1)
-    elseif r.FatherDoD <= r.DayDate
-        r.FatherDead = Int8(1)
-    end
-end
-"Add individual characteristics to to day records"
-function basicepisodes(basedirectory, node)
-    individuals = Arrow.Table(joinpath(basedirectory, node, "Staging", "Individuals.arrow")) |> DataFrame
-    residentdaybatches = Arrow.Stream(joinpath(basedirectory, node, "DayExtraction", "DayDatasetStep01_batched.arrow"))
-    hstate = iterate(residentdaybatches)
-    i = 1
-    while hstate !== nothing
-        t = now()
-        @info "Node $(node) batch $(i) at $(t)"
-        h, hst = hstate
-        hd = h |> DataFrame
-        df = innerjoin(hd, individuals, on = :IndividualId)
-        insertcols!(df, :MotherDead => Int8(0), :FatherDead => Int8(0))
-        for row in eachrow(df)
-            setparentstatus!(row)
-        end
-        select!(df,[:IndividualId, :Sex, :DoB, :DoD, :MotherId, :MotherDead, :FatherId, :FatherDead, :DayDate, :HouseholdId, :LocationId, :Resident, :Gap, 
-                   :Enumeration, :Born, :Participation, :InMigration, :LocationEntry, :ExtResStart, 
-                   :Died, :Refusal, :LostToFollowUp, :Current, :OutMigration, :LocationExit, :ExtResEnd, :MembershipStart, :MembershipEnd, 
-                   :HHRelationshipTypeId, :Memberships, :GapStart, :GapEnd])
-        open(joinpath(basedirectory, node, "DayExtraction", "DayDatasetStep02$(i).arrow"),"w"; lock = true) do io
-            Arrow.write(io, df, compress=:zstd)
-        end
-        hstate = iterate(residentdaybatches, hst)
-        @info "Node $(node) batch $(i) completed after $(round(now()-t, Dates.Second))"
-        i = i + 1
-    end
-    combinedaybatch(basedirectory,node,"DayDatasetStep02", i-1)
-    return nothing
-end
 @info "Started execution $(now())"
 t = now()
 # testreadwrite("D:\\Data\\SAPRIN_Data","Agincourt")
 # @info "Finished Agincourt $(now())"
-addindividualattributes("D:\\Data\\SAPRIN_Data","DIMAMO")
+basicepisodeQA("D:\\Data\\SAPRIN_Data","DIMAMO")
 @info "Finished DIMAMO $(now())"
 #testreadwrite("D:\\Data\\SAPRIN_Data","AHRI")
 d = now()-t

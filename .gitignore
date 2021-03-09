@@ -2,4 +2,5 @@
 /Manifest.toml
 /dev/
 /.vscode
+/.build
 *.log

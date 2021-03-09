@@ -527,7 +527,7 @@ function setresidencyflags(node::String)
                            AsTable([:IndResStartType, :HHMemStartType]) => ByRow(x -> ismissing(x.IndResStartType) ? x.HHMemStartType : x.IndResStartType) => :StartType,
                            AsTable([:IndResEndType, :HHMemEndType]) => ByRow(x -> ismissing(x.IndResEndType) ? x.HHMemEndType : x.IndResEndType) => :EndType)
         select!(df, Not([:IndResLocationId,:HHResLocationId,:IndResStartType, :HHMemStartType,:IndResEndType, :HHMemEndType, :IndResStart, :IndResEnd, :HHMemStart, :HHMemEnd]))
-        s = combine(groupby(sort!(df,[:IndividualId, :DayDate]), :IndividualId), :DayDate, :LocationId, :HouseholdId, :HHRelationshipTypeId, :Resident, :StartType, :EndType, :Memberships,
+        s = combine(groupby(df, :IndividualId), :DayDate, :LocationId, :HouseholdId, :HHRelationshipTypeId, :Resident, :StartType, :EndType, :Memberships,
                     :DayDate => Base.Fix2(lead,1) => :NextDay, :DayDate => Base.Fix2(lag,1) => :PrevDay, 
                     :StartType => Base.Fix2(lead,1) => :NextStart, :StartType => Base.Fix2(lag,1) => :PrevStart,
                     :EndType => Base.Fix2(lag,1) => :PrevEnd,

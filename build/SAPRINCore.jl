@@ -19,7 +19,7 @@ export BatchSize, individualbatch, nextidrange,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, 
        preferredhousehold, setresidencyflags, addindividualattributes,
-       basicepisodes, basicepisodeQA
+       basicepisodes, inmigrationflag
 #region Constants
 const BatchSize = 20000
 #endregion

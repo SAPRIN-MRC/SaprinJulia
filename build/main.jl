@@ -189,8 +189,6 @@ t = now()
 preferredhousehold("AHRI")
 d = now()-t
 @info "AHRI extraction complete $(now()) duration $(round(d, Dates.Second))"
-flush(io)
-=#
 @info "========== Start Agincourt set residency flags at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 setresidencyflags("Agincourt")
@@ -210,7 +208,6 @@ t = now()
 setresidencyflags("AHRI")
 d = now()-t
 @info "AHRI extraction complete $(now()) duration $(round(d, Dates.Second))"
-flush(io)
 
 @info "========== Start DIMAMO get individual attributes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
@@ -230,45 +227,27 @@ t = now()
 addindividualattributes("AHRI")
 d = now()-t
 @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
 #endregion
+
 #region Basic Episodes
-@info "========== Start Agincourt create basic episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-basicepisodes("Agincourt")
-d = now()-t
-@info "Agincourt basic episode creation complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
+# @info "========== Start Agincourt create basic episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+# t = now()
+# basicepisodes("Agincourt")
+# d = now()-t
+# @info "Agincourt basic episode creation complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+# flush(io)
+=#
 @info "========== Start DIMAMO create basic episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 basicepisodes("DIMAMO")
 d = now()-t
 @info "DIMAMO basic episode creation complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-@info "========== Start AHRI create basic episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-basicepisodes("AHRI")
-d = now()-t
-@info "AHRI basic episode creation complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
-# Episode QA
-@info "========== Start Agincourt do basic episodes QA at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-basicepisodeQA("Agincourt")
-d = now()-t
-@info "Agincourt basic episode QA complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
-@info "========== Start DIMAMO do basic episodes QA at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-basicepisodeQA("DIMAMO")
-d = now()-t
-@info "DIMAMO basic episode QA complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
-@info "========== Start AHRI do basic episodes QA at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-basicepisodeQA("AHRI")
-d = now()-t
-@info "AHRI basic episode QA complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+# @info "========== Start AHRI create basic episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+# t = now()
+# basicepisodes("AHRI")
+# d = now()-t
+# @info "AHRI basic episode creation complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 #endregion
 #region clean up
 global_logger(old_logger)
