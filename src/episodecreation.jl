@@ -1,4 +1,3 @@
-using NamedArrays
 "Group day records into basic exposure records"
 function basicepisodes(node)
     basedirectory = settings.BaseDirectory
@@ -96,24 +95,6 @@ function basicepisodes(node)
     end
     combinebatches(basedirectory,node,"Episodes","SurveillanceEpisodesBasic", i-1)
     return nothing
-end
-"Add a sheet to an exisiting Excel spreadsheet and transfer the contents of df DataFrame to the sheet"
-function addsheet!(path, df::NamedArray, sheetname)
-    XLSX.openxlsx(path, mode ="rw") do xf
-        sheet = XLSX.addsheet!(xf, sheetname)
-        data = collect([NamedArrays.names(df)[1], df.array])
-        cnames = [String(dimnames(df)[1]), "n"]
-        XLSX.writetable!(sheet, data, cnames)
-    end
-end
-"Add a sheet to an exisiting Excel spreadsheet and transfer the contents of df DataFrame to the sheet"
-function addsheet!(path, df::AbstractDataFrame, sheetname)
-    XLSX.openxlsx(path, mode ="rw") do xf
-        sheet = XLSX.addsheet!(xf, sheetname)
-        data = collect(eachcol(df))
-        cnames = DataFrames.names(df)
-        XLSX.writetable!(sheet, data, cnames)
-    end
 end
 "Do basic episodes QA"
 function basicepisodeQA(node)

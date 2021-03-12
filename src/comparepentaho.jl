@@ -3,6 +3,8 @@ using Arrow
 using SAPRINCore
 using XLSX
 using CSV
+using Dates
+using Logging
 
 function compareepisodes(basedirectory, node)
     #read pentaho episodes
@@ -17,11 +19,14 @@ function compareepisodes(basedirectory, node)
     @info "Node $(node) julia final episodes $(nrow(finaljulia)))"
     #add IndividualUid to episodes
     pe = innerjoin(finalpentaho, pentahoindividualmap, on = :IndividualId)
-    select!(pe, :IndividualUid, :IndividualId => :PentahoId, :StartDate => :PentahoStart, :EndDate => :PentahoEnd, :Episodes => :PentahoEpisodes)
+    select!(pe, :IndividualUid, :IndividualId => :PentahoId, :StartDate => :PentahoStart, :EndDate => :PentahoEnd, :Episodes => :PentahoEpisodes, :Died => :P_Died) 
     je = innerjoin(finaljulia, juliaindividualmap, on = :IndividualId)
-    select!(je, :IndividualUid, :IndividualId => :JuliaId, :StartDate => :JuliaStart, :EndDate => :JuliaEnd, :Episodes => :JuliaEpisodes)
-    e = outerjoin(pe, je, on = :IndividualUid)
+    select!(je, :IndividualUid, :IndividualId => :JuliaId, :StartDate => :JuliaStart, :EndDate => :JuliaEnd, :Episodes => :JuliaEpisodes, :Died => :J_Died)
+    e = innerjoin(pe, je, on = :IndividualUid)
     d = filter(r -> r.PentahoEpisodes != r.JuliaEpisodes, e)
+    transform!(d, names(d, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(d, names(d, Int32) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(d, names(d, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
     XLSX.writetable(joinpath(basedirectory, node, "Episodes","QC", "EpisodeComparison.xlsx"), collect(eachcol(d)),names(d),overwrite=true, sheetname="EpisodeNumbers")
     #filter start episodes
     startpentaho = filter(r -> r.Episode == 1, pentahoepisodes)
@@ -30,32 +35,47 @@ function compareepisodes(basedirectory, node)
     select!(pe, :IndividualUid, :IndividualId => :PentahoId, :StartDate => :PentahoStart, :EndDate => :PentahoEnd, :Resident => :P_Resident, :Born => :P_Born, :Enumeration => :P_Enumeration, :InMigration => :P_InMigration, :LocationEntry => :P_LocationEntry, :ExtResStart => :P_ExtResStart)
     je = innerjoin(startjulia, juliaindividualmap, on = :IndividualId)
     select!(je, :IndividualUid, :IndividualId => :JuliaId, :StartDate => :JuliaStart, :EndDate => :JuliaEnd, :Resident => :J_Resident, :Born => :J_Born, :Enumeration => :J_Enumeration, :InMigration => :J_InMigration, :LocationEntry => :J_LocationEntry, :ExtResStart => :J_ExtResStart)
-    e = outerjoin(pe, je, on = :IndividualUid)
+    e = innerjoin(pe, je, on = :IndividualUid)
     d = filter(r -> r.P_Born != r.J_Born, e)
-    d[!,:P_Born] = convert.(Int64, d[:, :P_Born]) #needed by XLSX
-    d[!,:P_Enumeration] = convert.(Int64, d[:, :P_Enumeration]) #needed by XLSX
-    d[!,:P_InMigration] = convert.(Int64, d[:, :P_InMigration]) #needed by XLSX
-    d[!,:P_LocationEntry] = convert.(Int64, d[:, :P_LocationEntry]) #needed by XLSX
-    d[!,:P_ExtResStart] = convert.(Int64, d[:, :P_ExtResStart]) #needed by XLSX
-    d[!,:P_Resident] = convert.(Int64, d[:, :P_Resident]) #needed by XLSX
-    d[!,:J_Born] = convert.(Int64, d[:, :J_Born]) #needed by XLSX
-    d[!,:J_Enumeration] = convert.(Int64, d[:, :J_Enumeration]) #needed by XLSX
-    d[!,:J_InMigration] = convert.(Int64, d[:, :J_InMigration]) #needed by XLSX
-    d[!,:J_LocationEntry] = convert.(Int64, d[:, :J_LocationEntry]) #needed by XLSX
-    d[!,:J_ExtResStart] = convert.(Int64, d[:, :J_ExtResStart]) #needed by XLSX
-    d[!,:J_Resident] = convert.(Int64, d[:, :J_Resident]) #needed by XLSX
-    XLSX.openxlsx(joinpath(basedirectory, node, "Episodes","QC", "EpisodeComparison.xlsx"), mode ="rw") do xf
-        sheet = XLSX.addsheet!(xf, "Born")
-        data = collect(eachcol(d))
-        cnames = DataFrames.names(d)
-        XLSX.writetable!(sheet, data, cnames)
-    end
+    transform!(d, names(d, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(d, names(d, Int32) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(d, names(d, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    addsheet!(joinpath(basedirectory, node, "Episodes","QC", "EpisodeComparison.xlsx"), d, "Born")
+    #Compare Died flag
+    pe = innerjoin(finalpentaho, pentahoindividualmap, on = :IndividualId)
+    select!(pe, :IndividualUid, :IndividualId => :PentahoId, :StartDate => :PentahoStart, :EndDate => :PentahoEnd, :Episodes => :PentahoEpisodes, :Died => :P_Died) 
+    je = innerjoin(finaljulia, juliaindividualmap, on = :IndividualId)
+    select!(je, :IndividualUid, :IndividualId => :JuliaId, :StartDate => :JuliaStart, :EndDate => :JuliaEnd, :Episodes => :JuliaEpisodes, :Died => :J_Died)
+    e = innerjoin(pe, je, on = :IndividualUid)
+    d = filter(r -> r.J_Died != r.P_Died, e)
+    transform!(d, names(d, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(d, names(d, Int32) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(d, names(d, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    addsheet!(joinpath(basedirectory, node, "Episodes","QC", "EpisodeComparison.xlsx"), d, "Died")
+    #Not in Julia
+    pe = innerjoin(finalpentaho, pentahoindividualmap, on = :IndividualId)
+    select!(pe, :IndividualUid, :IndividualId => :PentahoId, :StartDate => :PentahoStart, :EndDate => :PentahoEnd, :Episodes => :PentahoEpisodes, :Died => :P_Died) 
+    je = innerjoin(finaljulia, juliaindividualmap, on = :IndividualId)
+    select!(je, :IndividualUid, :IndividualId => :JuliaId, :StartDate => :JuliaStart, :EndDate => :JuliaEnd, :Episodes => :JuliaEpisodes, :Died => :J_Died)
+    e = antijoin(pe, je, on = :IndividualUid)
+    transform!(e, names(d, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    addsheet!(joinpath(basedirectory, node, "Episodes","QC", "EpisodeComparison.xlsx"), e, "Not in Julia")
+    #Not in Pentaho
+    pe = innerjoin(finalpentaho, pentahoindividualmap, on = :IndividualId)
+    select!(pe, :IndividualUid, :IndividualId => :PentahoId, :StartDate => :PentahoStart, :EndDate => :PentahoEnd, :Episodes => :PentahoEpisodes) 
+    je = innerjoin(finaljulia, juliaindividualmap, on = :IndividualId)
+    select!(je, :IndividualUid, :IndividualId => :JuliaId, :StartDate => :JuliaStart, :EndDate => :JuliaEnd, :Episodes => :JuliaEpisodes)
+    e = antijoin(je, pe, on = :IndividualUid)
+    transform!(e, names(d, Int8) .=> ByRow(Int64), renamecols=false) #needed by XLSX
+    addsheet!(joinpath(basedirectory, node, "Episodes","QC", "EpisodeComparison.xlsx"), e, "Not in Pentaho")
     return nothing
 end
 
-@info "Started execution $(now())"
+@info "Started execution $(Dates.now())"
 t = now()
+# compareepisodes("D:\\Data\\SAPRIN_Data","Agincourt")
 compareepisodes("D:\\Data\\SAPRIN_Data","DIMAMO")
-@info "Finished DIMAMO $(now())"
+compareepisodes("D:\\Data\\SAPRIN_Data","AHRI")
+@info "Finished compare episodes $(Dates.now())"
 d = now()-t
-@info "Stopped execution $(now()) duration $(round(d, Dates.Second))"
+@info "Stopped execution $(Dates.now()) duration $(round(d, Dates.Second))"

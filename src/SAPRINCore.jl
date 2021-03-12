@@ -13,8 +13,10 @@ using ShiftedArrays
 using XLSX
 using Statistics
 using CategoricalArrays
+using CSV
+using NamedArrays
 
-export BatchSize, individualbatch, nextidrange, 
+export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv,
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, 
@@ -116,6 +118,30 @@ function combinebatches(basedirectory::String, node::String, subdir::String, fil
     end
     return nothing
 end #combinebatches
+"Add a sheet to an exisiting Excel spreadsheet and transfer the contents of df NAmedArray to the sheet"
+function addsheet!(path, df::NamedArray, sheetname)
+    XLSX.openxlsx(path, mode ="rw") do xf
+        sheet = XLSX.addsheet!(xf, sheetname)
+        data = collect([NamedArrays.names(df)[1], df.array])
+        cnames = [String(dimnames(df)[1]), "n"]
+        XLSX.writetable!(sheet, data, cnames)
+    end
+end
+"Add a sheet to an exisiting Excel spreadsheet and transfer the contents of df DataFrame to the sheet"
+function addsheet!(path, df::AbstractDataFrame, sheetname)
+    XLSX.openxlsx(path, mode ="rw") do xf
+        sheet = XLSX.addsheet!(xf, sheetname)
+        data = collect(eachcol(df))
+        cnames = DataFrames.names(df)
+        XLSX.writetable!(sheet, data, cnames)
+    end
+end
+"Write dataset as CSV"
+function arrowtocsv(node::String, subdir::String, dataset::String)
+    Arrow.Table(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).arrow")) |> CSV.write(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).csv"))
+    return nothing
+end
+
 #endregion
 
 include("staging.jl")

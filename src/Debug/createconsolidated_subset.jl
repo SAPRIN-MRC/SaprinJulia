@@ -8,6 +8,6 @@ hstate = iterate(preferredhhbatches)
 t = now()
 h, hst = hstate
 hd = h |> DataFrame
-s = filter(row -> row.IndividualId == 14091, hd)
+s = filter(row -> row.IndividualId == 4902, hd)
 Arrow.write(joinpath("D:\\Data\\SAPRIN_Data", "Agincourt", "DayExtraction", "IndividualPreferredHHConsolidatedDays_subset.arrow"), s, compress=:zstd)
 browse(s)

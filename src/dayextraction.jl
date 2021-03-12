@@ -314,7 +314,7 @@ function recoverresidentdays(basedirectory::String, node::String)
     @info "Read $(nrow(hhresidencies)) rows for Household Residency Days"
     resdaysnomembership = Arrow.Table(joinpath(basedirectory, node, "DayExtraction", "ResDaysNoMember_batched.arrow")) |> DataFrame
     @info "Read $(nrow(resdaysnomembership)) rows for resdays no membership"
-    df = innerjoin(resdaysnomembership,hhresidencies; on = [:DayDate =>:DayDate , :IndResLocationId => :LocationId], makeunique = true)
+    df = innerjoin(resdaysnomembership, hhresidencies; on = [:DayDate =>:DayDate , :IndResLocationId => :LocationId], makeunique = true)
     insertcols!(df, :HHRank =>  Int32(12), :HHRelationshipTypeId => Int32(12), :Memberships => Int64(1), :HHResLocationId => df[!,:IndResLocationId])
     rename!(df, Dict(:StartType => "HHMemStartType", :EndType => "HHMemEndType", :Start => "HHMemStart", :End => "HHMemEnd"))
     select!(df,[:IndividualId, :HouseholdId, :DayDate, :HHResLocationId, :IndResLocationId, :HHMemStartType, :HHMemEndType, :HHMemStart, :HHMemEnd, 
@@ -343,6 +343,7 @@ function addresidentdayswithoutmembership(basedirectory::String, node::String)
                             :HouseholdId => first => :HouseholdId, :HHResLocationId => first => :HHResLocationId, 
                             :HHMemStartType => first => :HHMemStartType, :HHMemEndType => first => :HHMemEndType, :HHMemStart => first => :HHMemStart, :HHMemEnd => first => :HHMemEnd,
                             :HHRelationshipTypeId => first => :HHRelationshipTypeId, :HHRank => first => :HHRank, :Memberships => sum => :Memberships)
+        sort!(s,[:IndividualId, :DayDate])
         open(joinpath(basedirectory, node, "DayExtraction", "IndividualPreferredHHConsolidatedDays$(i).arrow"),"w"; lock = true) do io
             Arrow.write(io, s, compress=:zstd)
         end
@@ -591,10 +592,19 @@ function addindividualattributes(node)
         h, hst = hstate
         hd = h |> DataFrame
         df = innerjoin(hd, individuals, on = :IndividualId)
-        filter!([:DoB,:DayDate] => (x,y) -> y >= x && x > Date(1800), df)
+        filter!([:DoB,:DayDate] => (x,y) -> y >= x && x > Date(1800), df)               #No days before birth
+        filter!([:DoD,:DayDate] => (x,y) -> ismissing(x) || (!ismissing(x) && (y <= x)), df) #No days after death
         insertcols!(df, :MotherDead => Int8(0), :FatherDead => Int8(0))
         for row in eachrow(df)
             setparentstatus!(row)
+            # Set Born flag if DayDate == DoB
+            if row.DayDate == row.DoB
+                row.Born = Int8(1)
+            end
+            # Set Died flag if DayDate == DoD
+            if !ismissing(row.DoD) && row.DoD == row.DayDate
+                row.Died = Int8(1)
+            end
         end
         select!(df,[:IndividualId, :Sex, :DoB, :DoD, :MotherId, :MotherDead, :FatherId, :FatherDead, :DayDate, :HouseholdId, :LocationId, :Resident, :Episode, 
                    :Enumeration, :Born, :Participation, :InMigration, :LocationEntry, :ExtResStart, 

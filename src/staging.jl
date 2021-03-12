@@ -8,12 +8,35 @@ end
 "Read individuals and anonimise for node specified in settings and save id map and individual data to to arrow files"
 function readindividuals_internal(db::String, node::String, basedirectory::String)
     con = ODBC.Connection(db)
-    sql = """SELECT
+    sql = """WITH Deaths AS (
+        SELECT
+          IR.IndividualUid,
+          EE.EventDate DoD
+        FROM dbo.IndividualResidences IR
+          JOIN dbo.Events EE ON IR.EndEventUid = EE.EventUid
+        WHERE EE.EventTypeId = 7
+        UNION
+        SELECT
+          IR.IndividualUid,
+          EE.EventDate DoD
+        FROM dbo.HouseholdMemberships IR
+          JOIN dbo.Events EE ON IR.EndEventUid = EE.EventUid
+        WHERE EE.EventTypeId = 7
+    ),
+    IndividualDeaths AS (
+      SELECT
+        IndividualUid,
+        MAX(DoD) DoD
+      FROM Deaths
+      GROUP BY IndividualUid
+    )
+    SELECT
         UPPER(CONVERT(nvarchar(50),I.IndividualUid)) IndividualUid,
         I.Sex,
         CONVERT(date,SE.EventDate) DoB,
         CASE
         WHEN EE.EventTypeId=7 THEN CONVERT(date,EE.EventDate)
+        WHEN NOT ID.DoD IS NULL THEN CONVERT(date,ID.DoD)
         ELSE NULL
         END DoD,
         UPPER(CONVERT(nvarchar(50),I.MotherUid)) MotherUid,
@@ -23,8 +46,9 @@ function readindividuals_internal(db::String, node::String, basedirectory::Strin
     FROM dbo.Individuals I
         JOIN dbo.Events SE ON I.BirthEventUid=SE.EventUid
         JOIN dbo.Events EE ON I.EndEventUid=EE.EventUid
+        LEFT JOIN IndividualDeaths ID ON I.IndividualUid = ID.IndividualUid
     """    
-    individuals = DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    individuals = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     @info "Read $(nrow(individuals)) $(node) individuals"
     sex = freqtable(individuals, :Sex)
     @info "Sex breakdown $(node)" sex
@@ -92,10 +116,34 @@ end # readindividuals
 function individualobservationbounds(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """SELECT
-        UPPER(CONVERT(varchar(50),O.IndividualUid)) IndividualUid,
-        CONVERT(date,E.EventDate) EventDate
+    UPPER(CONVERT(varchar(50),O.IndividualUid)) IndividualUid,
+    CONVERT(date,E.EventDate) EventDate
     FROM dbo.IndividualObservations O
         JOIN dbo.Events E ON O.ObservationUid=E.EventUid
+    UNION
+    SELECT
+    UPPER(CONVERT(varchar(50),IR.IndividualUid)) IndividualUid,
+    CONVERT(date,E.EventDate) EventDate
+    FROM dbo.IndividualResidences IR
+    JOIN dbo.Events E ON IR.StartEventUid = E.EventUid
+    UNION
+    SELECT
+    UPPER(CONVERT(varchar(50),IR.IndividualUid)) IndividualUid,
+    CONVERT(date,E.EventDate) EventDate
+    FROM dbo.IndividualResidences IR
+    JOIN dbo.Events E ON IR.EndEventUid = E.EventUid
+    UNION
+    SELECT
+    UPPER(CONVERT(varchar(50),IR.IndividualUid)) IndividualUid,
+    CONVERT(date,E.EventDate) EventDate
+    FROM dbo.HouseholdMemberships IR
+    JOIN dbo.Events E ON IR.StartEventUid = E.EventUid
+    UNION
+    SELECT
+    UPPER(CONVERT(varchar(50),IR.IndividualUid)) IndividualUid,
+    CONVERT(date,E.EventDate) EventDate
+    FROM dbo.HouseholdMemberships IR
+    JOIN dbo.Events E ON IR.EndEventUid = E.EventUid
     """
     observations =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
@@ -415,10 +463,10 @@ function readresidencestatus(db::String, node::String, basedirectory::String, pe
         WHEN ResStatusCode = 'O' AND ResidentStatus>6 THEN CAST(1 AS int)
         WHEN ResStatusCode = 'O' AND ResidentStatus<=6 THEN CAST(2 AS int)
         WHEN ResStatusCode IN ('X','Q') AND (ResidentStatus>6) THEN CAST(1 AS int)
-        WHEN ResStatusCode IN ('X','Q') AND (ResidentStatus<6) THEN CAST(2 AS int)
+        WHEN ResStatusCode IN ('X','Q') AND (ResidentStatus<=6) THEN CAST(2 AS int)
         WHEN ResStatusCode IN ('X','Q') THEN CAST(1 AS int)
         WHEN ResStatusCode <> 'P' THEN CAST(2 AS int)
-        WHEN ResidentStatus>6 THEN CAST(1 AS int)
+        WHEN ResidentStatus<=6 THEN CAST(2 AS int)
         ELSE CAST(1 AS int)
       END ResidentStatus -- 1 Resident 2 Non-resident
     FROM SmoothedStatus
