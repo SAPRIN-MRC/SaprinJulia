@@ -16,7 +16,7 @@ using CategoricalArrays
 using CSV
 using NamedArrays
 
-export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv,
+export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv, stagingpath, dayextractionpath, episodepath,
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, 
@@ -59,6 +59,15 @@ function createdirectories(basedirectory,directory)
         mkdir(joinpath(basedirectory, "Agincourt", directory))
     end
     return nothing
+end
+function stagingpath(node::String)
+    return joinpath(settings.BaseDirectory,node,"Staging")
+end
+function dayextractionpath(node::String)
+    return joinpath(settings.BaseDirectory,node,"DayExtraction")
+end
+function episodepath(node::String)
+    return joinpath(settings.BaseDirectory,node,"Episodes")
 end
 #endregion
 #region startup
