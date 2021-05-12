@@ -2,7 +2,8 @@
 function extractresidencydays(node::String, batchsize::Int64 = BatchSize)
     batchresidencydays(settings.BaseDirectory, node, batchsize)
 end
-function processresidencydays(locationid, startdate, enddate, starttype, endtype)
+function processresidencydays(individualid, locationid, startdate, enddate, starttype, endtype)
+    #println("Proccess days $(individualid) length $(length(startdate))")
     start = startdate[1]
     stop = enddate[1]
     startt = starttype[1]
@@ -40,6 +41,12 @@ function processresidencydays(locationid, startdate, enddate, starttype, endtype
         append!(res_location, fill(location, length(new_daydate)))
         append!(res_start, fill(Int8(0), length(new_daydate)))        
         append!(res_end, fill(Int8(0), length(new_daydate)))  
+        # if  startidx>length(res_start)
+        #     println(individualid)
+        #     println(locationid) 
+        #     println(startdate) 
+        #     println(enddate) 
+        # end
         res_start[startidx] = Int8(1)
         res_end[end] = Int8(1)
     end
@@ -47,7 +54,8 @@ function processresidencydays(locationid, startdate, enddate, starttype, endtype
     return (locationid = res_location, daydate = res_daydate, starttype = res_starttype, endtype = res_endtype, episode = res_episode, startflag = res_start, endflag = res_end)
 end
 function getresidencydays(basedirectory::String, node::String, f, batch::Int64)
-    s = combine(groupby(sort(f, [:StartDate, order(:EndDate, rev=true)]), [:IndividualId], sort=true), [:LocationId, :StartDate, :EndDate, :StartType, :EndType] => processresidencydays => AsTable)
+   #println("Batch $(batch) $(nrow(f)) episodes to extract")
+    s = combine(groupby(sort(f, [:StartDate, order(:EndDate, rev=true)]), [:IndividualId], sort=true), [:IndividualId, :LocationId, :StartDate, :EndDate, :StartType, :EndType] => processresidencydays => AsTable)
     rename!(s,Dict(:locationid => "LocationId", :daydate => "DayDate", :episode => "Episode", :starttype => "StartType", :endtype => "EndType", :startflag => "Start", :endflag => "End"))
     disallowmissing!(s, [:LocationId, :DayDate, :Episode, :StartType, :EndType, :Start, :End])
     open(joinpath(basedirectory,node,"DayExtraction","IndividualResidencyDays$(batch).arrow"),"w"; lock = true) do io
@@ -63,7 +71,8 @@ function batchresidencydays(basedirectory::String, node::String, batchsize::Int6
     end
     select!(residencies,[:IndividualId, :LocationId, :StartDate, :StartType, :EndDate, :EndType])
     @info "Node $(node) $(nrow(residencies)) residency episodes"
-    Threads.@threads for i = 1:batches
+#    Threads.@threads for i = 1:batches
+    for i = 1:batches
         fromId, toId = nextidrange(minId, maxId, i, batchsize)
         @info "Batch $(i) from $(fromId) to $(toId)"
         d = filter([:IndividualId] => id -> fromId <= id <= toId, residencies)
@@ -511,7 +520,7 @@ function setresidencyflags(node::String)
     birthtypes = Int32[2, 10] # BTH, DLV
     outtypes = Int32[4, 5, 101 ,103, 104] # OMG, EXT, HDS, HME, HRC
     intypes = Int32[3, 6, 100, 102] # IMG, OMG, HFM, HMS
-    visittypes = Int32[9, 18] # OBE, OBS
+    visittypes = Int32[9, 18, 19] # OBE, OBS
     householdstarts = Int32[100, 102] # HFM, HMS
     householdend = Int32[101, 103] # HDS, HME
     preferredhhbatches = Arrow.Stream(joinpath(basedirectory, node, "DayExtraction", "IndividualPreferredHHConsolidatedDays_batched.arrow"))

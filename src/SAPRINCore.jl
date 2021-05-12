@@ -15,13 +15,15 @@ using Statistics
 using CategoricalArrays
 using CSV
 using NamedArrays
+using RCall
 
 export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv, stagingpath, dayextractionpath, episodepath,
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, 
        preferredhousehold, setresidencyflags, addindividualattributes,
-       basicepisodes, basicepisodeQA
+       basicepisodes, basicepisodeQA, yrage_episodes, yrage_episodeQA, arrowtostata
+       
 #region Constants
 const BatchSize = 20000
 #endregion
@@ -78,6 +80,9 @@ createdirectories(settings.BaseDirectory, "DayExtraction")
 createdirectories(settings.BaseDirectory, "Episodes")
 #endregion
 #region Utility functions
+function age(dob::Date, date::Date)
+    return Dates.year(date) - Dates.year(dob) - ((Dates.Month(date) < Dates.Month(dob)) || (Dates.Month(date) == Dates.Month(dob) && Dates.Day(date) < Dates.Day(dob)))
+end
 "Constrain date a to be no larger than b"
 function rightcensor(a::DataValue{Date}, b::Date)::Date
     return rightcensor(get(a, b), b) # get returns underlying Date, with default b if a is missing (isna)

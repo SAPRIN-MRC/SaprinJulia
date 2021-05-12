@@ -426,7 +426,7 @@ end
 function readresidencestatus(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """/*
-    Designed to smooth single instances of changed resident status over
+    Designed to smooth single instances of changed resident status over - changed to not exclude
     */
     WITH ExpandedStatus AS (
       SELECT
@@ -496,6 +496,9 @@ function dropnonresidentepisodes(basedirectory::String, node::String)
     end
     @info "$(nrow(rs)) $(node) residence status rows"
     s = outerjoin(r, rs, on=[:IndividualId => :IndividualId, :LocationId => :LocationId])
+    ###### Debug only
+    # filter!(row -> row.IndividualId == 184, s)
+    #######
     # eliminate records that didn't join properly
     dropmissing!(s, :LocationId, disallowmissing=true)
     dropmissing!(s, :Episode, disallowmissing=true)
@@ -508,17 +511,18 @@ function dropnonresidentepisodes(basedirectory::String, node::String)
             s[i,:ObservationDate] = s[i,:StartDate]
         end
     end
-            
-    s = s[((s.ObservationDate .>= s.StartDate) .& (s.ObservationDate .<= s.EndDate)), :] # drop records where observation date is out of bounds
-    df = combine(groupby(s, :IndividualId), :LocationId, :StartDate, :StartType, :EndDate, :EndType, :ResidentIndex, :Episode, :Episodes, :ObservationDate, :ResidentStatus,
+    filter!(row ->(row.ObservationDate >= row.StartDate) & (row.ObservationDate <= row.EndDate), s)       
+    df = combine(groupby(sort(s,[:StartDate,:ObservationDate]), :IndividualId), :LocationId, :StartDate, :StartType, :EndDate, :EndType, :ResidentIndex, :Episode, :Episodes, :ObservationDate, :ResidentStatus,
                 :ResidentStatus => Base.Fix2(lag, 1) => :LastResidentStatus, 
                 :LocationId => Base.Fix2(lag, 1) => :LastLocationId, :Episode => Base.Fix2(lag, 1) => :LastEpisode)
     insertcols!(df, :episode => 0)
     episode = 0
+    # println(df)
+    # Arrow.write(joinpath(basedirectory, node, "Staging", "dropnonresidentepisodes.arrow"), df, compress=:zstd)
     for i = 1:nrow(df)
         if ismissing(df[i,:LastLocationId])
             episode = 1
-            df[i,:episode] = episode
+            df[i,:episode] = episode        
         else
             location = df[i,:LocationId]
             lastlocation = df[i,:LastLocationId]
