@@ -86,23 +86,23 @@ function readindividuals_internal(db::String, node::String, basedirectory::Strin
     mothers = select(individuals, [:MotherId])
     dropmissing!(mothers)
     unique!(mothers)
-    mothers = innerjoin(mothers, individuals, on=:MotherId => :IndividualId, makeunique=true, matchmissing=:equal)
+    mothers = innerjoin(mothers, individuals, on = :MotherId => :IndividualId, makeunique=true, matchmissing=:equal)
     select!(mothers, [:MotherId, :DoD])
     rename!(mothers, :DoD => :MotherDoD)
     # Father DoD
     fathers = select(individuals, [:FatherId])
     dropmissing!(fathers)
     unique!(fathers)
-    fathers = innerjoin(fathers, individuals, on=:FatherId => :IndividualId, makeunique=true, matchmissing=:equal)
+    fathers = innerjoin(fathers, individuals, on = :FatherId => :IndividualId, makeunique=true, matchmissing=:equal)
     select!(fathers, [:FatherId, :DoD])
     rename!(fathers, :DoD => :FatherDoD)
-    individuals = leftjoin(individuals, mothers, on=:MotherId => :MotherId, makeunique=true, matchmissing=:equal)
-    individuals = leftjoin(individuals, fathers, on=:FatherId => :FatherId, makeunique=true, matchmissing=:equal)
+    individuals = leftjoin(individuals, mothers, on = :MotherId => :MotherId, makeunique=true, matchmissing=:equal)
+    individuals = leftjoin(individuals, fathers, on = :FatherId => :FatherId, makeunique=true, matchmissing=:equal)
     for i = 1:nrow(individuals)
-        if !ismissing(individuals[i,:MotherDoD_1])
+        if !ismissing(individuals[i, :MotherId]) #Always overwrite recorded DoD with linked mother DoD
             individuals[i,:MotherDoD] = individuals[i,:MotherDoD_1]
         end
-        if !ismissing(individuals[i,:FatherDoD_1])
+        if !ismissing(individuals[i, :FatherId]) #Always overwrite recorded DoD with linked father DoD
             individuals[i,:FatherDoD] = individuals[i,:FatherDoD_1]
         end
     end

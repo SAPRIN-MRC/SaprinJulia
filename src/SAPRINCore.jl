@@ -17,7 +17,7 @@ using CSV
 using NamedArrays
 using RCall
 
-export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv, stagingpath, dayextractionpath, episodepath,
+export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings,
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, 

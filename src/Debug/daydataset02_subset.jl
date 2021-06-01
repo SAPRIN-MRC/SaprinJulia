@@ -3,11 +3,12 @@ using Arrow
 using DataFrames
 using TableBrowse
 
-preferredhhbatches = Arrow.Stream(joinpath("D:\\Data\\SAPRIN_Data", "DIMAMO", "DayExtraction", "DayDatasetStep02_batched.arrow"))
-#preferredhhbatches = Arrow.Stream(joinpath("D:\\Data\\SAPRIN_Data", "Agincourt", "DayExtraction", "ResDaysNoMember_batched.arrow"))
-hstate = iterate(preferredhhbatches)
+df = Arrow.Stream(joinpath("D:\\Data\\SAPRIN_Data", "DIMAMO", "DayExtraction", "DeliveryDays_batched.arrow"))
+#df = Arrow.Stream(joinpath("D:\\Data\\SAPRIN_Data", "DIMAMO", "DayExtraction", "DayDatasetStep02_batched.arrow"))
+#df = Arrow.Stream(joinpath("D:\\Data\\SAPRIN_Data", "Agincourt", "DayExtraction", "ResDaysNoMember_batched.arrow"))
+hstate = iterate(df)
 t = now()
 h, hst = hstate
 hd = h |> DataFrame
-s = filter(row -> row.IndividualId == 11100, hd)
+s = subset(hd, :MotherId => x -> x .== 1108)
 browse(s)

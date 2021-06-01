@@ -13,7 +13,7 @@ flush(io)
 
 #region Staging
 # Individuals
-#=
+#
 @info "========== Start readindividuals Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readindividuals("Agincourt")
 @info "========== Finished readindividuals Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -28,7 +28,7 @@ readindividuals("AHRI")
 @info "========== Finished readindividuals AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
 #Locations
- 
+#=
 @info "========== Start readlocations Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readlocations("Agincourt")
 flush(io)
@@ -351,7 +351,7 @@ d = now()-t
 flush(io)
 #
 #endregion
-=#
+#
 #region Stata output
 @info "========== Start Agincourt output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
@@ -394,7 +394,7 @@ arrowtostata("AHRI", "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesY
 d = now()-t
 @info "AHRI output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-#
+=#
 
 #endregion
 #region clean up
