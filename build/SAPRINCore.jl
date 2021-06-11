@@ -84,8 +84,8 @@ end
 function convertanytostr(a)
     return string(a)
 end
-function individualbatch(basedirectory, node, batchsize::Int64 = BatchSize)
-    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+function individualbatch(node, batchsize::Int64 = BatchSize)
+    individualmap = Arrow.Table(joinpath(stagingpath(node),"IndividualMap.arrow")) |> DataFrame
     minId = minimum(individualmap[!,:IndividualId])
     maxId = maximum(individualmap[!,:IndividualId])
     idrange = (maxId - minId) + 1
@@ -104,15 +104,15 @@ function readpartitionfile(file)
     end
 end
 "Concatenate record batches"
-function combinebatches(basedirectory::String, node::String, subdir::String, file::String, batches)
+function combinebatches(path::String, file::String, batches)
     files = Array{String,1}()
     for i = 1:batches
-        push!(files,joinpath(basedirectory, node, subdir, "$(file)$(i).arrow"))
+        push!(files,joinpath(path, "$(file)$(i).arrow"))
     end
-    Arrow.write(joinpath(basedirectory, node, subdir, "$(file)_batched.arrow"), Tables.partitioner(x->readpartitionfile(x),files), compress=:zstd)
+    Arrow.write(joinpath(path, "$(file)_batched.arrow"), Tables.partitioner(x->readpartitionfile(x),files), compress=:zstd)
     #delete chunks
     for i = 1:batches
-        rm(joinpath(basedirectory, node, subdir, "$(file)$(i).arrow"))
+        rm(joinpath(path, "$(file)$(i).arrow"))
     end
     return nothing
 end #combinebatches

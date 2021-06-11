@@ -17,10 +17,10 @@ using CSV
 using NamedArrays
 using RCall
 
-export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings,
-       readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships,
+export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age,
+       readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships, readpregnancies,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
-       extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, 
+       extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, deliverydays,
        preferredhousehold, setresidencyflags, addindividualattributes,
        basicepisodes, basicepisodeQA, yrage_episodes, yrage_episodeQA, arrowtostata
        
@@ -100,8 +100,8 @@ end
 function convertanytostr(a)
     return string(a)
 end
-function individualbatch(basedirectory, node, batchsize::Int64 = BatchSize)
-    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+function individualbatch(node::String, batchsize::Int64 = BatchSize)
+    individualmap = Arrow.Table(joinpath(stagingpath(node),"IndividualMap.arrow")) |> DataFrame
     minId = minimum(individualmap[!,:IndividualId])
     maxId = maximum(individualmap[!,:IndividualId])
     idrange = (maxId - minId) + 1
@@ -114,26 +114,26 @@ function nextidrange(minId, maxId, i, batchsize::Int64 = BatchSize)
     toId = min(maxId, (minId + batchsize * i)-1)
     return fromId, toId
 end
-function readpartitionfile(file)
-    open(file,"r"; lock = true) do io
+function readpartitionfile(file::String)
+    open(file, "r"; lock = true) do io
         return Arrow.Table(io)
     end
 end
 "Concatenate record batches"
-function combinebatches(basedirectory::String, node::String, subdir::String, file::String, batches)
+function combinebatches(path::String, file::String, batches)
     files = Array{String,1}()
     for i = 1:batches
-        push!(files,joinpath(basedirectory, node, subdir, "$(file)$(i).arrow"))
+        push!(files,joinpath(path, "$(file)$(i).arrow"))
     end
-    Arrow.write(joinpath(basedirectory, node, subdir, "$(file)_batched.arrow"), Tables.partitioner(x->readpartitionfile(x),files), compress=:zstd)
+    Arrow.write(joinpath(path, "$(file)_batched.arrow"), Tables.partitioner(x->readpartitionfile(x),files), compress=:zstd)
     #delete chunks
     for i = 1:batches
-        rm(joinpath(basedirectory, node, subdir, "$(file)$(i).arrow"))
+        rm(joinpath(path, "$(file)$(i).arrow"))
     end
     return nothing
 end #combinebatches
 "Add a sheet to an exisiting Excel spreadsheet and transfer the contents of df NAmedArray to the sheet"
-function addsheet!(path, df::NamedArray, sheetname)
+function addsheet!(path::String, df::NamedArray, sheetname::String)
     XLSX.openxlsx(path, mode ="rw") do xf
         sheet = XLSX.addsheet!(xf, sheetname)
         data = collect([NamedArrays.names(df)[1], df.array])
@@ -142,7 +142,7 @@ function addsheet!(path, df::NamedArray, sheetname)
     end
 end
 "Add a sheet to an exisiting Excel spreadsheet and transfer the contents of df DataFrame to the sheet"
-function addsheet!(path, df::AbstractDataFrame, sheetname)
+function addsheet!(path::String, df::AbstractDataFrame, sheetname::String)
     XLSX.openxlsx(path, mode ="rw") do xf
         sheet = XLSX.addsheet!(xf, sheetname)
         data = collect(eachcol(df))
@@ -155,7 +155,19 @@ function arrowtocsv(node::String, subdir::String, dataset::String)
     Arrow.Table(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).arrow")) |> CSV.write(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).csv"))
     return nothing
 end
-
+function arrowtostata(node, inputfile, outputfile)
+    df = Arrow.Table(joinpath(episodepath(node), inputfile * ".arrow")) |> DataFrame
+    arrowfile = joinpath(episodepath(node), outputfile * ".arrow")
+    Arrow.write(arrowfile, df, compress = :zstd)
+    statafile = joinpath(episodepath(node), outputfile * ".dta")
+    R"""
+    library(arrow)
+    library(rio)
+    x <- read_feather($arrowfile)
+    export(x, $statafile)
+    """
+    return nothing
+end
 #endregion
 
 include("staging.jl")

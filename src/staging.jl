@@ -1,12 +1,12 @@
 #region individuals
 "Read individuals and anonimise for specified node specified and save individual data, id map and bounds to to arrow files"
 function readindividuals(node::String)
-    readindividuals_internal(settings.Databases[node], node, settings.BaseDirectory)
-    individualobservationbounds(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+    readindividuals_internal(settings.Databases[node], node)
+    individualobservationbounds(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
 end
 
 "Read individuals and anonimise for node specified in settings and save id map and individual data to to arrow files"
-function readindividuals_internal(db::String, node::String, basedirectory::String)
+function readindividuals_internal(db::String, node::String)
     con = ODBC.Connection(db)
     sql = """WITH Deaths AS (
         SELECT
@@ -74,7 +74,7 @@ function readindividuals_internal(db::String, node::String, basedirectory::Strin
     individuals.IndividualId = 1:nrow(individuals)
     # Convert gui ids to integer ids
     map = individuals[!,[:IndividualUid,:IndividualId]]
-    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualMap.arrow"), map, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "IndividualMap.arrow"), map, compress=:zstd)
     # Convert mother and father uids to corresponding integer ids
     individuals = leftjoin(individuals, map, on=:MotherUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     individuals = leftjoin(individuals, map, on=:FatherUid => :IndividualUid, makeunique=true, matchmissing=:equal)
@@ -108,12 +108,12 @@ function readindividuals_internal(db::String, node::String, basedirectory::Strin
     end
     select!(individuals, [:IndividualId, :Sex, :DoB, :DoD, :MotherId, :MotherDoD, :FatherId, :FatherDoD])
     disallowmissing!(individuals, [:IndividualId, :Sex, :DoB])
-    Arrow.write(joinpath(basedirectory, node, "Staging", "Individuals.arrow"), individuals, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "Individuals.arrow"), individuals, compress=:zstd)
     @info "Wrote $(nrow(individuals)) $(node) individuals"
     return nothing
 end # readindividuals
 "Creates a dataset with the earliest and latest date at which an individual has been observed within left and rightcensor dates"
-function individualobservationbounds(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function individualobservationbounds(db::String, node::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """SELECT
     UPPER(CONVERT(varchar(50),O.IndividualUid)) IndividualUid,
@@ -154,21 +154,21 @@ function individualobservationbounds(db::String, node::String, basedirectory::St
     bounds = combine(groupby(observations, :IndividualUid), :EventDate => minimum => :EarliestDate, :EventDate => maximum => :LatestDate)
     disallowmissing!(bounds, :IndividualUid)
     @info "Read $(nrow(bounds)) $(node) individuals after group"
-    individualmap = Arrow.Table(joinpath(basedirectory, node, "Staging", "IndividualMap.arrow")) |> DataFrame
+    individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     bounds = innerjoin(bounds, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     select!(bounds, [:IndividualId, :EarliestDate, :LatestDate])
     sort!(bounds, :IndividualId)
-    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualBounds.arrow"), bounds, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "IndividualBounds.arrow"), bounds, compress=:zstd)
     @info "Wrote $(nrow(bounds)) $(node) individual bounds"
     return nothing
 end
 #endregion individuals
 #region locations
 function readlocations(node::String)
-    readlocations_internal(settings.Databases[node], node, settings.BaseDirectory)
+    readlocations_internal(settings.Databases[node], node)
 end
 "Read locations and anonimise for node save id map and location data to to arrow files"
-function readlocations_internal(db::String, node::String, basedirectory::String)
+function readlocations_internal(db::String, node::String)
     con = ODBC.Connection(db)
     sql1 = """WITH Areas AS (
         SELECT 
@@ -194,15 +194,15 @@ function readlocations_internal(db::String, node::String, basedirectory::String)
     locations.LocationId = 1:nrow(locations)
     # Convert gui ids to integer ids
     map = locations[!,[:LocationUid,:LocationId]]
-    Arrow.write(joinpath(basedirectory, node, "Staging", "LocationMap.arrow"), map, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "LocationMap.arrow"), map, compress=:zstd)
     areas = select(locations,[:AreaUid]) # |> @select(:AreaUid) |> @filter(!isna(_.AreaUid)) |> @unique() |> DataFrame
     dropmissing!(areas)
     unique!(areas)
     areas.AreaId = 1:nrow(areas)
-    Arrow.write(joinpath(basedirectory, node, "Staging", "AreaMap.arrow"), areas, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "AreaMap.arrow"), areas, compress=:zstd)
     locations = leftjoin(locations, areas, on=:AreaUid => :AreaUid, makeunique=true, matchmissing=:equal)
     locations = select!(locations, [:LocationId,:NodeId,:LocationTypeId,:AreaId])
-    Arrow.write(joinpath(basedirectory, node, "Staging", "Locations.arrow"), locations, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "Locations.arrow"), locations, compress=:zstd)
     a = freqtable(locations, :AreaId)
     @info "Area breakdown for $(node)" a
     return nothing
@@ -211,15 +211,15 @@ end # readlocations
 #region residencies
 "Retrieve and save residence episodes, assumes individual and locations have been read"
 function readresidences(node::String)
-    readresidences_internal(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+    readresidences_internal(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
     if node in ["Agincourt", "DIMAMO"]
-        eliminateresidenceoverlaps(node, settings.BaseDirectory)
-        readresidencestatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
-        dropnonresidentepisodes(settings.BaseDirectory, node)
+        eliminateresidenceoverlaps(node)
+        readresidencestatus(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+        dropnonresidentepisodes(node)
     end
 end
 "Retrieve and save residence episodes directly from database"
-function readresidences_internal(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function readresidences_internal(db::String, node::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """WITH ResidentStatus AS (
         SELECT
@@ -281,9 +281,9 @@ function readresidences_internal(db::String, node::String, basedirectory::String
     residences = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(residences)) $(node) residences"
-    individualmap = Arrow.Table(joinpath(basedirectory, node, "Staging", "IndividualMap.arrow")) |> DataFrame
+    individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     residences = innerjoin(residences, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
-    locationmap = Arrow.Table(joinpath(basedirectory, node, "Staging", "LocationMap.arrow")) |> DataFrame
+    locationmap = Arrow.Table(joinpath(stagingpath(node), "LocationMap.arrow")) |> DataFrame
     residences = innerjoin(residences, locationmap, on=:LocationUid => :LocationUid, makeunique=true, matchmissing=:equal)
     select!(residences, [:IndividualId,:LocationId,:StartDate,:StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate, :ResidentIndex])
     a = freqtable(residences, :StartType)
@@ -349,7 +349,7 @@ function readresidences_internal(db::String, node::String, basedirectory::String
     disallowmissing!(df, [:StartDate,:StartType,:EndDate,:EndType,:ResidentIndex])
     # filter!(:IndividualId => x -> x < 100, df)
     transform!(groupby(sort(df,[:IndividualId, :StartDate]), :IndividualId), :IndividualId => eachindex => :Episode, nrow => :Episodes)
-    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualResidencies.arrow"), df, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "IndividualResidencies.arrow"), df, compress=:zstd)
     years = Dates.year.(residences.StartDate) 
     a = freqtable(years)
     @info "Start years breakdown $(node)" a
@@ -407,8 +407,8 @@ function processresidencedays(startdate, enddate, starttype, endtype, residentid
     return (daydate = res_daydate, startdate = res_startdate, enddate = res_enddate, starttype = res_starttype, endtype = res_endtype, residentidx = res_residentidx, locationid = res_locationid, episode = res_episode)
 end
 "Decompose residences into days and eliminate overlaps"
-function eliminateresidenceoverlaps(node::String, basedirectory::String)
-    residences = Arrow.Table(joinpath(basedirectory, node, "Staging", "IndividualResidencies.arrow")) |> DataFrame
+function eliminateresidenceoverlaps(node::String)
+    residences = Arrow.Table(joinpath(stagingpath(node), "IndividualResidencies.arrow")) |> DataFrame
     @info "Node $(node) $(nrow(residences)) episodes before overlap elimination at $(now())"
     select!(residences, [:ResidenceId, :IndividualId, :LocationId, :StartDate,:StartType, :EndDate, :EndType, :ResidentIndex])
     insertcols!(residences, :ResidentIndex, :GapStart => 0, :GapEnd => 0, :Gap => 0)
@@ -419,11 +419,11 @@ function eliminateresidenceoverlaps(node::String, basedirectory::String)
                                                                :residentidx => mean => :ResidentIndex, :episode => maximum => :episodes)
     @info "Node $(node) $(nrow(df)) episodes after overlap elimination at $(now())"
     rename!(df,Dict(:episode=>"Episode",:locationid=>"LocationId",:episodes => "Episodes"))
-    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualResidenciesIntermediate.arrow"), df, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "IndividualResidenciesIntermediate.arrow"), df, compress=:zstd)
     return nothing
 end
 "Read resident status observations"
-function readresidencestatus(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function readresidencestatus(db::String, node::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """/*
     Designed to smooth single instances of changed resident status over - changed to not exclude
@@ -476,22 +476,22 @@ function readresidencestatus(db::String, node::String, basedirectory::String, pe
     @info "Read $(nrow(resstatuses)) $(node) residence statuses"
     filter!(:ObservationDate => s -> s <= periodend, resstatuses)        # drop statuses after period end
     filter!(:ObservationDate => s -> s >= leftcensor, resstatuses)       # drop statuses before leftcensor date
-    individualmap = Arrow.Table(joinpath(basedirectory, node, "Staging", "IndividualMap.arrow")) |> DataFrame
+    individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     resstatuses = innerjoin(resstatuses, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
-    locationmap = Arrow.Table(joinpath(basedirectory, node, "Staging", "LocationMap.arrow")) |> DataFrame
+    locationmap = Arrow.Table(joinpath(stagingpath(node), "LocationMap.arrow")) |> DataFrame
     resstatuses = innerjoin(resstatuses, locationmap, on=:LocationUid => :LocationUid, makeunique=true, matchmissing=:equal)
     select!(resstatuses, [:IndividualId,:LocationId,:ObservationDate,:ResidentStatus])
     disallowmissing!(resstatuses, [:ObservationDate,:ResidentStatus])
     sort!(resstatuses, [:IndividualId,:LocationId,:ObservationDate])
-    Arrow.write(joinpath(basedirectory, node, "Staging", "ResidentStatus.arrow"), resstatuses, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "ResidentStatus.arrow"), resstatuses, compress=:zstd)
     @info "Wrote $(nrow(resstatuses)) $(node) residence statuses"
     return nothing
 end # readresidencestatus
 "Use resident status observations to identify non-resident episodes and drop those from residency episodes"
-function dropnonresidentepisodes(basedirectory::String, node::String)
-    r = Arrow.Table(joinpath(basedirectory, node, "Staging", "IndividualResidenciesIntermediate.arrow")) |> DataFrame
+function dropnonresidentepisodes(node::String)
+    r = Arrow.Table(joinpath(stagingpath(node), "IndividualResidenciesIntermediate.arrow")) |> DataFrame
     @info "$(nrow(r)) $(node) residence rows"
-    rs = open(joinpath(basedirectory, node, "Staging", "ResidentStatus.arrow")) do io
+    rs = open(joinpath(stagingpath(node), "ResidentStatus.arrow")) do io
         return Arrow.Table(io) |> DataFrame
     end
     @info "$(nrow(rs)) $(node) residence status rows"
@@ -518,7 +518,7 @@ function dropnonresidentepisodes(basedirectory::String, node::String)
     insertcols!(df, :episode => 0)
     episode = 0
     # println(df)
-    # Arrow.write(joinpath(basedirectory, node, "Staging", "dropnonresidentepisodes.arrow"), df, compress=:zstd)
+    # Arrow.write(joinpath(stagingpath(node), "dropnonresidentepisodes.arrow"), df, compress=:zstd)
     for i = 1:nrow(df)
         if ismissing(df[i,:LastLocationId])
             episode = 1
@@ -567,20 +567,20 @@ function dropnonresidentepisodes(basedirectory::String, node::String)
     @info "Node $(node) $(nrow(df)) episodes after dropping non-resident episodes"
     df.ResidenceId = 1:nrow(df)
     select!(df, [:ResidenceId, :IndividualId, :LocationId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate, :ResidentIndex])
-    mv(joinpath(basedirectory, node, "Staging", "IndividualResidencies.arrow"), joinpath(basedirectory, node, "Staging", "IndividualResidencies_old.arrow"), force=true)
+    mv(joinpath(stagingpath(node), "IndividualResidencies.arrow"), joinpath(stagingpath(node), "IndividualResidencies_old.arrow"), force=true)
     transform!(groupby(sort(df,[:IndividualId, :StartDate]),:IndividualId), :IndividualId => eachindex => :Episode, nrow => :Episodes)
-    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualResidencies.arrow"), df, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "IndividualResidencies.arrow"), df, compress=:zstd)
     return nothing
 end # dropnonresidentepisodes
 #endregion
 #region Households
 "Read households and save household map and data to staging directory"
 function readhouseholds(node::String)
-    readhouseholds_internal(settings.Databases[node], node, settings.BaseDirectory)
-    readhouseholdresidences(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+    readhouseholds_internal(settings.Databases[node], node)
+    readhouseholdresidences(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
 end
 "Read households and save household map and data to staging directory"
-function readhouseholds_internal(db::String, node::String, basedirectory::String)
+function readhouseholds_internal(db::String, node::String)
     con = ODBC.Connection(db)
     sql = """SELECT
         UPPER(CONVERT(nvarchar(50),H.HouseholdUid)) HouseholdUid,
@@ -598,13 +598,13 @@ function readhouseholds_internal(db::String, node::String, basedirectory::String
     DBInterface.close!(con)
     households.HouseholdId = 1:nrow(households)
     map = households[!,[:HouseholdUid,:HouseholdId]]
-    Arrow.write(joinpath(basedirectory, node, "Staging", "HouseholdMap.arrow"), map, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "HouseholdMap.arrow"), map, compress=:zstd)
     select!(households, [:HouseholdId, :StartDate, :StartType, :EndDate, :EndType])
-    Arrow.write(joinpath(basedirectory, node, "Staging", "Households.arrow"), households, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "Households.arrow"), households, compress=:zstd)
     return nothing
 end # readhouseholds
 "Retrieve household residencies with left and right censor dates"
-function readhouseholdresidences(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function readhouseholdresidences(db::String, node::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """SELECT
         UPPER(CONVERT(nvarchar(50),HouseholdResidenceUid)) HouseholdResidenceUid
@@ -677,9 +677,9 @@ function readhouseholdresidences(db::String, node::String, basedirectory::String
     filter!([:StartDate,:EndDate] => (s, e) -> s <= e, r) # start date must be smaller or equal to end date
     select!(r, [:HouseholdUid,:LocationUid,:StartDate,:StartType,:EndDate,:EndType,:StartObservationDate,:EndObservationDate])
     @info "Household residences $(nrow(r)) $(node) after right censor"
-    householdmap = Arrow.Table(joinpath(basedirectory, node, "Staging", "HouseholdMap.arrow")) |> DataFrame
+    householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
     r = innerjoin(r, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
-    locationmap = Arrow.Table(joinpath(basedirectory, node, "Staging", "LocationMap.arrow")) |> DataFrame
+    locationmap = Arrow.Table(joinpath(stagingpath(node), "LocationMap.arrow")) |> DataFrame
     r = innerjoin(r, locationmap, on=:LocationUid => :LocationUid, makeunique=true, matchmissing=:equal)
     select!(r, [:HouseholdId,:LocationId,:StartDate,:StartType,:EndDate,:EndType,:StartObservationDate,:EndObservationDate])
     disallowmissing!(r, [:StartDate,:EndDate])
@@ -710,7 +710,7 @@ function readhouseholdresidences(db::String, node::String, basedirectory::String
     sort!(df,[:HouseholdId,:StartDate, order(:EndDate, rev=true)])
     select!(df,[:HouseholdId, :LocationId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate])
     transform!(groupby(df, [:HouseholdId]), :HouseholdId => eachindex => :Episode, nrow => :Episodes)
-    Arrow.write(joinpath(basedirectory, node, "Staging", "HouseholdResidences.arrow"), df, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "HouseholdResidences.arrow"), df, compress=:zstd)
     @info "Wrote $(nrow(df)) $(node) household residences"
     return nothing
 end
@@ -718,11 +718,11 @@ end
 #region HouseholdMemberships
 "Retrieve and save household membership and householdhead relationships data"
 function readhouseholdmemberships(node::String)
-    readhouseholdmemberships_internal(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
-    readhouseholdheadrelationships(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+    readhouseholdmemberships_internal(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+    readhouseholdheadrelationships(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
 end
 "Retrieve household memberships with left and right censor dates"
-function readhouseholdmemberships_internal(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function readhouseholdmemberships_internal(db::String, node::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """SELECT
       UPPER(CONVERT(varchar(50),HM.IndividualUid)) IndividualUid
@@ -743,13 +743,13 @@ function readhouseholdmemberships_internal(db::String, node::String, basedirecto
     memberships =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(memberships)) $(node) membership episodes from database"
-    householdmap = Arrow.Table(joinpath(basedirectory,node,"Staging","HouseholdMap.arrow")) |> DataFrame
+    householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
     memberships = innerjoin(memberships, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(memberships)) $(node) membership episodes"
-    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    individualmap = Arrow.Table(joinpath(stagingpath(node),"IndividualMap.arrow")) |> DataFrame
     memberships = innerjoin(memberships, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(memberships)) $(node) membership episodes"
-    individualbounds = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualBounds.arrow")) |> DataFrame
+    individualbounds = Arrow.Table(joinpath(stagingpath(node),"IndividualBounds.arrow")) |> DataFrame
     m = leftjoin(memberships,individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(m)) $(node) membership episodes after individual bounds join"
     #adjust start and end dates
@@ -773,12 +773,12 @@ function readhouseholdmemberships_internal(db::String, node::String, basedirecto
     m.MembershipId = 1:nrow(m)
     transform!(groupby(m,[:IndividualId,:HouseholdId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
     select!(m,[:MembershipId, :IndividualId, :HouseholdId, :StartDate, :StartType, :StartObservationDate, :EndDate, :EndType, :EndObservationDate, :Episode, :Episodes])
-    Arrow.write(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow"), m, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "HouseholdMemberships.arrow"), m, compress=:zstd)
     @info "Wrote $(nrow(m)) $(node) membership episodes"
     return nothing
 end #readhouseholdmemberships
 "Retrieve household head relationships with left and right censor dates"
-function readhouseholdheadrelationships(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function readhouseholdheadrelationships(db::String, node::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """SELECT
         UPPER(CONVERT(varchar(50),HM.IndividualUid)) IndividualUid
@@ -801,13 +801,13 @@ function readhouseholdheadrelationships(db::String, node::String, basedirectory:
     relationships =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(relationships)) $(node) relationships episodes from database"
-    householdmap = Arrow.Table(joinpath(basedirectory,node,"Staging","HouseholdMap.arrow")) |> DataFrame
+    householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
     relationships = innerjoin(relationships, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(relationships)) $(node) relationships episodes"
-    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     relationships = innerjoin(relationships, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(relationships)) $(node) relationships episodes"
-    individualbounds = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualBounds.arrow")) |> DataFrame
+    individualbounds = Arrow.Table(joinpath(stagingpath(node), "IndividualBounds.arrow")) |> DataFrame
     m = leftjoin(relationships,individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(m)) $(node) relationships episodes after individual bounds join"
     #adjust start and end dates
@@ -831,7 +831,7 @@ function readhouseholdheadrelationships(db::String, node::String, basedirectory:
     m.RelationshipId = 1:nrow(m)
     transform!(groupby(m,[:IndividualId,:HouseholdId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
     select!(m,[:RelationshipId, :IndividualId, :HouseholdId, :HHRelationshipTypeId, :StartDate, :StartType, :StartObservationDate, :EndDate, :EndType, :EndObservationDate, :Episode, :Episodes])
-    Arrow.write(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow"), m, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "HHeadRelationships.arrow"), m, compress=:zstd)
     @info "Wrote $(nrow(m)) $(node) relationships episodes"
     return nothing
 end #readhouseholdheadrelationships
@@ -839,7 +839,7 @@ end #readhouseholdheadrelationships
 #region IndividualMemberships
 "Decompose household memberships to days and combine with houeshold relationships and produced consolidated individual hosuehold membership episodes with household head relationship"
 function readindividualmemberships(node::String, batchsize::Int64 = BatchSize)
-    batchmemberships(settings.BaseDirectory, node, batchsize)
+    batchmemberships(node, batchsize)
 end
 function processmembershipdays(startdate, enddate, starttype, endtype)
     start = startdate[1]
@@ -925,7 +925,7 @@ function getrelationshipdays(f)
     rename!(s,Dict(:daydate=>"DayDate",:episode=>"Episode",:startdate=>"StartDate",:enddate => "EndDate",:starttype => "StartType",:endtype => "EndType",:hhrelationtype => "HHRelationshipTypeId"))
     return s
 end #getrelationshipdays
-function individualmemberships(basedirectory::String, node::String, m, r, batch::Int64)
+function individualmemberships(node::String, m, r, batch::Int64)
     mr = leftjoin(getmembershipdays(m), getrelationshipdays(r), on = [:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
     select!(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :Episode])
     replace!(mr.HHRelationshipTypeId, missing => 12)
@@ -947,61 +947,61 @@ function individualmemberships(basedirectory::String, node::String, m, r, batch:
     end
     memberships = combine(groupby(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :Episode]), :DayDate => minimum => :StartDate, :StartType => first => :StartType,
                                                                                             :DayDate => maximum => :EndDate, :EndType => last => :EndType)
-    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualMemberships$(batch).arrow"), memberships)
+    Arrow.write(joinpath(stagingpath(node), "IndividualMemberships$(batch).arrow"), memberships)
     @info "Wrote $(nrow(memberships)) $(node) individual membership episodes in batch $(batch)"
     return nothing
 end #individualmemberships
-function openchunk(basedirectory::String, node::String, chunk::Int64)
-    open(joinpath(basedirectory, node, "Staging", "IndividualMemberships$(chunk).arrow")) do io
+function openchunk(node::String, chunk::Int64)
+    open(joinpath(stagingpath(node), "IndividualMemberships$(chunk).arrow")) do io
         return Arrow.Table(io) |> DataFrame
     end;
 end
 "Concatenate membership batches"
-function combinemembershipbatch(basedirectory::String, node::String, batches)
-    memberships = openchunk(basedirectory::String, node::String, 1)
+function combinemembershipbatch(node::String, batches)
+    memberships = openchunk(node::String, 1)
     r = similar(memberships,0)
     for i = 1:batches
-        m = openchunk(basedirectory::String, node::String, i)
+        m = openchunk(node::String, i)
         append!(r, m)
     end
-    Arrow.write(joinpath(basedirectory, node, "Staging", "IndividualMemberships.arrow"), r, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "IndividualMemberships.arrow"), r, compress=:zstd)
     @info "Final individual membership rows $(nrow(r)) for $(node)"
     #delete chunks
     for i = 1:batches
-        rm(joinpath(basedirectory, node, "Staging", "IndividualMemberships$(i).arrow"))
+        rm(joinpath(stagingpath(node), "IndividualMemberships$(i).arrow"))
     end
     return nothing
 end #combinemembershipbatch
 "Normalise memberships in batches"
-function batchmemberships(basedirectory::String, node::String, batchsize::Int64 = BatchSize)
-    relationships = open(joinpath(basedirectory, node, "Staging", "HHeadRelationships.arrow")) do io
+function batchmemberships(node::String, batchsize::Int64 = BatchSize)
+    relationships = open(joinpath(stagingpath(node), "HHeadRelationships.arrow")) do io
         return Arrow.Table(io) |> DataFrame
     end
     select!(relationships,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType, :HHRelationshipTypeId])
     @info "Node $(node) $(nrow(relationships)) relationship episodes"
-    memberships = open(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow")) do io
+    memberships = open(joinpath(stagingpath(node), "HouseholdMemberships.arrow")) do io
         return Arrow.Table(io) |> DataFrame
     end
     select!(memberships,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType])
     @info "Node $(node) $(nrow(memberships)) memberships episodes"
-    minId, maxId, batches = individualbatch(basedirectory, node, batchsize)
+    minId, maxId, batches = individualbatch(node, batchsize)
     Threads.@threads for i = 1:batches
         fromId, toId = nextidrange(minId, maxId, i, batchsize)
         @info "Batch $(i) from $(fromId) to $(toId)"
         m = filter([:IndividualId] => id -> fromId <= id <= toId, memberships)
         r = filter([:IndividualId] => id -> fromId <= id <= toId, relationships)
-        individualmemberships(basedirectory,node,m,r,i)
+        individualmemberships(node, m, r, i)
     end
-    combinemembershipbatch(basedirectory,node,batches)
+    combinemembershipbatch(node, batches)
     return nothing
 end #batchmemberships
 
 #endregion
 #region EducationStatuses
 function readeducationstatuses(node::String)
-    educationstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+    educationstatus(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
 end
-function educationstatus(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function educationstatus(db::String, node::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """SELECT
     UPPER(CONVERT(varchar(50),IndividualUid)) IndividualUid
@@ -1015,9 +1015,9 @@ function educationstatus(db::String, node::String, basedirectory::String, period
     s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(s)) $(node) education statuses from database"
-    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     si = innerjoin(s, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
-    individualbounds = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualBounds.arrow")) |> DataFrame
+    individualbounds = Arrow.Table(joinpath(stagingpath(node), "IndividualBounds.arrow")) |> DataFrame
     m = leftjoin(si, individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
     insertcols!(m,:OutsideBounds => false)
     for i=1:nrow(m)
@@ -1036,7 +1036,7 @@ function educationstatus(db::String, node::String, basedirectory::String, period
     disallowmissing!(m,[:ObservationDate])
     select!(m,[:IndividualId,:ObservationDate,:CurrentEducation, :HighestSchoolLevel, :HighestNonSchoolLevel])
     sort!(m,[:IndividualId,:ObservationDate])
-    Arrow.write(joinpath(basedirectory, node, "Staging", "EducationStatuses.arrow"), m, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "EducationStatuses.arrow"), m, compress=:zstd)
     a = freqtable(m,:CurrentEducation)
     @info "Current Education breakdown for $(node)" a
     a = freqtable(m,:HighestSchoolLevel)
@@ -1049,10 +1049,10 @@ end
 #region household socio-economic
 "Read and save household socio-economic data"
 function readhouseholdsocioeconomic(node::String)
-    householdassets(settings.Databases[node], node, settings.BaseDirectory)
-    householdsocioeconomic(settings.Databases[node], node, settings.BaseDirectory)
+    householdassets(settings.Databases[node], node)
+    householdsocioeconomic(settings.Databases[node], node)
 end
-function householdassets(db::String, node::String, basedirectory::String)
+function householdassets(db::String, node::String)
     con = ODBC.Connection(db)
     sql = """SELECT
         UPPER(CONVERT(varchar(50),HA.HouseholdObservationUid)) HouseholdObservationUid,
@@ -1086,10 +1086,10 @@ function householdassets(db::String, node::String, basedirectory::String)
     @info "Modern asset breakdown for $(node)" a
     a = freqtable(w,:Livestock)
     @info "Livestock asset breakdown for $(node)" a
-    Arrow.write(joinpath(basedirectory, node, "Staging", "AssetStatus.arrow"), w, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "AssetStatus.arrow"), w, compress=:zstd)
     return nothing
 end #householdassets
-function householdsocioeconomic(db::String, node::String, basedirectory::String)
+function householdsocioeconomic(db::String, node::String)
     con = ODBC.Connection(db)
     sql = """SELECT
         UPPER(CONVERT(varchar(50),HouseholdObservationUid)) HouseholdObservationUid,
@@ -1117,10 +1117,10 @@ function householdsocioeconomic(db::String, node::String, basedirectory::String)
     s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(s)) $(node) HSE observations from database"
-    householdmap = Arrow.Table(joinpath(basedirectory,node,"Staging","HouseholdMap.arrow")) |> DataFrame
+    householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
     si = innerjoin(s, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(si)) $(node) HSE observations after household map"
-    householdassets = Arrow.Table(joinpath(basedirectory,node,"Staging","AssetStatus.arrow")) |> DataFrame
+    householdassets = Arrow.Table(joinpath(stagingpath(node), "AssetStatus.arrow")) |> DataFrame
     s = leftjoin(si,householdassets,on = :HouseholdObservationUid => :HouseholdObservationUid, makeunique=true, matchmissing=:equal)
     select!(s,Not([:HouseholdObservationUid,:HouseholdUid]))
     a = freqtable(s,:WaterSource)
@@ -1166,16 +1166,16 @@ function householdsocioeconomic(db::String, node::String, basedirectory::String)
     select!(s, [:HouseholdId,:ObservationDate,:SEIdx,:DwellingIdx,:WaterSanitationIdx,:PowerSupplyIdx,:LivestockIdx, :ModernAssetIdx, 
                 :Crime, :FinancialStatus, :CutMeals, :CutMealsFrequency, :NotEat, :NotEatFrequency, :ChildMealSkipCut, :ChildMealSkipCutFrequency, :ConsentToCall])
     sort!(s, [:HouseholdId,:ObservationDate])
-    Arrow.write(joinpath(basedirectory, node, "Staging", "SocioEconomic.arrow"), s, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "SocioEconomic.arrow"), s, compress=:zstd)
     return nothing
 end #householdsocioeconomic
 #endregion
 #region Marital status
 "Read and save individual marital status observations"
 function readmaritalstatuses(node::String)
-    maritalstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+    maritalstatus(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
 end
-function maritalstatus(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function maritalstatus(db::String, node::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """SELECT
       UPPER(CONVERT(varchar(50),IndividualUid)) IndividualUid
@@ -1189,11 +1189,11 @@ function maritalstatus(db::String, node::String, basedirectory::String, perioden
     s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(s)) $(node) marital statuses from database"
-    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     si = innerjoin(s, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     @info "$(nrow(si)) $(node) marital statuses after individual map"
     select!(si,[:IndividualId, :ObservationDate, :MaritalStatus])
-    individualbounds = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualBounds.arrow")) |> DataFrame
+    individualbounds = Arrow.Table(joinpath(stagingpath(node), "IndividualBounds.arrow")) |> DataFrame
     m = leftjoin(si, individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
     insertcols!(m,:OutsideBounds => false)
     for i=1:nrow(m)
@@ -1212,15 +1212,15 @@ function maritalstatus(db::String, node::String, basedirectory::String, perioden
     select!(m,[:IndividualId, :ObservationDate, :MaritalStatus])
     disallowmissing!(m,:ObservationDate)
     sort!(m, [:IndividualId, :ObservationDate])
-    Arrow.write(joinpath(basedirectory, node, "Staging", "MaritalStatus.arrow"), m, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "MaritalStatus.arrow"), m, compress=:zstd)
     return nothing
 end #maritalstatus
 #endregion
 #region Labour status
 function readlabourstatuses(node::String)
-    labourstatus(settings.Databases[node], node, settings.BaseDirectory, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+    labourstatus(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
 end
-function labourstatus(db::String, node::String, basedirectory::String, periodend::Date, leftcensor::Date)
+function labourstatus(db::String, node::String, periodend::Date, leftcensor::Date)
     con = ODBC.Connection(db)
     sql = """SELECT
       UPPER(CONVERT(varchar(50),IndividualUid)) IndividualUid
@@ -1239,11 +1239,11 @@ function labourstatus(db::String, node::String, basedirectory::String, periodend
     s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(s)) $(node) labour statuses from database"
-    individualmap = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualMap.arrow")) |> DataFrame
+    individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     si = innerjoin(s, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     @info "$(nrow(si)) $(node) labour statuses after individual map"
     select!(si,[:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer])
-    individualbounds = Arrow.Table(joinpath(basedirectory,node,"Staging","IndividualBounds.arrow")) |> DataFrame
+    individualbounds = Arrow.Table(joinpath(stagingpath(node), "IndividualBounds.arrow")) |> DataFrame
     m = leftjoin(si, individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
     insertcols!(m,:OutsideBounds => false)
     for i=1:nrow(m)
@@ -1268,7 +1268,40 @@ function labourstatus(db::String, node::String, basedirectory::String, periodend
     a = freqtable(m,:Employer)
     @info "Employer breakdown for $(node)" a
     sort!(m, [:IndividualId, :ObservationDate])
-    Arrow.write(joinpath(basedirectory, node, "Staging", "LabourStatus.arrow"), m, compress=:zstd)
+    Arrow.write(joinpath(stagingpath(node), "LabourStatus.arrow"), m, compress=:zstd)
     return nothing
 end #labourstatus
+#endregion
+#region Pregnancies
+function readpregnancies(node::String)
+    con = ODBC.Connection(settings.Databases[node])
+    sql = """    
+        SELECT
+          UPPER(CONVERT(nvarchar(50),P.WomanUid)) WomanUid,
+          CAST(E.EventDate AS DATE) DeliveryDate,
+          CASE WHEN PO.LiveBirths >= 10 THEN 1 ELSE PO.LiveBirths END LiveBirths,
+          CASE WHEN PO.StillBirths >= 10 THEN 1 ELSE PO.StillBirths END StillBirths,
+          PO.TerminationTypeId
+        FROM dbo.Pregnancies P
+          JOIN dbo.PregnancyOutcomeEvents PO ON P.OutcomeEventUid = PO.EventUid
+          JOIN dbo.Events E ON PO.EventUid = E.EventUid
+    """
+    pregnancies = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
+    @info "Read $(nrow(pregnancies)) $(node) pregnancies"
+    DBInterface.close!(con)
+    individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
+    @info "Read $(nrow(individualmap)) $(node) individualmap entries"
+    pregnancies = innerjoin(pregnancies, individualmap, on = :WomanUid => :IndividualUid, makeunique=true, matchmissing=:equal)
+    @info "Read $(nrow(pregnancies)) $(node) pregnancies after join"
+    select!(pregnancies, [:IndividualId, :DeliveryDate, :LiveBirths, :StillBirths, :TerminationTypeId])
+    sort!(pregnancies, [:IndividualId, :DeliveryDate])
+    pregnancies = combine(groupby(pregnancies, [:IndividualId, :DeliveryDate]), :LiveBirths => maximum => :LiveBirths, :StillBirths => maximum => :StillBirths, :TerminationTypeId => maximum => :TerminationTypeId)
+    Arrow.write(joinpath(stagingpath(node), "Pregnancies.arrow"), pregnancies, compress=:zstd)
+    @info "Wrote $(nrow(pregnancies)) $(node) pregnancies"
+    livebirths = freqtable(pregnancies, :LiveBirths)
+    @info "LiveBirths breakdown $(node)" livebirths
+    stillbirths = freqtable(pregnancies, :StillBirths)
+    @info "StillBirths breakdown $(node)" stillbirths
+    return nothing
+end
 #endregion

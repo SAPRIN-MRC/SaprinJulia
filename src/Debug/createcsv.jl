@@ -2,6 +2,6 @@ using Arrow
 using CSV
 using SAPRINCore
 
-arrowtocsv("DIMAMO", "Staging", "IndividualMap")
-arrowtocsv("DIMAMO", "Staging", "LocationMap")
-arrowtocsv("DIMAMO", "Staging", "HouseholdMap")
+arrowtocsv("Agincourt", "Staging", "IndividualMap")
+arrowtocsv("Agincourt", "Staging", "LocationMap")
+arrowtocsv("Agincourt", "Staging", "HouseholdMap")]

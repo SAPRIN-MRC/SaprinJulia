@@ -1,8 +1,5 @@
 "Group day records into basic exposure records"
 function basicepisodes(node)
-    basedirectory = settings.BaseDirectory
-    periodend = settings.PeriodEnd
-    ltfcutoff = settings.LTFCutOff
     residentdaybatches = Arrow.Stream(joinpath(basedirectory, node, "DayExtraction", "DayDatasetStep02_batched.arrow"))
     hstate = iterate(residentdaybatches)
     i = 1
@@ -88,6 +85,6 @@ function basicepisodes(node)
         @info "Node $(node) batch $(i) completed with $(nrow(e)) episodes after $(round(now()-t, Dates.Second))"
         i = i + 1
     end
-    combinebatches(basedirectory,node,"Episodes","SurveillanceEpisodesBasic", i-1)
+    combinebatches(episodepath(node), "SurveillanceEpisodesBasic", i-1)
     return nothing
 end

@@ -1,6 +1,6 @@
 #region Individual residency days
 function extractresidencydays(node::String, batchsize::Int64 = BatchSize)
-    batchresidencydays(settings.BaseDirectory, node, batchsize)
+    batchresidencydays(node, batchsize)
 end
 function processresidencydays(locationid, startdate, enddate, starttype, endtype)
     start = startdate[1]
@@ -46,19 +46,19 @@ function processresidencydays(locationid, startdate, enddate, starttype, endtype
 
     return (locationid = res_location, daydate = res_daydate, starttype = res_starttype, endtype = res_endtype, episode = res_episode, startflag = res_start, endflag = res_end)
 end
-function getresidencydays(basedirectory::String, node::String, f, batch::Int64)
+function getresidencydays(node::String, f, batch::Int64)
     s = combine(groupby(sort(f, [:StartDate, order(:EndDate, rev=true)]), [:IndividualId], sort=true), [:LocationId, :StartDate, :EndDate, :StartType, :EndType] => processresidencydays => AsTable)
     rename!(s,Dict(:locationid => "LocationId", :daydate => "DayDate", :episode => "Episode", :starttype => "StartType", :endtype => "EndType", :startflag => "Start", :endflag => "End"))
     disallowmissing!(s, [:LocationId, :DayDate, :Episode, :StartType, :EndType, :Start, :End])
-    open(joinpath(basedirectory,node,"DayExtraction","IndividualResidencyDays$(batch).arrow"),"w"; lock = true) do io
+    open(joinpath(dayextractionpath(node),"IndividualResidencyDays$(batch).arrow"),"w"; lock = true) do io
         Arrow.write(io, s, compress=:zstd)
     end
     return nothing
 end #getresidencydays
 "Normalise residencies in batches"
-function batchresidencydays(basedirectory::String, node::String, batchsize::Int64)
-    minId, maxId, batches = individualbatch(basedirectory, node, batchsize)
-    residencies = open(joinpath(basedirectory, node, "Staging", "IndividualResidencies.arrow")) do io
+function batchresidencydays(node::String, batchsize::Int64)
+    minId, maxId, batches = individualbatch(node, batchsize)
+    residencies = open(joinpath(stagingpath(node), "IndividualResidencies.arrow")) do io
         return Arrow.Table(io) |> DataFrame
     end
     select!(residencies,[:IndividualId, :LocationId, :StartDate, :StartType, :EndDate, :EndType])
@@ -67,15 +67,15 @@ function batchresidencydays(basedirectory::String, node::String, batchsize::Int6
         fromId, toId = nextidrange(minId, maxId, i, batchsize)
         @info "Batch $(i) from $(fromId) to $(toId)"
         d = filter([:IndividualId] => id -> fromId <= id <= toId, residencies)
-        getresidencydays(basedirectory,node,d,i)
+        getresidencydays(node, d, i)
     end
-    combinebatches(basedirectory,node,"DayExtraction","IndividualResidencyDays",batches)
+    combinebatches(dayextractionpath(node), "IndividualResidencyDays",batches)
     return nothing
 end #batchresidencydays
 #endregion
 #region Household residency days
 function extracthhresidencydays(node::String)
-    processresidencydays(settings.BaseDirectory, node)
+    processresidencydays(node)
 end
 function processhhresidencydays(locationid, startdate, enddate, starttype, endtype)
     start = startdate[1]
@@ -122,12 +122,12 @@ function processhhresidencydays(locationid, startdate, enddate, starttype, endty
     return (locationid = res_location, daydate = res_daydate, starttype = res_starttype, endtype = res_endtype, episode = res_episode, startflag = res_start, endflag = res_end)
 end
 "Ensure household residency span household membership extends"
-function normalisehouseholdresidencies(basedirectory::String, node::String)
-    memberships = open(joinpath(basedirectory, node, "Staging", "HouseholdMemberships.arrow")) do io
+function normalisehouseholdresidencies(node::String)
+    memberships = open(joinpath(stagingpath(node), "HouseholdMemberships.arrow")) do io
         Arrow.Table(io) |> DataFrame
     end;
     m = combine(groupby(memberships,[:HouseholdId]),:StartDate => minimum => :MemStartDate, :EndDate => maximum => :MemEndDate)
-    residencies = open(joinpath(basedirectory, node, "Staging", "HouseholdResidences.arrow")) do io
+    residencies = open(joinpath(stagingpath(node), "HouseholdResidences.arrow")) do io
         Arrow.Table(io) |> DataFrame
     end;
     mr = leftjoin(residencies, m, on = :HouseholdId, makeunique = true)
@@ -144,21 +144,21 @@ function normalisehouseholdresidencies(basedirectory::String, node::String)
     return mr
 end
 "Extract household residency days"
-function processresidencydays(basedirectory::String, node::String)
-    residencies = normalisehouseholdresidencies(basedirectory, node)
+function processresidencydays(node::String)
+    residencies = normalisehouseholdresidencies(node)
     select!(residencies,[:HouseholdId, :LocationId, :StartDate, :StartType, :EndDate, :EndType])
     @info "Node $(node) $(nrow(residencies)) household residency episodes"
     s = combine(groupby(sort(residencies, [:StartDate, order(:EndDate, rev=true)]), [:HouseholdId], sort=true), [:LocationId, :StartDate, :EndDate, :StartType, :EndType] => processhhresidencydays => AsTable)
     rename!(s,Dict(:locationid => "LocationId", :daydate => "DayDate", :episode => "Episode", :starttype => "StartType", :endtype => "EndType", :startflag => "Start", :endflag => "End"))
     disallowmissing!(s, [:LocationId, :DayDate, :Episode, :StartType, :EndType, :Start, :End])
-    Arrow.write(joinpath(basedirectory, node, "DayExtraction", "HouseholdResidencyDays.arrow"), s, compress=:zstd)
+    Arrow.write(joinpath(dayextractionpath(node), "HouseholdResidencyDays.arrow"), s, compress=:zstd)
     @info "Node $(node) $(nrow(s)) household residency days"
     return nothing
 end #processresidencydays
 #endregion
 #region Household Membership days
 function extractmembershipdays(node::String, batchsize::Int64 = BatchSize)
-    batchmembershipdays(settings.BaseDirectory, node, batchsize)
+    batchmembershipdays(node, batchsize)
 end
 function processhhmembershipdays(startdate, enddate, starttype, endtype)
     start = startdate[1]
@@ -200,19 +200,19 @@ function processhhmembershipdays(startdate, enddate, starttype, endtype)
 
     return (daydate = res_daydate, starttype = res_starttype, endtype = res_endtype, episode = res_episode, startflag = res_start, endflag = res_end)
 end #processhhmembershipdays
-function gethhmembershipdays(basedirectory::String, node::String, f, batch::Int64)
+function gethhmembershipdays(node::String, f, batch::Int64)
     s = combine(groupby(sort(f, [:StartDate, order(:EndDate, rev=true)]), [:IndividualId,:HouseholdId,:HHRelationshipTypeId], sort=true), [:StartDate, :EndDate, :StartType, :EndType] => processhhmembershipdays => AsTable)
     rename!(s,Dict(:daydate => "DayDate", :episode => "Episode", :starttype => "StartType", :endtype => "EndType", :startflag => "Start", :endflag => "End"))
     disallowmissing!(s, [:DayDate, :Episode, :StartType, :EndType, :Start, :End])
-    open(joinpath(basedirectory,node,"DayExtraction","HouseholdMembershipDays$(batch).arrow"),"w"; lock = true) do io
+    open(joinpath(dayextractionpath(node),"HouseholdMembershipDays$(batch).arrow"),"w"; lock = true) do io
         Arrow.write(io, s, compress=:zstd)
     end
     return nothing
 end #gethhresidencydays
 "Extract membership days in batches"
-function batchmembershipdays(basedirectory::String, node::String, batchsize::Int64)
-    minId, maxId, batches = individualbatch(basedirectory, node, batchsize)
-    memberships = open(joinpath(basedirectory, node, "Staging", "IndividualMemberships.arrow")) do io
+function batchmembershipdays(node::String, batchsize::Int64)
+    minId, maxId, batches = individualbatch(node, batchsize)
+    memberships = open(joinpath(stagingpath(node), "IndividualMemberships.arrow")) do io
         return Arrow.Table(io) |> DataFrame
     end
     @info "Node $(node) $(nrow(memberships)) individual membership episodes"
@@ -220,51 +220,51 @@ function batchmembershipdays(basedirectory::String, node::String, batchsize::Int
         fromId, toId = nextidrange(minId, maxId, i, batchsize)
         @info "Batch $(i) from $(fromId) to $(toId)"
         d = filter([:IndividualId] => id -> fromId <= id <= toId, memberships)
-        gethhmembershipdays(basedirectory,node,d,i)
+        gethhmembershipdays(node, d, i)
     end
-    combinebatches(basedirectory,node,"DayExtraction","HouseholdMembershipDays",batches)
+    combinebatches(dayextractionpath(node), "HouseholdMembershipDays",batches)
     return nothing
 end #batchmembershipdays
 #endregion
 #region Preferred Household
 "Convert a Arrow file into an Arrow file with record batches based on IndividualId"
-function batchonindividualid(basedirectory, node, file, batchsize = BatchSize)
-    minId, maxId, numbatches = individualbatch(basedirectory, node, batchsize)
-    df = Arrow.Table(joinpath(basedirectory,node,"DayExtraction","$(file).arrow"))
+function batchonindividualid(node, file, batchsize = BatchSize)
+    minId, maxId, numbatches = individualbatch(node, batchsize)
+    df = Arrow.Table(joinpath(dayextractionpath(node),"$(file).arrow"))
     @info "Read $(node) $(file) arrow table ", now()
     partitions = Array{TableOperations.Filter}(undef, 0)
     for i = 1:numbatches 
         fromId, toId = nextidrange(minId, maxId, i, batchsize)
         push!(partitions, TableOperations.filter(x -> fromId <= x.IndividualId <= toId, df))
     end
-    open(joinpath(basedirectory,node,"DayExtraction","$(file)_batched.arrow"),"a"; lock = true) do io
+    open(joinpath(dayextractionpath(node),"$(file)_batched.arrow"),"a"; lock = true) do io
         Arrow.write(io, Tables.partitioner(partitions), compress=:zstd)
     end
 end
-function batchmembershipdayswithlocation(basedirectory::String, node::String)
-    hhresidencies = Arrow.Table(joinpath(basedirectory, node, "DayExtraction", "HouseholdResidencyDays.arrow")) |> DataFrame
+function batchmembershipdayswithlocation(node::String)
+    hhresidencies = Arrow.Table(joinpath(dayextractionpath(node), "HouseholdResidencyDays.arrow")) |> DataFrame
     @info "$(node) read $(nrow(hhresidencies)) household residency days at $(now())"
-    membershipdaybatches = Arrow.Stream(joinpath(basedirectory, node, "DayExtraction", "HouseholdMembershipDays_batched.arrow"));
+    membershipdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "HouseholdMembershipDays_batched.arrow"));
     batch = 1
     for b in membershipdaybatches
         memberships = b |> DataFrame
         hm = innerjoin(memberships,hhresidencies, on = [:HouseholdId, :DayDate], makeunique = true)
         select!(hm,[:HouseholdId, :DayDate, :IndividualId, :LocationId, :StartType, :EndType, :Start, :End, :HHRelationshipTypeId])
         rename!(hm, [:LocationId =>:HHResLocationId, :StartType => :HHMemStartType, :EndType => :HHMemEndType, :Start => :HHMemStart, :End => :HHMemEnd])
-        open(joinpath(basedirectory,node,"DayExtraction","HouseholdMembershipDaysWithLocation$(batch).arrow"),"w"; lock = true) do io
+        open(joinpath(dayextractionpath(node),"HouseholdMembershipDaysWithLocation$(batch).arrow"),"w"; lock = true) do io
             Arrow.write(io, hm, compress=:zstd)
         end
         @info "Wrote $(nrow(hm)) membership with location rows, batch $(batch) for node $(node)"
         batch = batch + 1
     end
-    combinebatches(basedirectory,node,"DayExtraction","HouseholdMembershipDaysWithLocation", batch-1)
+    combinebatches(dayextractionpath(node),"HouseholdMembershipDaysWithLocation", batch-1)
     @info "Completed writing membership with location on $(now())"
     return nothing
 end
-function processconsolidatehhbatch(basedirectory::String, node::String, md, rd, batch)
+function processconsolidatehhbatch(node::String, md, rd, batch)
     rename!(rd,[:LocationId => :IndResLocationId, :StartType => :IndResStartType, :EndType => :IndResEndType, :Start => :IndResStart, :End => :IndResEnd])
     df = outerjoin(md, rd, on = [:IndividualId, :DayDate], makeunique=true, indicator=:result)
-    open(joinpath(basedirectory, node, "DayExtraction", "ResDaysNoMember$(batch).arrow"),"w"; lock = true) do io
+    open(joinpath(dayextractionpath(node), "ResDaysNoMember$(batch).arrow"),"w"; lock = true) do io
         Arrow.write(io, select(filter(x -> x.result == "right_only", df), [:IndividualId,:DayDate,:IndResLocationId,:IndResStartType,:IndResEndType, :IndResStart, :IndResEnd]), compress=:zstd)
     end
     filter!(x -> x.result != "right_only", df)
@@ -283,14 +283,14 @@ function processconsolidatehhbatch(basedirectory::String, node::String, md, rd, 
     # sort!(df, [:IndividualId,:DayDate,:HHRank])
     # unique!(df,[:IndividualId,:DayDate])
     select!(s,[:IndividualId,:HouseholdId,:DayDate,:HHResLocationId,:IndResLocationId,:HHMemStartType, :HHMemEndType, :HHMemStart, :HHMemEnd, :IndResStartType, :IndResEndType, :Episode, :IndResStart, :IndResEnd, :HHRank, :HHRelationshipTypeId, :Memberships])
-    open(joinpath(basedirectory, node, "DayExtraction", "IndividualPreferredHHDays$(batch).arrow"),"w"; lock = true) do io
+    open(joinpath(dayextractionpath(node), "IndividualPreferredHHDays$(batch).arrow"),"w"; lock = true) do io
         Arrow.write(io, s, compress=:zstd)
     end
     @info "$(node) batch $(batch) wrote $(nrow(s)) preferred household days at $(now())"
 end
-function consolidatepreferredhousehold(basedirectory::String, node::String)
-    membershipbatches = Arrow.Stream(joinpath(basedirectory, node, "DayExtraction", "HouseholdMembershipDaysWithLocation_batched.arrow"))
-    residencybatches = Arrow.Stream(joinpath(basedirectory, node, "DayExtraction", "IndividualResidencyDays_batched.arrow"))
+function consolidatepreferredhousehold(node::String)
+    membershipbatches = Arrow.Stream(joinpath(dayextractionpath(node), "HouseholdMembershipDaysWithLocation_batched.arrow"))
+    residencybatches = Arrow.Stream(joinpath(dayextractionpath(node), "IndividualResidencyDays_batched.arrow"))
     mstate = iterate(membershipbatches)
     rstate = iterate(residencybatches)
     i = 1
@@ -299,20 +299,20 @@ function consolidatepreferredhousehold(basedirectory::String, node::String)
         md = m |> DataFrame
         r, rst = rstate
         rd = r |> DataFrame
-        processconsolidatehhbatch(basedirectory, node, md, rd, i)
+        processconsolidatehhbatch(node, md, rd, i)
         mstate = iterate(membershipbatches, mst)
         rstate = iterate(residencybatches, rst)
         i = i + 1
     end
-    combinebatches(basedirectory,node,"DayExtraction","ResDaysNoMember", i-1)
-    combinebatches(basedirectory,node,"DayExtraction","IndividualPreferredHHDays", i-1)
+    combinebatches(dayextractionpath(node), "ResDaysNoMember", i-1)
+    combinebatches(dayextractionpath(node),"IndividualPreferredHHDays", i-1)
     return nothing
 end
 "Recreate membership days for residency days without a membership"
-function recoverresidentdays(basedirectory::String, node::String)
-    hhresidencies = Arrow.Table(joinpath(basedirectory, node, "DayExtraction", "HouseholdResidencyDays.arrow")) |> DataFrame
+function recoverresidentdays(node::String)
+    hhresidencies = Arrow.Table(joinpath(dayextractionpath(node), "HouseholdResidencyDays.arrow")) |> DataFrame
     @info "Read $(nrow(hhresidencies)) rows for Household Residency Days"
-    resdaysnomembership = Arrow.Table(joinpath(basedirectory, node, "DayExtraction", "ResDaysNoMember_batched.arrow")) |> DataFrame
+    resdaysnomembership = Arrow.Table(joinpath(dayextractionpath(node), "ResDaysNoMember_batched.arrow")) |> DataFrame
     @info "Read $(nrow(resdaysnomembership)) rows for resdays no membership"
     df = innerjoin(resdaysnomembership,hhresidencies; on = [:DayDate =>:DayDate , :IndResLocationId => :LocationId], makeunique = true)
     insertcols!(df, :HHRank =>  Int32(12), :HHRelationshipTypeId => Int32(12), :Memberships => Int64(1), :HHResLocationId => df[!,:IndResLocationId])
@@ -324,13 +324,13 @@ function recoverresidentdays(basedirectory::String, node::String)
     return df
 end
 "Consolidate daily exposure for an individual to a single preferred household based on relationship to household head"
-function addresidentdayswithoutmembership(basedirectory::String, node::String)
-    rd = recoverresidentdays(basedirectory, node)
+function addresidentdayswithoutmembership(node::String)
+    rd = recoverresidentdays(node)
     @info "Recovered $(nrow(rd)) residency days"
-    preferredhhbatches = Arrow.Stream(joinpath(basedirectory, node, "DayExtraction", "IndividualPreferredHHDays_batched.arrow"))
+    preferredhhbatches = Arrow.Stream(joinpath(dayextractionpath(node), "IndividualPreferredHHDays_batched.arrow"))
     hstate = iterate(preferredhhbatches)
     i = 1
-    minId, maxId, batches = individualbatch(basedirectory, node)
+    minId, maxId, batches = individualbatch(node)
     while hstate !== nothing
         h, hst = hstate
         hd = copy(h |> DataFrame)
@@ -343,20 +343,20 @@ function addresidentdayswithoutmembership(basedirectory::String, node::String)
                             :HouseholdId => first => :HouseholdId, :HHResLocationId => first => :HHResLocationId, 
                             :HHMemStartType => first => :HHMemStartType, :HHMemEndType => first => :HHMemEndType, :HHMemStart => first => :HHMemStart, :HHMemEnd => first => :HHMemEnd,
                             :HHRelationshipTypeId => first => :HHRelationshipTypeId, :HHRank => first => :HHRank, :Memberships => sum => :Memberships)
-        open(joinpath(basedirectory, node, "DayExtraction", "IndividualPreferredHHConsolidatedDays$(i).arrow"),"w"; lock = true) do io
+        open(joinpath(dayextractionpath(node), "IndividualPreferredHHConsolidatedDays$(i).arrow"),"w"; lock = true) do io
             Arrow.write(io, s, compress=:zstd)
         end
         hstate = iterate(preferredhhbatches, hst)
         i = i + 1
     end
-    combinebatches(basedirectory,node,"DayExtraction","IndividualPreferredHHConsolidatedDays", i-1)
+    combinebatches(dayextractionpath(node),"IndividualPreferredHHConsolidatedDays", i-1)
     return nothing
 end
 function preferredhousehold(node::String)
     @info "Started preferredhousehold execution for node $(node) at $(now())"
-    batchmembershipdayswithlocation(settings.BaseDirectory, node)
-    consolidatepreferredhousehold(settings.BaseDirectory, node)
-    addresidentdayswithoutmembership(settings.BaseDirectory, node)
+    batchmembershipdayswithlocation(node)
+    consolidatepreferredhousehold(node)
+    addresidentdayswithoutmembership(node)
     @info "Finished preferredhousehold execution for node $(node) at $(now())"
 end
 #endregion
@@ -506,15 +506,14 @@ end
 "Determine whether a particular day starts or end a residency episode and the type of start or end"
 function setresidencyflags(node::String)
     ltfcutoff = settings.LTFCutOff
-    basedirectory = settings.BaseDirectory
     birthtypes = Int32[2, 10] # BTH, DLV
     outtypes = Int32[4, 5, 101 ,103, 104] # OMG, EXT, HDS, HME, HRC
     intypes = Int32[3, 6, 100, 102] # IMG, OMG, HFM, HMS
     visittypes = Int32[9, 18] # OBE, OBS
     householdstarts = Int32[100, 102] # HFM, HMS
     householdend = Int32[101, 103] # HDS, HME
-    preferredhhbatches = Arrow.Stream(joinpath(basedirectory, node, "DayExtraction", "IndividualPreferredHHConsolidatedDays_batched.arrow"))
-    #preferredhhbatches = Arrow.Stream(joinpath(basedirectory, node, "DayExtraction", "IndividualPreferredHHConsolidatedDays_subset.arrow"))
+    preferredhhbatches = Arrow.Stream(joinpath(dayextractionpath(node), "IndividualPreferredHHConsolidatedDays_batched.arrow"))
+    #preferredhhbatches = Arrow.Stream(joinpath(dayextractionpath(node), "IndividualPreferredHHConsolidatedDays_subset.arrow"))
     hstate = iterate(preferredhhbatches)
     i = 1
     while hstate !== nothing
@@ -556,14 +555,14 @@ function setresidencyflags(node::String)
                    :Enumeration, :Born, :Participation, :InMigration, :LocationEntry, :ExtResStart, 
                    :Died, :Refusal, :LostToFollowUp, :Current, :OutMigration, :LocationExit, :ExtResEnd, :MembershipStart, :MembershipEnd, 
                    :HHRelationshipTypeId, :Memberships, :GapStart])
-        open(joinpath(basedirectory, node, "DayExtraction", "DayDatasetStep01$(i).arrow"),"w"; lock = true) do io
+        open(joinpath(dayextractionpath(node), "DayDatasetStep01$(i).arrow"),"w"; lock = true) do io
             Arrow.write(io, s, compress=:zstd)
         end
         hstate = iterate(preferredhhbatches, hst)
         @info "Node $(node) batch $(i) completed after $(round(now()-t, Dates.Second))"
         i = i + 1
     end
-    combinebatches(basedirectory,node,"DayExtraction","DayDatasetStep01", i-1)
+    combinebatches(path,"DayDatasetStep01", i-1)
     return nothing
 end
 function setparentstatus!(r)
@@ -580,9 +579,8 @@ function setparentstatus!(r)
 end
 "Add individual characteristics to to day records"
 function addindividualattributes(node)
-    basedirectory = settings.BaseDirectory
-    individuals = Arrow.Table(joinpath(basedirectory, node, "Staging", "Individuals.arrow")) |> DataFrame
-    residentdaybatches = Arrow.Stream(joinpath(basedirectory, node, "DayExtraction", "DayDatasetStep01_batched.arrow"))
+    individuals = Arrow.Table(joinpath(stagingpath(node), "Individuals.arrow")) |> DataFrame
+    residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep01_batched.arrow"))
     hstate = iterate(residentdaybatches)
     i = 1
     while hstate !== nothing
@@ -600,14 +598,14 @@ function addindividualattributes(node)
                    :Enumeration, :Born, :Participation, :InMigration, :LocationEntry, :ExtResStart, 
                    :Died, :Refusal, :LostToFollowUp, :Current, :OutMigration, :LocationExit, :ExtResEnd, :MembershipStart, :MembershipEnd, 
                    :HHRelationshipTypeId, :Memberships, :GapStart])
-        open(joinpath(basedirectory, node, "DayExtraction", "DayDatasetStep02$(i).arrow"),"w"; lock = true) do io
+        open(joinpath(dayextractionpath(node), "DayDatasetStep02$(i).arrow"),"w"; lock = true) do io
             Arrow.write(io, df, compress=:zstd)
         end
         hstate = iterate(residentdaybatches, hst)
         @info "Node $(node) batch $(i) completed after $(round(now()-t, Dates.Second))"
         i = i + 1
     end
-    combinebatches(basedirectory,node,"DayExtraction","DayDatasetStep02", i-1)
+    combinebatches(dayextractionpath(node), "DayDatasetStep02", i-1)
     return nothing
 end
 #endregion
