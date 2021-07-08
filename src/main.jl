@@ -18,7 +18,7 @@ flush(io)
 readindividuals("Agincourt")
 @info "========== Finished readindividuals Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#
+# 
 @info "========== Start readindividuals DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readindividuals("DIMAMO")
 @info "========== Finished readindividuals DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -27,12 +27,12 @@ flush(io)
 readindividuals("AHRI")
 @info "========== Finished readindividuals AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#
+# 
 #Locations
 @info "========== Start readlocations Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readlocations("Agincourt")
 flush(io)
-#
+# 
 @info "========== Start readlocations DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readlocations("DIMAMO")
 flush(io)
@@ -42,12 +42,12 @@ readlocations("AHRI")
 @info "========== Finished readlocations at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
 #Individual Residencies
-#
+# 
 @info "========== Start readresidences Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readresidences("Agincourt")
 @info "========== Finished readresidences Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#
+# 
 @info "========== Start readresidences DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readresidences("DIMAMO")
 @info "========== Finished readresidences DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -61,7 +61,7 @@ flush(io)
 readhouseholds("Agincourt")
 @info "========== Finished readhouseholds Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#
+# 
 @info "========== Start readhouseholds DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readhouseholds("DIMAMO")
 @info "========== Finished readhouseholds DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -235,28 +235,28 @@ setresidencyflags("Agincourt")
 d = now()-t
 @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-#=
+#
 @info "========== Start DIMAMO set residency flags at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 setresidencyflags("DIMAMO")
 d = now()-t
 @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-=#
+#
 @info "========== Start AHRI set residency flags at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 setresidencyflags("AHRI")
 d = now()-t
 @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-#=
+#
 @info "========== Start DIMAMO get individual attributes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 addindividualattributes("DIMAMO")
 d = now()-t
 @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-=#
+#
 @info "========== Start Agincourt get individual attributes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 addindividualattributes("Agincourt")
@@ -279,14 +279,14 @@ basicepisodes("Agincourt")
 d = now()-t
 @info "Agincourt basic episode creation complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-#=
+#
 @info "========== Start DIMAMO create basic episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 basicepisodes("DIMAMO")
 d = now()-t
 @info "DIMAMO basic episode creation complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-=#
+#
 @info "========== Start AHRI create basic episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 basicepisodes("AHRI")
@@ -301,20 +301,20 @@ basicepisodeQA("Agincourt")
 d = now()-t
 @info "Agincourt basic episode QA complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-#=
+#
 @info "========== Start DIMAMO basic episodes QA at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 basicepisodeQA("DIMAMO")
 d = now()-t
 @info "DIMAMO basic episode QA complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-=#
+#
 @info "========== Start AHRI do basic episodes QA at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 basicepisodeQA("AHRI")
 d = now()-t
 @info "AHRI basic episode QA complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-#=
+#
 @info "========== Start DIMAMO create YrAge episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 yrage_episodes("DIMAMO")
@@ -328,7 +328,7 @@ yrage_episodeQA("DIMAMO")
 d = now()-t
 @info "DIMAMO YrAge episode QA complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-=#
+#
 @info "========== Start Agincourt create YrAge episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 yrage_episodes("Agincourt")
@@ -356,7 +356,94 @@ yrage_episodeQA("AHRI")
 d = now()-t
 @info "AHRI YrAge episode QA complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
+#endregion
 #
+#region YrAgeDel 
+@info "========== Start DIMAMO read pregnancies at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+readpregnancies("DIMAMO")
+d = now()-t
+@info "DIMAMO read pregnancies complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start DIMAMO create delivery days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+deliverydays("DIMAMO")
+d = now()-t
+@info "DIMAMO create delivery days complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start DIMAMO create YrAgeDel episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+yragedel_episodes("DIMAMO")
+d = now()-t
+@info "DIMAMO YrAgeDel episode creation complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start DIMAMO YrAgeDel episodes QA at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+yragedel_episodeQA("DIMAMO")
+d = now()-t
+@info "DIMAMO YrAgeDel episode QA complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+# Agincourt
+@info "========== Start Agincourt read pregnancies at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+readpregnancies("Agincourt")
+d = now()-t
+@info "Agincourt read pregnancies complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start Agincourt create delivery days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+deliverydays("Agincourt")
+d = now()-t
+@info "Agincourt create delivery days complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start Agincourt create YrAgeDel episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+yragedel_episodes("Agincourt")
+d = now()-t
+@info "Agincourt YrAgeDel episode creation complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start Agincourt YrAgeDel episodes QA at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+yragedel_episodeQA("Agincourt")
+d = now()-t
+@info "Agincourt YrAgeDel episode QA complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+# AHRI
+@info "========== Start AHRI read pregnancies at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+readpregnancies("AHRI")
+d = now()-t
+@info "AHRI read pregnancies complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start AHRI create delivery days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+deliverydays("AHRI")
+d = now()-t
+@info "AHRI create delivery days complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start AHRI create YrAgeDel episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+yragedel_episodes("AHRI")
+d = now()-t
+@info "AHRI YrAgeDel episode creation complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start AHRI YrAgeDel episodes QA at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+yragedel_episodeQA("AHRI")
+d = now()-t
+@info "AHRI YrAgeDel episode QA complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
 #endregion
 #
 #region Stata output
@@ -402,51 +489,29 @@ d = now()-t
 @info "AHRI output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
 =#
-#endregion
-#region Parent co-residency
-#
-@info "========== Start Agincourt mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+@info "========== Start Agincourt output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
-mothercoresidency("Agincourt")
+arrowtostata("Agincourt", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
 d = now()-t
-@info "Agincourt mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+@info "Agincourt output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
 #
-@info "========== Start Agincourt father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+@info "========== Start DIMAMO output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
-fathercoresidency("Agincourt")
+arrowtostata("DIMAMO", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
 d = now()-t
-@info "Agincourt father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+@info "DIMAMO output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
 #
-@info "========== Start DIMAMO mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+@info "========== Start AHRI output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
-mothercoresidency("DIMAMO")
+arrowtostata("AHRI", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
 d = now()-t
-@info "DIMAMO mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+@info "AHRI output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
+
 #
-@info "========== Start DIMAMO father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-fathercoresidency("DIMAMO")
-d = now()-t
-@info "DIMAMO father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
-#
-@info "========== Start AHRI mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-mothercoresidency("AHRI")
-d = now()-t
-@info "AHRI mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
-#
-@info "========== Start AHRI father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-fathercoresidency("AHRI")
-d = now()-t
-@info "AHRI father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
-#
+
 #endregion
 #region clean up
 global_logger(old_logger)

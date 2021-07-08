@@ -21,8 +21,8 @@ export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv, stagingpa
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships, readpregnancies,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, deliverydays,
-       preferredhousehold, setresidencyflags, addindividualattributes, mothercoresident, fathercoresident,
-       basicepisodes, basicepisodeQA, yrage_episodes, yrage_episodeQA, arrowtostata
+       preferredhousehold, setresidencyflags, addindividualattributes, arrowtostata,
+       basicepisodes, basicepisodeQA, yrage_episodes, yrage_episodeQA, yragedel_episodes, yragedel_episodeQA
        
 #region Constants
 const BatchSize = 20000
@@ -155,6 +155,7 @@ function arrowtocsv(node::String, subdir::String, dataset::String)
     Arrow.Table(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).arrow")) |> CSV.write(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).csv"))
     return nothing
 end
+"Convert file in Arrow format to Stata"
 function arrowtostata(node, inputfile, outputfile)
     df = Arrow.Table(joinpath(episodepath(node), inputfile * ".arrow")) |> DataFrame
     arrowfile = joinpath(episodepath(node), outputfile * ".arrow")
