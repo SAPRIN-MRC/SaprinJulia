@@ -21,7 +21,7 @@ export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv, stagingpa
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships, readpregnancies,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, deliverydays,
-       preferredhousehold, setresidencyflags, addindividualattributes,
+       preferredhousehold, setresidencyflags, addindividualattributes, mothercoresident, fathercoresident,
        basicepisodes, basicepisodeQA, yrage_episodes, yrage_episodeQA, arrowtostata
        
 #region Constants

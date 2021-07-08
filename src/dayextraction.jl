@@ -727,3 +727,111 @@ function deliverydays(node)
     return nothing
 end
 #endregion
+#region Paretnt Coresidency
+"Create the date bounds (earliest and latest dates) for the presence of children and their parents"
+function familybounds(node::String)
+    residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep02_batched.arrow"))
+    hstate = iterate(residentdaybatches)
+    i = 1
+    childbounds = DataFrame()
+    while hstate !== nothing
+        t = now()
+        h, hst = hstate
+        hd = h |> DataFrame
+        cd = combine(groupby(hd, :IndividualId), :MotherId => maximum => :MotherId, :FatherId => maximum => :FatherId, :DayDate => minimum => :EarliestDate, :DayDate => maximum => :LatestDate)
+        if i==1
+            childbounds = cd
+            allowmissing!(childbounds, [:MotherId, :FatherId])
+        else
+            append!(childbounds, cd)
+        end
+        hstate = iterate(residentdaybatches, hst)
+        @info "Node $(node) batch $(i) completed with $(nrow(cd)) episodes after $(round(now()-t, Dates.Second))"
+        i = i + 1
+    end
+    filter!([:MotherId,:FatherId] => (m,f) -> !(ismissing(m) && ismissing(f)), childbounds) #exclude children with no known parents
+    @info "Node $(node) $(nrow(childbounds)) children with one or more parent"
+    Arrow.write(joinpath(dayextractionpath(node), "ChildBounds.arrow"), childbounds, compress=:zstd)
+    motherbounds = combine(groupby(childbounds, :MotherId), :EarliestDate => minimum => :EarliestDate, :LatestDate => maximum => :LatestDate)
+    sort!(motherbounds, :MotherId)
+    @info "Node $(node) $(nrow(motherbounds)) mothers"
+    Arrow.write(joinpath(dayextractionpath(node), "MotherBounds.arrow"), motherbounds, compress=:zstd)
+    fatherbounds = combine(groupby(childbounds, :FatherId), :EarliestDate => minimum => :EarliestDate, :LatestDate => maximum => :LatestDate)
+    sort!(fatherbounds, :FatherId)
+    @info "Node $(node) $(nrow(fatherbounds)) fathers"
+    Arrow.write(joinpath(dayextractionpath(node), "FatherBounds.arrow"), fatherbounds, compress=:zstd)
+    return nothing
+end
+"Create parent day file for only those days during which the parent is known to have had a child. col is the column name for MotherId or FatherId"
+function parentdays(node::String, col::String)
+    residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep02_batched.arrow"))
+    parentbounds = Arrow.Table(joinpath(dayextractionpath(node), "$(col[1:6])Bounds.arrow")) |> DataFrame
+    @info names(parentbounds)
+    hstate = iterate(residentdaybatches)
+    i = 1
+    days = DataFrame()
+    while hstate !== nothing
+        t = now()
+        h, hst = hstate
+        hd = h |> DataFrame
+        pd = innerjoin(hd, parentbounds, on = :IndividualId => Symbol(col), matchmissing = :notequal)
+        filter!([:DayDate, :EarliestDate, :LatestDate] => (d,e,l) -> e <= d <= l, pd)
+        select!(pd, :IndividualId => Symbol(col), :DayDate, :LocationId => :ParentLocation)
+        if i==1
+            days = pd
+        else
+            append!(days, pd)
+        end
+        hstate = iterate(residentdaybatches, hst)
+        @info "Node $(node) batch $(i) completed with $(nrow(pd)) days after $(round(now()-t, Dates.Second))"
+        i = i + 1
+    end
+    @info "Node $(node) $(nrow(days)) $(eval(col)[1:6]) days"
+    Arrow.write(joinpath(dayextractionpath(node), "$(col[1:6])Days.arrow"), days, compress=:zstd)
+    return nothing
+end
+"Add flag to individual days indicating parent presence in the same location as the child"
+function parentcoresidence(node::String, col::String, step::Integer)
+    residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep$(lpad(step, 2, '0'))_batched.arrow"))
+    parentdays = Arrow.Table(joinpath(dayextractionpath(node), "$(col[1:6])Days.arrow")) |> DataFrame
+    @info names(parentdays)
+    hstate = iterate(residentdaybatches)
+    i = 1
+    days = DataFrame()
+    parentcol = Symbol("$(col[1:6])CoResident")
+    while hstate !== nothing
+        t = now()
+        h, hst = hstate
+        hd = h |> DataFrame
+        pd = leftjoin(hd, parentdays, on = [Symbol(col), :DayDate], matchmissing = :notequal, makeunique = true)
+        insertcols!(pd,findfirst(occursin.(names(pd),"$(col[1:6])Dead")), parentcol => Int8(0))
+        for j = 1:nrow(pd)
+            if !ismissing(pd[j, :ParentLocation]) && pd[j, :LocationId] == pd[j, :ParentLocation]
+                pd[j,parentcol] = Int8(1)
+            end
+        end
+        select!(pd, Not(:ParentLocation))
+        open(joinpath(dayextractionpath(node), "DayDatasetStep$(lpad(step+1, 2, '0'))$(i).arrow"),"w"; lock = true) do io
+            Arrow.write(io, pd, compress=:zstd)
+        end
+        hstate = iterate(residentdaybatches, hst)
+        @info "Node $(node) batch $(i) completed with $(nrow(pd)) days after $(round(now()-t, Dates.Second))"
+        i = i + 1
+    end
+    combinebatches(dayextractionpath(node),"DayDatasetStep$(lpad(step+1, 2, '0'))", i-1)
+    return nothing
+end
+"Add a mother co-residency flag to the day extraction dataset"
+function mothercoresident(node::String)
+    familybounds(node)
+    parentdays(node, "MotherId")
+    parentcoresidence(node, "MotherId", 2)
+end
+"""Add a father co-residency flag to the day extraction dataset.
+   This function must be run after the mothercoresident function.
+"""
+function fathercoresident(node::String)
+    parentdays(node, "FatherId")
+    parentcoresidence(node, "FatherId", 3)
+end
+#endregion

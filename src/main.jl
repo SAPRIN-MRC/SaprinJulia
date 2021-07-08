@@ -13,12 +13,12 @@ flush(io)
 
 #region Staging
 # Individuals
-#
+#=
 @info "========== Start readindividuals Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readindividuals("Agincourt")
 @info "========== Finished readindividuals Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#=
+#
 @info "========== Start readindividuals DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readindividuals("DIMAMO")
 @info "========== Finished readindividuals DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -27,12 +27,12 @@ flush(io)
 readindividuals("AHRI")
 @info "========== Finished readindividuals AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-=#
+#
 #Locations
 @info "========== Start readlocations Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readlocations("Agincourt")
 flush(io)
-#=
+#
 @info "========== Start readlocations DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readlocations("DIMAMO")
 flush(io)
@@ -42,12 +42,12 @@ readlocations("AHRI")
 @info "========== Finished readlocations at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
 #Individual Residencies
-=#
+#
 @info "========== Start readresidences Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readresidences("Agincourt")
 @info "========== Finished readresidences Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#=
+#
 @info "========== Start readresidences DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readresidences("DIMAMO")
 @info "========== Finished readresidences DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -56,12 +56,12 @@ flush(io)
 readresidences("AHRI")
 @info "========== Finished readresidences AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-=#
+#
 @info "========== Start readhouseholds Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readhouseholds("Agincourt")
 @info "========== Finished readhouseholds Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#= 
+#
 @info "========== Start readhouseholds DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readhouseholds("DIMAMO")
 @info "========== Finished readhouseholds DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -71,12 +71,12 @@ flush(io)
 readhouseholds("AHRI")
 @info "========== Finished readhouseholds at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-=# 
+# 
 @info "========== Start readhouseholdmemberships Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readhouseholdmemberships("Agincourt")
 @info "========== Finished readhouseholdmemberships Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#=
+#
 @info "========== Start readhouseholdmemberships DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readhouseholdmemberships("DIMAMO")
 @info "========== Finished readhouseholdmemberships DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -86,12 +86,12 @@ flush(io)
 readhouseholdmemberships("AHRI")
 @info "========== Finished readhouseholdmemberships at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-=#
+#
 @info "========== Start readindividualmemberships Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readindividualmemberships("Agincourt", 25000)
 @info "========== Finished readindividualmemberships Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#= 
+# 
 @info "========== Start readindividualmemberships DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 readindividualmemberships("DIMAMO", 25000)
 @info "========== Finished readindividualmemberships DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -100,44 +100,44 @@ flush(io)
 readindividualmemberships("AHRI", 25000)
 @info "========== Finished readindividualmemberships AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-=#
+#
 readeducationstatuses("Agincourt")
 @info "========== Finished Agincourt readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#=
+#
 readeducationstatuses("DIMAMO")
 @info "========== Finished DIMAMO readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
 readeducationstatuses("AHRI")
 @info "========== Finished AHRI readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-=#
+#
 readhouseholdsocioeconomic("Agincourt")
 @info "========== Finished Agincourt readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#=
+#
 readhouseholdsocioeconomic("DIMAMO")
 @info "========== Finished DIMAMO readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
 readhouseholdsocioeconomic("AHRI")
 @info "========== Finished AHRI readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-=#
+#
 readmaritalstatuses("Agincourt")
 @info "========== Finished Agincourt readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#=
+#
 readmaritalstatuses("DIMAMO")
 @info "========== Finished DIMAMO readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
 readmaritalstatuses("AHRI")
 @info "========== Finished AHRI readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-=#
+#
 readlabourstatuses("Agincourt")
 @info "========== Finished Agincourt readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
-#=
+#
 readlabourstatuses("DIMAMO")
 @info "========== Finished DIMAMO readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 flush(io)
@@ -402,7 +402,51 @@ d = now()-t
 @info "AHRI output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
 =#
-
+#endregion
+#region Parent co-residency
+#
+@info "========== Start Agincourt mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+mothercoresidency("Agincourt")
+d = now()-t
+@info "Agincourt mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start Agincourt father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+fathercoresidency("Agincourt")
+d = now()-t
+@info "Agincourt father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start DIMAMO mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+mothercoresidency("DIMAMO")
+d = now()-t
+@info "DIMAMO mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start DIMAMO father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+fathercoresidency("DIMAMO")
+d = now()-t
+@info "DIMAMO father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start AHRI mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+mothercoresidency("AHRI")
+d = now()-t
+@info "AHRI mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start AHRI father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+fathercoresidency("AHRI")
+d = now()-t
+@info "AHRI father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
 #endregion
 #region clean up
 global_logger(old_logger)
