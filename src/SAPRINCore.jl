@@ -17,11 +17,11 @@ using CSV
 using NamedArrays
 using RCall
 
-export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age,
+export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, arrowtostata,
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships, readpregnancies,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, deliverydays,
-       preferredhousehold, setresidencyflags, addindividualattributes, arrowtostata,
+       preferredhousehold, setresidencyflags, addindividualattributes, mothercoresident, fathercoresident,
        basicepisodes, basicepisodeQA, yrage_episodes, yrage_episodeQA, yragedel_episodes, yragedel_episodeQA
        
 #region Constants
