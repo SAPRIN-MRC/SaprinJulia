@@ -790,6 +790,13 @@ function parentdays(node::String, col::String)
     Arrow.write(joinpath(dayextractionpath(node), "$(col[1:6])Days.arrow"), days, compress=:zstd)
     return nothing
 end
+function samelocation(a , b)
+    if ismissing(a) || ismissing(b)
+        return Int8(0)
+    else
+        return a == b ? Int8(1) : Int8(0)
+    end
+end
 "Add flag to individual days indicating parent presence in the same location as the child"
 function parentcoresidence(node::String, col::String, step::Integer)
     residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep$(lpad(step, 2, '0'))_batched.arrow"))
@@ -804,12 +811,15 @@ function parentcoresidence(node::String, col::String, step::Integer)
         h, hst = hstate
         hd = h |> DataFrame
         pd = leftjoin(hd, parentdays, on = [Symbol(col), :DayDate], matchmissing = :notequal, makeunique = true)
+        transform!(pd, [:LocationId, :ParentLocation] => ((x,y) -> samelocation.(x,y)) => parentcol)
+        #=
         insertcols!(pd,findfirst(occursin.(names(pd),"$(col[1:6])Dead")), parentcol => Int8(0))
         for j = 1:nrow(pd)
             if !ismissing(pd[j, :ParentLocation]) && pd[j, :LocationId] == pd[j, :ParentLocation]
                 pd[j,parentcol] = Int8(1)
             end
         end
+        =#
         select!(pd, Not(:ParentLocation))
         open(joinpath(dayextractionpath(node), "DayDatasetStep$(lpad(step+1, 2, '0'))$(i).arrow"),"w"; lock = true) do io
             Arrow.write(io, pd, compress=:zstd)

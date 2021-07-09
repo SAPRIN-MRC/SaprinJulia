@@ -509,7 +509,7 @@ arrowtostata("AHRI", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceE
 d = now()-t
 @info "AHRI output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-=#
+=
 @info "========== Start Agincourt output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
 t = now()
 arrowtostata("Agincourt", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
@@ -530,10 +530,54 @@ arrowtostata("AHRI", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceE
 d = now()-t
 @info "AHRI output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
 flush(io)
-
 #
-
 #endregion
+#region Parent co-residency
+=#
+@info "========== Start Agincourt mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+mothercoresident("Agincourt")
+d = now()-t
+@info "Agincourt mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start Agincourt father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+fathercoresident("Agincourt")
+d = now()-t
+@info "Agincourt father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#=
+@info "========== Start DIMAMO mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+mothercoresident("DIMAMO")
+d = now()-t
+@info "DIMAMO mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start DIMAMO father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+fathercoresident("DIMAMO")
+d = now()-t
+@info "DIMAMO father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+=#
+@info "========== Start AHRI mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+mothercoresident("AHRI")
+d = now()-t
+@info "AHRI mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+@info "========== Start AHRI father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+t = now()
+fathercoresident("AHRI")
+d = now()-t
+@info "AHRI father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+flush(io)
+#
+#endregion
+
 #region clean up
 global_logger(old_logger)
 close(io)
