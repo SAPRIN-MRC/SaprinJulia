@@ -440,7 +440,9 @@ function readresidencestatus(db::String, node::String, periodend::Date, leftcens
       FROM dbo.IndividualObservations IO
         JOIN dbo.Events EO ON IO.ObservationUid=EO.EventUid
         JOIN dbo.Observations O ON IO.ObservationUid=O.EventUid
-    ),
+      WHERE ResidentStatus > 0
+         OR NOT ResStatusCode IS NULL
+       ),
     SmoothedStatus AS (
       SELECT
         IndividualUid,
@@ -462,12 +464,12 @@ function readresidencestatus(db::String, node::String, periodend::Date, leftcens
         WHEN ResStatusCode = 'P' THEN CAST(1 AS int)
         WHEN ResStatusCode = 'O' AND ResidentStatus>6 THEN CAST(1 AS int)
         WHEN ResStatusCode = 'O' AND ResidentStatus<=6 THEN CAST(2 AS int)
-        WHEN ResStatusCode IN ('X','Q') AND (ResidentStatus>6) THEN CAST(1 AS int)
-        WHEN ResStatusCode IN ('X','Q') AND (ResidentStatus<=6) THEN CAST(2 AS int)
+        WHEN ResStatusCode IN ('X','Q') AND (ResidentStatus>=6) THEN CAST(1 AS int)
+        WHEN ResStatusCode IN ('X','Q') AND (ResidentStatus<6) THEN CAST(2 AS int)
         WHEN ResStatusCode IN ('X','Q') THEN CAST(1 AS int)
         WHEN ResStatusCode <> 'P' THEN CAST(2 AS int)
-        WHEN ResidentStatus<=6 THEN CAST(2 AS int)
-        ELSE CAST(1 AS int)
+	    WHEN ResidentStatus < 6 THEN CAST(2 AS int)
+	    ELSE CAST(1 AS int)
       END ResidentStatus -- 1 Resident 2 Non-resident
     FROM SmoothedStatus
     """
