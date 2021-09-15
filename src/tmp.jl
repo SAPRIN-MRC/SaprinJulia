@@ -8,10 +8,14 @@ using ShiftedArrays
 using XLSX
 using FreqTables
 
+"Construct day level data from education status observations"
+function educationdays(node::String)
+
+end
 
 @info "Started execution $(now())"
 t = now()
-
-@info "Finished AHRI $(now())"
+parentresidentepisodes("DIMAMO")
+@info "Finished DIMAMO $(now())"
 d = now()-t
-@info "Stopped AHRI execution $(now()) duration $(round(d, Dates.Second))"
+@info "Stopped DIMAMO execution $(now()) duration $(round(d, Dates.Second))"

@@ -148,7 +148,7 @@ function individualobservationbounds(db::String, node::String, periodend::Date, 
     observations =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(observations)) $(node) individual observations"
-    filter!(:EventDate => s -> s <= periodend, observations) # event must be before period end
+    #filter!(:EventDate => s -> s <= periodend, observations) # event must be before period end
     filter!(:EventDate => s -> s >= leftcensor, observations) # event must be after left censor date
     @info "Read $(nrow(observations)) $(node) individual observations after bounds"
     bounds = combine(groupby(observations, :IndividualUid), :EventDate => minimum => :EarliestDate, :EventDate => maximum => :LatestDate)
@@ -156,7 +156,7 @@ function individualobservationbounds(db::String, node::String, periodend::Date, 
     @info "Read $(nrow(bounds)) $(node) individuals after group"
     individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     bounds = innerjoin(bounds, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
-    select!(bounds, [:IndividualId, :EarliestDate, :LatestDate])
+    select!(bounds, :IndividualId, :EarliestDate, :LatestDate => ByRow(x -> x > periodend ? periodend : x) => :LatestDate)
     sort!(bounds, :IndividualId)
     Arrow.write(joinpath(stagingpath(node), "IndividualBounds.arrow"), bounds, compress=:zstd)
     @info "Wrote $(nrow(bounds)) $(node) individual bounds"
