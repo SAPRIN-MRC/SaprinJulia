@@ -15,9 +15,9 @@ using Statistics
 using CategoricalArrays
 using CSV
 using NamedArrays
-#using RCall
+using StataCall
 
-export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, arrowtostata,
+export BatchSize, individualbatch, nextidrange, addsheet!, writeXLSX, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, arrowtostata,
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships, readpregnancies,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, deliverydays,
@@ -43,22 +43,22 @@ end # struct
 "Create directories to output staging data"
 function createdirectories(basedirectory,directory)
     if !isdir(joinpath(basedirectory, "AHRI"))
-        mkdir(joinpath(basedirectory, "AHRI"))
+        mkpath(joinpath(basedirectory, "AHRI"))
     end
     if !isdir(joinpath(basedirectory, "AHRI", directory))
-        mkdir(joinpath(basedirectory, "AHRI", directory))
+        mkpath(joinpath(basedirectory, "AHRI", directory))
     end
     if !isdir(joinpath(basedirectory, "DIMAMO"))
-        mkdir(joinpath(basedirectory, "DIMAMO"))
+        mkpath(joinpath(basedirectory, "DIMAMO"))
     end
     if !isdir(joinpath(basedirectory, "DIMAMO", directory))
-        mkdir(joinpath(basedirectory, "DIMAMO", directory))
+        mkpath(joinpath(basedirectory, "DIMAMO", directory))
     end
     if !isdir(joinpath(basedirectory, "Agincourt"))
-        mkdir(joinpath(basedirectory, "Agincourt"))
+        mkpath(joinpath(basedirectory, "Agincourt"))
     end
     if !isdir(joinpath(basedirectory, "Agincourt", directory))
-        mkdir(joinpath(basedirectory, "Agincourt", directory))
+        mkpath(joinpath(basedirectory, "Agincourt", directory))
     end
     return nothing
 end
@@ -77,7 +77,7 @@ s = readsettings(joinpath(pwd(),"src","settings.json"))
 settings = Settings()
 createdirectories(settings.BaseDirectory, "Staging")
 createdirectories(settings.BaseDirectory, "DayExtraction")
-createdirectories(settings.BaseDirectory, "Episodes")
+createdirectories(settings.BaseDirectory, joinpath("Episodes","QC"))
 #endregion
 #region Utility functions
 function age(dob::Date, date::Date)
@@ -140,15 +140,30 @@ function addsheet!(path::String, df::NamedArray, sheetname::String)
         cnames = [String(dimnames(df)[1]), "n"]
         XLSX.writetable!(sheet, data, cnames)
     end
+    return nothing
 end
-"Add a sheet to an exisiting Excel spreadsheet and transfer the contents of df DataFrame to the sheet"
+"Add a sheet to an existing Excel spreadsheet and transfer the contents of df DataFrame to the sheet"
 function addsheet!(path::String, df::AbstractDataFrame, sheetname::String)
+    if nrow(df) == 0
+        return nothing
+    end
+    transform!(df, names(df, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Int32) .=> ByRow(Int), renamecols=false) #needed by XLSX
     XLSX.openxlsx(path, mode ="rw") do xf
         sheet = XLSX.addsheet!(xf, sheetname)
         data = collect(eachcol(df))
         cnames = DataFrames.names(df)
         XLSX.writetable!(sheet, data, cnames)
     end
+    return nothing
+end
+"Write a dataframe to an Excel spreadsheet, overwrite file if it exists"
+function writeXLSX(path::String, df::AbstractDataFrame, sheetname::String)
+    transform!(df, names(df, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Int32) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    XLSX.writetable(path, collect(eachcol(df)), names(df), overwrite = true, sheetname = sheetname)
 end
 "Write dataset as CSV"
 function arrowtocsv(node::String, subdir::String, dataset::String)

@@ -97,57 +97,37 @@ end
 function basicepisodeQA(node)
     df = Arrow.Table(joinpath(episodepath(node), "SurveillanceEpisodesBasic_batched.arrow")) |> DataFrame
     sf = combine(groupby(df, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
-    XLSX.writetable(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), collect(eachcol(sf)),names(sf),overwrite=true,sheetname="StartFlags")
+    writeXLSX(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "StartFlags")
     sf = combine(groupby(df, [:Died, :OutMigration, :LocationExit, :ExtResEnd, :Refusal, :LostToFollowUp, :Current, :MembershipEnd]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "EndFlags")
     sf = filter(r -> r.Episode == 1, df) #Start episodes only
     sf = combine(groupby(sf, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "Episode1StartFlags")
     sf = filter(r -> r.Episode == r.Episodes, df) #Last episodes only
     sf = combine(groupby(sf, [:Died, :OutMigration, :LocationExit, :ExtResEnd, :Refusal, :LostToFollowUp, :Current, :MembershipEnd]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "LastEpisodeEndFlags")
     #Current before end
     sf = filter(r -> r.Episode < r.Episodes & r.Current == 1, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "CurrentBeforeEnd")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "CurrentBeforeEnd")
     #Died before end
     sf = filter(r -> r.Episode < r.Episodes & r.Died == 1, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "DiedBeforeEnd")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "DiedBeforeEnd")
     #Enumeration after episode 1
     sf = filter(r -> r.Episode > 1 & r.Enumeration == 1, df)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "EnumerationAfterStart")
     #Died prior to or at end of episode, without Died flags
     sf = filter(r -> !ismissing(r.DoD) && r.DoD <= r.EndDate && r.Died == 0, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "MissingDiedFlag")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "MissingDiedFlag")
     #Died flag but no DoD
     sf = filter(r -> ismissing(r.DoD) && r.Died == 1, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "DiedWithoutDoD")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "DiedWithoutDoD")
     #Died flag with ExtResEnd
     sf = filter(r -> r.Died == 1 && r.ExtResEnd == 1, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "DiedFlagWithExtResEnd")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "DiedFlagWithExtResEnd")
     #Episodes breakdown
     e = freqtable(df, :Episodes)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), e, "EpisodesFreq")
@@ -309,140 +289,102 @@ function yrage_episodeQA(node)
     df = Arrow.Table(joinpath(episodepath(node), "SurveillanceEpisodesYrAge_batched.arrow")) |> DataFrame
     # StartFlags
     sf = combine(groupby(df, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart, :YrStart, :AgeStart]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
-    XLSX.writetable(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), collect(eachcol(sf)), names(sf), overwrite=true, sheetname="StartFlags")
+    writeXLSX(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "StartFlags")
     # EndFlags
     sf = combine(groupby(df, [:Died, :OutMigration, :LocationExit, :ExtResEnd, :Refusal, :LostToFollowUp, :Current, :MembershipEnd, :YrEnd, :AgeEnd]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "EndFlags")
     # Episode1StartFlags
     sf = filter(r -> r.Episode == 1, df) #Start episodes only
     sf = combine(groupby(sf, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart, :YrStart, :AgeStart]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "Episode1StartFlags")
     # LastEpisodeEndFlags
     sf = filter(r -> r.Episode == r.Episodes, df) #Last episodes only
     sf = combine(groupby(sf, [:Died, :OutMigration, :LocationExit, :ExtResEnd, :Refusal, :LostToFollowUp, :Current, :MembershipEnd, :YrEnd, :AgeEnd]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "LastEpisodeEndFlags")
     # Births per year
     sf = filter(r -> r.Born == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "Births")
     # Enumerations per year
     sf = filter(r -> r.Enumeration == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "Enumerations")
     # InMigrations per year
     sf = filter(r -> r.InMigration == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "InMigrations")
     # LocationEntry per year
     sf = filter(r -> r.LocationEntry == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "LocationEntries")
     # ExtResStart per year
     sf = filter(r -> r.ExtResStart == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "ExtResStarts")
     # Deaths per year
     sf = filter(r -> r.Died == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "Deaths")
     # OutMigrations per year
     sf = filter(r -> r.OutMigration == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "OutMigrations")
     # LocationExits per year
     sf = filter(r -> r.LocationExit == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "LocationExits")
     # ExtResEnds per year
     sf = subset(df, :ExtResEnd => r -> r .== 1)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "ExtResEnds")
     # Refusals per year
     sf = subset(df, :Refusal => r -> r .== 1)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "Refusals")
     # LostToFollowUps per year
     sf = subset(df, :LostToFollowUp => r -> r .== 1)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "LostToFollowUps")
     # Current per year
     sf = subset(df, :Current => r -> r .== 1)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "Current")
     #Current before end
     sf = filter(r -> r.Episode < r.Episodes & r.Current == 1, df)
     if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
         addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "CurrentBeforeEnd")
     end
     #Died before end
     sf = filter(r -> r.Episode < r.Episodes & r.Died == 1, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "DiedBeforeEnd")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "DiedBeforeEnd")
     #Enumeration after episode 1
     sf = filter(r -> r.Episode > 1 & r.Enumeration == 1, df)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "EnumerationAfterStart")
     #Died prior to or at end of episode, without Died flags
     sf = filter(r -> !ismissing(r.DoD) && r.DoD <= r.EndDate && r.Died == 0, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "MissingDiedFlag")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "MissingDiedFlag")
     #Died flag but no DoD
     sf = filter(r -> ismissing(r.DoD) && r.Died == 1, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "DiedWithoutDoD")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "DiedWithoutDoD")
     #Died flag with ExtResEnd
     sf = filter(r -> r.Died == 1 && r.ExtResEnd == 1, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "DiedFlagWithExtResEnd")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "DiedFlagWithExtResEnd")
     #Episodes breakdown
     e = freqtable(df, :Episodes)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), e, "EpisodesFreq")
@@ -595,154 +537,112 @@ function yragedel_episodeQA(node)
     df = Arrow.Table(joinpath(episodepath(node), "SurveillanceEpisodesYrAgeDelivery_batched.arrow")) |> DataFrame
     # StartFlags
     sf = combine(groupby(df, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart, :YrStart, :AgeStart, :Delivery]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
-    XLSX.writetable(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), collect(eachcol(sf)), names(sf), overwrite=true, sheetname="StartFlags")
+    writeXLSX(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "StartFlags")
     # EndFlags
     sf = combine(groupby(df, [:Died, :OutMigration, :LocationExit, :ExtResEnd, :Refusal, :LostToFollowUp, :Current, :MembershipEnd, :YrEnd, :AgeEnd]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "EndFlags")
     # Episode1StartFlags
     sf = filter(r -> r.Episode == 1, df) #Start episodes only
     sf = combine(groupby(sf, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart, :YrStart, :AgeStart, :Delivery]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "Episode1StartFlags")
     # LastEpisodeEndFlags
     sf = filter(r -> r.Episode == r.Episodes, df) #Last episodes only
     sf = combine(groupby(sf, [:Died, :OutMigration, :LocationExit, :ExtResEnd, :Refusal, :LostToFollowUp, :Current, :MembershipEnd, :YrEnd, :AgeEnd]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "LastEpisodeEndFlags")
     # Births per year
     sf = filter(r -> r.Born == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "Births")
     # Enumerations per year
     sf = filter(r -> r.Enumeration == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "Enumerations")
     # InMigrations per year
     sf = filter(r -> r.InMigration == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "InMigrations")
     # LocationEntry per year
     sf = filter(r -> r.LocationEntry == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "LocationEntries")
     # ExtResStart per year
     sf = filter(r -> r.ExtResStart == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "ExtResStarts")
     # Deaths per year
     sf = filter(r -> r.Died == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "Deaths")
     # OutMigrations per year
     sf = filter(r -> r.OutMigration == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "OutMigrations")
     # LocationExits per year
     sf = filter(r -> r.LocationExit == 1, df)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "LocationExits")
     # ExtResEnds per year
     sf = subset(df, :ExtResEnd => r -> r .== 1)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "ExtResEnds")
     # Refusals per year
     sf = subset(df, :Refusal => r -> r .== 1)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "Refusals")
     # LostToFollowUps per year
     sf = subset(df, :LostToFollowUp => r -> r .== 1)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "LostToFollowUps")
     # Deliveries per year
     sf = subset(df, :Delivery => r -> r .== 1)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols = false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "Deliveries")
     # ChildrenEverBorn
     sf = subset(df, [:Episode, :Episodes] => ByRow((x,y) -> x == y), :Sex => x -> x .== 2)
     sf = combine(groupby(sf, [:ChildrenEverBorn]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols = false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "ChildrenEverBorn")
     # Current per year
     sf = subset(df, :Current => r -> r .== 1)
     sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     sort!(sf)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "Current")
     #Current before end
     sf = filter(r -> r.Episode < r.Episodes & r.Current == 1, df)
     if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
         addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "CurrentBeforeEnd")
     end
     #Died before end
     sf = filter(r -> r.Episode < r.Episodes & r.Died == 1, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "DiedBeforeEnd")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "DiedBeforeEnd")
     #Enumeration after episode 1
     sf = filter(r -> r.Episode > 1 & r.Enumeration == 1, df)
-    transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "EnumerationAfterStart")
     #Died prior to or at end of episode, without Died flags
     sf = filter(r -> !ismissing(r.DoD) && r.DoD <= r.EndDate && r.Died == 0, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "MissingDiedFlag")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "MissingDiedFlag")
     #Died flag but no DoD
     sf = filter(r -> ismissing(r.DoD) && r.Died == 1, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "DiedWithoutDoD")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "DiedWithoutDoD")
     #Died flag with ExtResEnd
     sf = filter(r -> r.Died == 1 && r.ExtResEnd == 1, df)
-    if nrow(sf) > 0
-        transform!(sf, names(sf, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        transform!(sf, names(sf, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
-        addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "DiedFlagWithExtResEnd")
-    end
+    addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "DiedFlagWithExtResEnd")
     #Episodes breakdown
     e = freqtable(df, :Episodes)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), e, "EpisodesFreq")
