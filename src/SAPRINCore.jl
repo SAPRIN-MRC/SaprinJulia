@@ -174,7 +174,7 @@ end
 function arrowtostata(node, inputfile, outputfile)
     df = readpartitionfile(joinpath(episodepath(node), inputfile * ".arrow"), lock = false) |> DataFrame
     statafile = joinpath(episodepath(node), outputfile * ".dta")
-    cmds = ["compress", "saveold \"$(statafile)\", replace"]
+    cmds = ["compress", "la da \"SAPRIN Episodes v4\"", "saveold \"$(statafile)\", replace"]
     stataCall(cmds, df, false, false, true)
     return nothing
 end
