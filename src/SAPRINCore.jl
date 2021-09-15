@@ -15,7 +15,7 @@ using Statistics
 using CategoricalArrays
 using CSV
 using NamedArrays
-using RCall
+#using RCall
 
 export BatchSize, individualbatch, nextidrange, addsheet!, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, arrowtostata,
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships, readpregnancies,
@@ -73,7 +73,7 @@ function episodepath(node::String)
 end
 #endregion
 #region startup
-s = readsettings("settings.json")
+s = readsettings(joinpath(pwd(),"src","settings.json"))
 settings = Settings()
 createdirectories(settings.BaseDirectory, "Staging")
 createdirectories(settings.BaseDirectory, "DayExtraction")
@@ -161,12 +161,12 @@ function arrowtostata(node, inputfile, outputfile)
     arrowfile = joinpath(episodepath(node), outputfile * ".arrow")
     Arrow.write(arrowfile, df, compress = :zstd)
     statafile = joinpath(episodepath(node), outputfile * ".dta")
-    R"""
-    library(arrow)
-    library(rio)
-    x <- read_feather($arrowfile)
-    export(x, $statafile)
-    """
+    # R"""
+    # library(arrow)
+    # library(rio)
+    # x <- read_feather($arrowfile)
+    # export(x, $statafile)
+    # """
     return nothing
 end
 #endregion
