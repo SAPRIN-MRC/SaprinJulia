@@ -114,8 +114,8 @@ function nextidrange(minId, maxId, i, batchsize::Int64 = BatchSize)
     toId = min(maxId, (minId + batchsize * i)-1)
     return fromId, toId
 end
-function readpartitionfile(file::String)
-    open(file, "r"; lock = true) do io
+function readpartitionfile(file::String; lock = true)
+    open(file, "r"; lock = lock) do io
         return Arrow.Table(io)
     end
 end
@@ -155,18 +155,12 @@ function arrowtocsv(node::String, subdir::String, dataset::String)
     Arrow.Table(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).arrow")) |> CSV.write(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).csv"))
     return nothing
 end
-"Convert file in Arrow format to Stata"
+"Convert episode file in Arrow format to Stata"
 function arrowtostata(node, inputfile, outputfile)
-    df = Arrow.Table(joinpath(episodepath(node), inputfile * ".arrow")) |> DataFrame
-    arrowfile = joinpath(episodepath(node), outputfile * ".arrow")
-    Arrow.write(arrowfile, df, compress = :zstd)
+    df = readpartitionfile(joinpath(episodepath(node), inputfile * ".arrow"), lock = false) |> DataFrame
     statafile = joinpath(episodepath(node), outputfile * ".dta")
-    # R"""
-    # library(arrow)
-    # library(rio)
-    # x <- read_feather($arrowfile)
-    # export(x, $statafile)
-    # """
+    cmds = ["compress", "saveold \"$(statafile)\", replace"]
+    stataCall(cmds, df, false, false, true)
     return nothing
 end
 #endregion
