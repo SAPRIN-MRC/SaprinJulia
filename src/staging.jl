@@ -1066,7 +1066,7 @@ function householdassets(db::String, node::String)
     s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(s)) $(node) asset statuses from database"
-    assetmap = DataFrame(XLSX.readtable("Assets.xlsx","Consolidated")...)
+    assetmap = DataFrame(XLSX.readtable(joinpath(pwd(),"src","Assets.xlsx"),"Consolidated")...)
     assetmap[!,:AssetId] = map(convertanytoint,assetmap[!,:AssetId])
     assetmap[!,:Id] = map(convertanytoint,assetmap[!,:Id])
     assetmap[!,:AssetName] = map(convertanytostr,assetmap[!,:AssetName])
