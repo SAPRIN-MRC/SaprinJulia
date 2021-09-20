@@ -914,3 +914,1447 @@ HighestNonSchoolLevel  │
 └ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1047
 ┌ Info: ========== Finished DIMAMO readeducationstatuses at 2021-09-15 16:41:36
 └ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:146
+┌ Info: Execution started 2021-09-16 07:47
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:10
+┌ Info: ========== Start readeducationstatuses Agincourt at 2021-09-16 07:47:50
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:143
+┌ Info: Read 2125658 Agincourt education statuses from database
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1019
+┌ Info: Read 2001873 Agincourt education statuses inside bounds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1035
+┌ Info: Read 1230913 Agincourt education statuses not missing
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1037
+┌ Info: Current Education breakdown for Agincourt
+│   a = 2-element Named Vector{Int64}
+CurrentEducation  │ 
+──────────────────┼───────
+-1                │ 423967
+6                 │ 806946
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1043
+┌ Info: Highest School Level breakdown for Agincourt
+│   a = 22-element Named Vector{Int64}
+HighestSchoolLevel  │ 
+────────────────────┼───────
+-1                  │  19645
+0                   │ 329729
+1                   │  36604
+2                   │  41046
+3                   │  46607
+4                   │  49735
+5                   │  48278
+6                   │  53977
+7                   │  57554
+8                   │  57634
+9                   │  67609
+10                  │  76770
+11                  │  83497
+12                  │ 200544
+21                  │  11041
+22                  │  21928
+23                  │  11769
+31                  │    601
+32                  │    474
+33                  │    634
+34                  │   1558
+99                  │  13679
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1045
+┌ Info: Highest Non-School Level breakdown for Agincourt
+│   a = 1-element Named Vector{Int64}
+HighestNonSchoolLevel  │ 
+───────────────────────┼────────
+-1                     │ 1230913
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1047
+┌ Info: ========== Finished Agincourt readeducationstatuses at 2021-09-16 07:48:01
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:145
+┌ Info: ========== Start DIMAMO readeducationstatuses at 2021-09-16 07:48:01
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:149
+┌ Info: Read 695105 DIMAMO education statuses from database
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1019
+┌ Info: Read 563061 DIMAMO education statuses inside bounds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1035
+┌ Info: Read 496829 DIMAMO education statuses not missing
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1037
+┌ Info: Current Education breakdown for DIMAMO
+│   a = 1-element Named Vector{Int64}
+CurrentEducation  │ 
+──────────────────┼───────
+-1                │ 496829
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1043
+┌ Info: Highest School Level breakdown for DIMAMO
+│   a = 16-element Named Vector{Int64}
+HighestSchoolLevel  │ 
+────────────────────┼───────
+-1                  │     64
+0                   │   5168
+1                   │  11474
+2                   │  14479
+3                   │  14484
+4                   │  17209
+5                   │  17486
+6                   │  20392
+7                   │  22710
+8                   │  31381
+9                   │  26511
+10                  │  40470
+11                  │  42271
+12                  │ 108827
+50                  │     13
+98                  │ 123890
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1045
+┌ Info: Highest Non-School Level breakdown for DIMAMO
+│   a = 15-element Named Vector{Int64}
+HighestNonSchoolLevel  │ 
+───────────────────────┼───────
+-1                     │ 453513
+12                     │     37
+21                     │  41984
+22                     │      5
+25                     │      4
+31                     │     37
+32                     │      1
+33                     │      1
+34                     │      9
+41                     │    563
+42                     │     52
+43                     │     11
+50                     │     11
+97                     │     14
+98                     │    587
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1047
+┌ Info: ========== Finished DIMAMO readeducationstatuses at 2021-09-16 07:48:04
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:151
+┌ Info: ========== Start Agincourt readhouseholdsocioeconomic at 2021-09-16 07:48:04
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:161
+┌ Info: Read 3000064 Agincourt asset statuses from database
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1068
+┌ Info: 2201150 Agincourt grouped asset statuses
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1077
+┌ Info: 1229518 Agincourt present asset statuses
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1079
+┌ Info: 374331 Agincourt asset groups
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1081
+┌ Info: Modern asset breakdown for Agincourt
+│   a = 10-element Named Vector{Int64}
+Modern  │ 
+────────┼──────
+0       │  6596
+1       │ 12999
+2       │ 14266
+3       │ 19562
+4       │ 36475
+5       │ 59837
+6       │ 32535
+7       │ 15854
+8       │  1959
+9       │   161
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1088
+┌ Info: Livestock asset breakdown for Agincourt
+│   a = 3-element Named Vector{Int64}
+Livestock  │ 
+───────────┼───────
+0          │  19561
+1          │    459
+2          │ 180224
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1090
+┌ Info: Read 227002 Agincourt HSE observations from database
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1121
+┌ Info: Read 227002 Agincourt HSE observations after household map
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1124
+┌ Info: Watersource breakdown for Agincourt
+│   a = 9-element Named Vector{Int64}
+WaterSource  │ 
+─────────────┼───────
+0            │  26800
+1            │  73844
+2            │ 110386
+3            │   4293
+4            │    166
+5            │   1715
+6            │    257
+8            │   6495
+11           │   3046
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1129
+┌ Info: Watersource breakdown for Agincourt after recode
+│   a = 5-element Named Vector{Int64}
+WaterSource  │ 
+─────────────┼───────
+0            │  26800
+1            │  11679
+2            │   4293
+3            │ 110386
+4            │  73844
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1132
+┌ Info: Toilet breakdown for Agincourt
+│   a = 4-element Named Vector{Int64}
+Toilet  │ 
+────────┼───────
+0       │  58967
+1       │   1953
+2       │  16499
+3       │ 149583
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1134
+┌ Info: Toilet breakdown for Agincourt after recode
+│   a = 4-element Named Vector{Int64}
+Toilet  │ 
+────────┼───────
+0       │  58967
+1       │ 149583
+2       │  16499
+3       │   1953
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1137
+┌ Info: CookingFuel breakdown for Agincourt
+│   a = 6-element Named Vector{Int64}
+CookingFuel  │ 
+─────────────┼───────
+0            │  27193
+1            │ 104871
+2            │   1452
+4            │  90866
+5            │   2374
+6            │    246
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1139
+┌ Info: CookingFuel breakdown for Agincourt after recode
+│   a = 5-element Named Vector{Int64}
+CookingFuel  │ 
+─────────────┼───────
+0            │  27193
+1            │ 104871
+3            │   2620
+4            │   1452
+5            │  90866
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1142
+┌ Info: WallMaterial breakdown for Agincourt
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1144
+┌ Info: WallMaterial breakdown for Agincourt after recode
+│   a = 5-element Named Vector{Int64}
+WallMaterial  │ 
+──────────────┼───────
+0             │  26706
+1             │   5431
+2             │   4532
+3             │    510
+4             │ 189823
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1147
+┌ Info: FloorMaterial breakdown for Agincourt
+│   a = 10-element Named Vector{Int64}
+FloorMaterial  │ 
+───────────────┼───────
+0              │      5
+1              │  26752
+2              │ 169653
+6              │     72
+8              │  26679
+9              │    300
+10             │    136
+11             │   2302
+12             │    141
+13             │    962
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1149
+┌ Info: FloorMaterial breakdown for Agincourt after recode
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1152
+┌ Info: Bedrooms breakdown for Agincourt
+│   a = 34-element Named Vector{Int64}
+Bedrooms  │ 
+──────────┼──────
+-2        │     1
+0         │   796
+1         │ 39363
+2         │ 66902
+3         │ 54298
+4         │ 30237
+5         │  6852
+6         │  1652
+7         │   325
+8         │   111
+9         │    33
+10        │    12
+11        │     2
+12        │     3
+13        │     1
+14        │     2
+20        │     1
+21        │     7
+22        │     7
+23        │     3
+25        │     4
+30        │    15
+32        │     1
+33        │     2
+36        │     4
+44        │     2
+54        │     1
+56        │     1
+58        │     1
+93        │     1
+201       │     1
+202       │     2
+2014      │     1
+missing   │ 26358
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1154
+┌ Info: Bedrooms breakdown for Agincourt after recode
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1156
+┌ Info: ConnectedToGrid breakdown for Agincourt
+│   a = 3-element Named Vector{Int64}
+ConnectedToGrid  │ 
+─────────────────┼───────
+false            │  12616
+true             │ 187606
+missing          │  26780
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1158
+┌ Info: ConnectedToGrid for Agincourt after recode
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1161
+┌ Info: ========== Finished Agincourt readhouseholdsocioeconomic at 2021-09-16 07:48:29
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:163
+┌ Info: ========== Start DIMAMO readhouseholdsocioeconomic at 2021-09-16 07:48:29
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:167
+┌ Info: Read 186372 DIMAMO asset statuses from database
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1068
+┌ Info: 123510 DIMAMO grouped asset statuses
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1077
+┌ Info: 83880 DIMAMO present asset statuses
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1079
+┌ Info: 24928 DIMAMO asset groups
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1081
+┌ Info: Modern asset breakdown for DIMAMO
+│   a = 10-element Named Vector{Int64}
+Modern  │ 
+────────┼─────
+0       │   26
+1       │  308
+2       │  379
+3       │  594
+4       │ 1655
+5       │ 5327
+6       │ 2036
+7       │  782
+8       │  145
+9       │   22
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1088
+┌ Info: Livestock asset breakdown for DIMAMO
+│   a = 3-element Named Vector{Int64}
+Livestock  │ 
+───────────┼─────
+0          │ 8444
+1          │ 2240
+2          │  590
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1090
+┌ Info: Read 11634 DIMAMO HSE observations from database
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1121
+┌ Info: Read 11634 DIMAMO HSE observations after household map
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1124
+┌ Info: Watersource breakdown for DIMAMO
+│   a = 10-element Named Vector{Int64}
+WaterSource  │ 
+─────────────┼─────
+0            │  333
+1            │ 5619
+2            │ 4867
+3            │  171
+4            │   42
+6            │  152
+7            │   21
+8            │  233
+10           │  187
+11           │    9
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1129
+┌ Info: Watersource breakdown for DIMAMO after recode
+│   a = 5-element Named Vector{Int64}
+WaterSource  │ 
+─────────────┼─────
+0            │  333
+1            │  457
+2            │  358
+3            │ 4867
+4            │ 5619
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1132
+┌ Info: Toilet breakdown for DIMAMO
+│   a = 6-element Named Vector{Int64}
+Toilet  │ 
+────────┼─────
+0       │  374
+1       │  357
+2       │ 7851
+3       │ 2950
+4       │   86
+5       │   16
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1134
+┌ Info: Toilet breakdown for DIMAMO after recode
+│   a = 4-element Named Vector{Int64}
+Toilet  │ 
+────────┼─────
+0       │  374
+1       │ 3036
+2       │ 7867
+3       │  357
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1137
+┌ Info: CookingFuel breakdown for DIMAMO
+│   a = 6-element Named Vector{Int64}
+CookingFuel  │ 
+─────────────┼─────
+0            │  396
+1            │ 1082
+2            │   77
+3            │   20
+4            │ 9525
+5            │  534
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1139
+┌ Info: CookingFuel breakdown for DIMAMO after recode
+│   a = 6-element Named Vector{Int64}
+CookingFuel  │ 
+─────────────┼─────
+0            │  396
+1            │ 1082
+2            │   20
+3            │  534
+4            │   77
+5            │ 9525
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1142
+┌ Info: WallMaterial breakdown for DIMAMO
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1144
+┌ Info: WallMaterial breakdown for DIMAMO after recode
+│   a = 5-element Named Vector{Int64}
+WallMaterial  │ 
+──────────────┼──────
+0             │   309
+1             │   173
+2             │    76
+3             │   343
+4             │ 10733
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1147
+┌ Info: FloorMaterial breakdown for DIMAMO
+│   a = 9-element Named Vector{Int64}
+FloorMaterial  │ 
+───────────────┼─────
+0              │  284
+2              │ 8658
+3              │  346
+6              │    3
+8              │ 2175
+9              │   27
+11             │  101
+12             │   26
+13             │   14
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1149
+┌ Info: FloorMaterial breakdown for DIMAMO after recode
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1152
+┌ Info: Bedrooms breakdown for DIMAMO
+│   a = 27-element Named Vector{Int64}
+Bedrooms  │ 
+──────────┼─────
+0         │    2
+1         │  567
+2         │ 1533
+3         │ 2320
+4         │ 2376
+5         │ 1350
+6         │ 1074
+7         │  777
+8         │  572
+9         │  337
+10        │  207
+11        │   91
+12        │   78
+13        │   40
+14        │   19
+15        │   19
+16        │    8
+17        │    2
+18        │    3
+19        │    2
+20        │    2
+25        │    1
+33        │    1
+36        │    1
+81        │    1
+91        │    1
+missing   │  250
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1154
+┌ Info: Bedrooms breakdown for DIMAMO after recode
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1156
+┌ Info: ConnectedToGrid breakdown for DIMAMO
+│   a = 3-element Named Vector{Int64}
+ConnectedToGrid  │ 
+─────────────────┼──────
+false            │   677
+true             │ 10551
+missing          │   406
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1158
+┌ Info: ConnectedToGrid for DIMAMO after recode
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1161
+┌ Info: ========== Finished DIMAMO readhouseholdsocioeconomic at 2021-09-16 07:48:31
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:169
+┌ Info: ========== Start Agincourt readmaritalstatuses at 2021-09-16 07:48:31
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:179
+┌ Info: Read 2125540 Agincourt marital statuses from database
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1193
+┌ Info: 2125540 Agincourt marital statuses after individual map
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1196
+┌ Info: 2001755 Agincourt marital statuses inside bounds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1211
+┌ Info: Marital Status breakdown for Agincourt
+│   a = 4-element Named Vector{Int64}
+MaritalStatus  │ 
+───────────────┼────────
+1              │ 1754173
+2              │  182276
+4              │   30731
+5              │   34575
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1213
+┌ Info: ========== Finished Agincourt readmaritalstatuses at 2021-09-16 07:48:42
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:181
+┌ Info: ========== Start DIMAMO readmaritalstatuses at 2021-09-16 07:48:42
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:185
+┌ Info: Read 271726 DIMAMO marital statuses from database
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1193
+┌ Info: 271726 DIMAMO marital statuses after individual map
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1196
+┌ Info: 169592 DIMAMO marital statuses inside bounds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1211
+┌ Info: Marital Status breakdown for DIMAMO
+│   a = 5-element Named Vector{Int64}
+MaritalStatus  │ 
+───────────────┼───────
+1              │ 111460
+2              │  38568
+3              │     53
+4              │   4068
+5              │  15443
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1213
+┌ Info: ========== Finished DIMAMO readmaritalstatuses at 2021-09-16 07:48:43
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:187
+┌ Info: ========== Start Agincourt readlabourstatuses at 2021-09-16 07:48:43
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:197
+┌ Info: Read 2125658 Agincourt labour statuses from database
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1243
+┌ Info: 2125658 Agincourt labour statuses after individual map
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1246
+┌ Info: Read 2001873 Agincourt labour statuses inside bounds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1263
+┌ Info: CurrentEmployment breakdown for Agincourt
+│   a = 10-element Named Vector{Int64}
+CurrentEmployment  │ 
+───────────────────┼────────
+0                  │ 1614036
+1                  │  161104
+3                  │    8867
+4                  │   23873
+5                  │    3180
+11                 │   21095
+12                 │   64819
+13                 │  101319
+14                 │    3259
+202                │     321
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1265
+┌ Info: EmploymentSector breakdown for Agincourt
+│   a = 10-element Named Vector{Int64}
+EmploymentSector  │ 
+──────────────────┼────────
+100               │ 1902933
+101               │    6610
+102               │    5957
+103               │    4460
+105               │    4389
+106               │   10770
+107               │    9257
+301               │   11801
+305               │   43535
+306               │    2161
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1267
+┌ Info: EmploymentType breakdown for Agincourt
+│   a = 4-element Named Vector{Int64}
+EmploymentType  │ 
+────────────────┼────────
+200             │ 1981369
+201             │   15423
+202             │     665
+203             │    4416
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1269
+┌ Info: Employer breakdown for Agincourt
+│   a = 5-element Named Vector{Int64}
+Employer  │ 
+──────────┼────────
+201       │  108997
+300       │ 1878256
+305       │     483
+307       │   13461
+308       │     676
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1271
+┌ Info: ========== Finished Agincourt readlabourstatuses at 2021-09-16 07:48:57
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:199
+┌ Info: ========== Start DIMAMO readlabourstatuses at 2021-09-16 07:48:57
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:203
+┌ Info: Read 695105 DIMAMO labour statuses from database
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1243
+┌ Info: 695105 DIMAMO labour statuses after individual map
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1246
+┌ Info: Read 563061 DIMAMO labour statuses inside bounds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1263
+┌ Info: CurrentEmployment breakdown for DIMAMO
+│   a = 4-element Named Vector{Int64}
+CurrentEmployment  │ 
+───────────────────┼───────
+0                  │ 562663
+1                  │    102
+2                  │     23
+4                  │    273
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1265
+┌ Info: EmploymentSector breakdown for DIMAMO
+│   a = 2-element Named Vector{Int64}
+EmploymentSector  │ 
+──────────────────┼───────
+0                 │ 531703
+100               │  31358
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1267
+┌ Info: EmploymentType breakdown for DIMAMO
+│   a = 3-element Named Vector{Int64}
+EmploymentType  │ 
+────────────────┼───────
+0               │ 562934
+201             │    119
+202             │      8
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1269
+┌ Info: Employer breakdown for DIMAMO
+│   a = 8-element Named Vector{Int64}
+Employer  │ 
+──────────┼───────
+0         │ 562942
+301       │     10
+302       │      4
+303       │      1
+304       │     30
+305       │     64
+306       │      5
+308       │      5
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1271
+┌ Info: ========== Finished DIMAMO readlabourstatuses at 2021-09-16 07:49:01
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:205
+┌ Info: ========== Start Agincourt extractresidencydays at 2021-09-16 07:49:01
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:221
+┌ Info: Node Agincourt Batch size 20000 Minimum id 1, maximum Id 218775, idrange 218775, batches 11
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\SAPRINCore.jl:109
+┌ Info: Node Agincourt 290779 residency episodes
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:73
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 7 from 120001 to 140000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 8 from 140001 to 160000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 9 from 160001 to 180000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 10 from 180001 to 200000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 11 from 200001 to 218775
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Agincourt extraction complete 2021-09-16 08:16:31 duration 1650 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:225
+┌ Info: ========== Start DIMAMO extractresidencydays at 2021-09-16 08:16:31
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:229
+┌ Info: Node DIMAMO Batch size 20000 Minimum id 1, maximum Id 125436, idrange 125436, batches 7
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\SAPRINCore.jl:109
+┌ Info: Node DIMAMO 121618 residency episodes
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:73
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: Batch 7 from 120001 to 125436
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:77
+┌ Info: DIMAMO extraction complete 2021-09-16 08:20:28 duration 238 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:233
+┌ Info: ========== Start Agincourt extract household residencydays at 2021-09-16 08:20:28
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:245
+┌ Info: Node Agincourt 32508 household residency episodes
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:159
+┌ Info: Node Agincourt 142043828 household residency days
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:164
+┌ Info: Agincourt extraction complete 2021-09-16 08:20:50 duration 22 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:249
+┌ Info: ========== Start DIMAMO extract household residencydays at 2021-09-16 08:20:50
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:253
+┌ Info: Node DIMAMO 21541 household residency episodes
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:159
+┌ Info: Node DIMAMO 29237562 household residency days
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:164
+┌ Info: DIMAMO extraction complete 2021-09-16 08:20:56 duration 5 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:257
+┌ Info: ========== Start Agincourt extract household membership days at 2021-09-16 08:20:56
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:269
+┌ Info: Node Agincourt Batch size 20000 Minimum id 1, maximum Id 218775, idrange 218775, batches 11
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\SAPRINCore.jl:109
+┌ Info: Node Agincourt 308422 individual membership episodes
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:227
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 10 from 180001 to 200000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 11 from 200001 to 218775
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 7 from 120001 to 140000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 9 from 160001 to 180000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 8 from 140001 to 160000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Agincourt extraction complete 2021-09-16 09:19:27 duration 3512 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:273
+┌ Info: ========== Start DIMAMO extract household membership days at 2021-09-16 09:19:27
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:277
+┌ Info: Node DIMAMO Batch size 20000 Minimum id 1, maximum Id 125436, idrange 125436, batches 7
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\SAPRINCore.jl:109
+┌ Info: Node DIMAMO 123691 individual membership episodes
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:227
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 7 from 120001 to 125436
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:230
+┌ Info: DIMAMO extraction complete 2021-09-16 09:26:46 duration 439 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:281
+┌ Info: ========== Start Agincourt residency days at preferred household at 2021-09-16 09:26:46
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:293
+┌ Info: Started preferredhousehold execution for node Agincourt at 2021-09-16T09:26:48.311
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:366
+┌ Info: Agincourt read 142043828 household residency days at 2021-09-16T09:38:32.845
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:255
+┌ Info: Wrote 63947721 membership with location rows, batch 1 for node Agincourt
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 64454360 membership with location rows, batch 2 for node Agincourt
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 68496014 membership with location rows, batch 3 for node Agincourt
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 75700270 membership with location rows, batch 4 for node Agincourt
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 76725994 membership with location rows, batch 5 for node Agincourt
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 75516939 membership with location rows, batch 6 for node Agincourt
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 76311268 membership with location rows, batch 7 for node Agincourt
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 76765067 membership with location rows, batch 8 for node Agincourt
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 75045880 membership with location rows, batch 9 for node Agincourt
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 76432506 membership with location rows, batch 10 for node Agincourt
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 72744582 membership with location rows, batch 11 for node Agincourt
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Completed writing membership with location on 2021-09-16T11:39:02.791
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:270
+┌ Info: Agincourt batch 1 wrote 63915398 preferred household days at 2021-09-16T11:49:58.728
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: Agincourt batch 2 wrote 64425989 preferred household days at 2021-09-16T12:00:59.975
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: Agincourt batch 3 wrote 68477076 preferred household days at 2021-09-16T12:12:46.832
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: Agincourt batch 4 wrote 75687625 preferred household days at 2021-09-16T12:25:47.695
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: Agincourt batch 5 wrote 76710911 preferred household days at 2021-09-16T12:39:13.290
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: Agincourt batch 6 wrote 75505859 preferred household days at 2021-09-16T12:52:29.884
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: Agincourt batch 7 wrote 76297163 preferred household days at 2021-09-16T13:05:45.758
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: Agincourt batch 8 wrote 76749603 preferred household days at 2021-09-16T13:19:09.434
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: Agincourt batch 9 wrote 75038787 preferred household days at 2021-09-16T13:32:10.122
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: Agincourt batch 10 wrote 76417269 preferred household days at 2021-09-16T13:45:14.735
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: Agincourt batch 11 wrote 72729892 preferred household days at 2021-09-16T13:57:42.473
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: Read 142043828 rows for Household Residency Days
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:323
+┌ Info: Read 4305974 rows for resdays no membership
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:325
+┌ Info: Recovered 2518522 residency days
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:338
+┌ Info: Node Agincourt Batch size 20000 Minimum id 1, maximum Id 218775, idrange 218775, batches 11
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\SAPRINCore.jl:109
+┌ Info: Days to be added 143818 for batch 1
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 141224 for batch 2
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 177253 for batch 3
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 291208 for batch 4
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 266952 for batch 5
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 242619 for batch 6
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 289677 for batch 7
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 232455 for batch 8
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 252632 for batch 9
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 243249 for batch 10
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 237435 for batch 11
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Finished preferredhousehold execution for node Agincourt at 2021-09-16T19:00:16.939
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:370
+┌ Info: Agincourt extraction complete 2021-09-16 19:00:16 duration 34411 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:297
+┌ Info: ========== Start DIMAMO residency days at preferred household at 2021-09-16 19:00:16
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:301
+┌ Info: Started preferredhousehold execution for node DIMAMO at 2021-09-16T19:00:16.940
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:366
+┌ Info: DIMAMO read 29237562 household residency days at 2021-09-16T19:01:46.764
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:255
+┌ Info: Wrote 31090783 membership with location rows, batch 1 for node DIMAMO
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 24151549 membership with location rows, batch 2 for node DIMAMO
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 24237062 membership with location rows, batch 3 for node DIMAMO
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 24323771 membership with location rows, batch 4 for node DIMAMO
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 24472240 membership with location rows, batch 5 for node DIMAMO
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 24532328 membership with location rows, batch 6 for node DIMAMO
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Wrote 6432667 membership with location rows, batch 7 for node DIMAMO
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:266
+┌ Info: Completed writing membership with location on 2021-09-16T19:19:00.932
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:270
+┌ Info: DIMAMO batch 1 wrote 31083157 preferred household days at 2021-09-16T19:23:28.918
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: DIMAMO batch 2 wrote 24144663 preferred household days at 2021-09-16T19:26:39.999
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: DIMAMO batch 3 wrote 24222651 preferred household days at 2021-09-16T19:29:46.830
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: DIMAMO batch 4 wrote 24319534 preferred household days at 2021-09-16T19:32:55.973
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: DIMAMO batch 5 wrote 24466126 preferred household days at 2021-09-16T19:36:05.371
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: DIMAMO batch 6 wrote 24524594 preferred household days at 2021-09-16T19:39:18.317
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: DIMAMO batch 7 wrote 6432634 preferred household days at 2021-09-16T19:40:05.885
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:298
+┌ Info: Read 29237562 rows for Household Residency Days
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:323
+┌ Info: Read 819383 rows for resdays no membership
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:325
+┌ Info: Recovered 2357 residency days
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:338
+┌ Info: Node DIMAMO Batch size 20000 Minimum id 1, maximum Id 125436, idrange 125436, batches 7
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\SAPRINCore.jl:109
+┌ Info: Days to be added 0 for batch 1
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 116 for batch 2
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 34 for batch 3
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 462 for batch 4
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 376 for batch 5
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 1369 for batch 6
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Days to be added 0 for batch 7
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:348
+┌ Info: Finished preferredhousehold execution for node DIMAMO at 2021-09-16T20:23:41.062
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:370
+┌ Info: DIMAMO extraction complete 2021-09-16 20:23:41 duration 5004 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:305
+┌ Info: ========== Start Agincourt set residency flags at 2021-09-16 20:23:41
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:317
+┌ Info: Node Agincourt batch 1 at 2021-09-16T20:29:31.039
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node Agincourt batch 1 completed after 1227 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node Agincourt batch 2 at 2021-09-16T20:49:57.762
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node Agincourt batch 2 completed after 1265 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node Agincourt batch 3 at 2021-09-16T21:11:03.108
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node Agincourt batch 3 completed after 1379 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node Agincourt batch 4 at 2021-09-16T21:34:02.562
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node Agincourt batch 4 completed after 1494 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node Agincourt batch 5 at 2021-09-16T21:58:56.448
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node Agincourt batch 5 completed after 1514 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node Agincourt batch 6 at 2021-09-16T22:24:10.161
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node Agincourt batch 6 completed after 1491 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node Agincourt batch 7 at 2021-09-16T22:49:01.626
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node Agincourt batch 7 completed after 1513 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node Agincourt batch 8 at 2021-09-16T23:14:14.462
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node Agincourt batch 8 completed after 1539 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node Agincourt batch 9 at 2021-09-16T23:39:53.301
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node Agincourt batch 9 completed after 1553 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node Agincourt batch 10 at 2021-09-17T00:05:46.311
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node Agincourt batch 10 completed after 1552 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node Agincourt batch 11 at 2021-09-17T00:31:38.206
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node Agincourt batch 11 completed after 1054 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Agincourt extraction complete 2021-09-17 02:34:02 duration 22221 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:321
+┌ Info: ========== Start DIMAMO set residency flags at 2021-09-17 02:34:02
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:325
+┌ Info: Node DIMAMO batch 1 at 2021-09-17T02:36:56.298
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node DIMAMO batch 1 completed after 572 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node DIMAMO batch 2 at 2021-09-17T02:46:28.083
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node DIMAMO batch 2 completed after 474 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node DIMAMO batch 3 at 2021-09-17T02:54:22.527
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node DIMAMO batch 3 completed after 477 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node DIMAMO batch 4 at 2021-09-17T03:02:19.378
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node DIMAMO batch 4 completed after 475 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node DIMAMO batch 5 at 2021-09-17T03:10:14.641
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node DIMAMO batch 5 completed after 504 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node DIMAMO batch 6 at 2021-09-17T03:18:38.722
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node DIMAMO batch 6 completed after 402 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: Node DIMAMO batch 7 at 2021-09-17T03:25:20.826
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:531
+┌ Info: Node DIMAMO batch 7 completed after 100 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:572
+┌ Info: DIMAMO extraction complete 2021-09-17 03:45:46 duration 4305 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:329
+┌ Info: ========== Start DIMAMO get individual attributes at 2021-09-17 03:45:46
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:341
+┌ Info: Node DIMAMO batch 1 at 2021-09-17T03:49:36.047
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node DIMAMO batch 1 completed after 219 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node DIMAMO batch 2 at 2021-09-17T03:53:15.161
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node DIMAMO batch 2 completed after 208 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node DIMAMO batch 3 at 2021-09-17T03:56:43.301
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node DIMAMO batch 3 completed after 194 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node DIMAMO batch 4 at 2021-09-17T03:59:57.731
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node DIMAMO batch 4 completed after 197 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node DIMAMO batch 5 at 2021-09-17T04:03:14.362
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node DIMAMO batch 5 completed after 218 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node DIMAMO batch 6 at 2021-09-17T04:06:52.259
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node DIMAMO batch 6 completed after 77 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node DIMAMO batch 7 at 2021-09-17T04:08:09.062
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node DIMAMO batch 7 completed after 12 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: DIMAMO extraction complete 2021-09-17 04:35:59 duration 3013 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:345
+┌ Info: ========== Start Agincourt get individual attributes at 2021-09-17 04:35:59
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:349
+┌ Info: Node Agincourt batch 1 at 2021-09-17T04:45:02.681
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node Agincourt batch 1 completed after 614 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node Agincourt batch 2 at 2021-09-17T04:55:16.795
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node Agincourt batch 2 completed after 623 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node Agincourt batch 3 at 2021-09-17T05:05:39.562
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node Agincourt batch 3 completed after 759 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node Agincourt batch 4 at 2021-09-17T05:18:18.890
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node Agincourt batch 4 completed after 792 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node Agincourt batch 5 at 2021-09-17T05:31:31.266
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node Agincourt batch 5 completed after 763 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node Agincourt batch 6 at 2021-09-17T05:44:14.547
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node Agincourt batch 6 completed after 778 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node Agincourt batch 7 at 2021-09-17T05:57:12.941
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node Agincourt batch 7 completed after 777 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node Agincourt batch 8 at 2021-09-17T06:10:09.472
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node Agincourt batch 8 completed after 762 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node Agincourt batch 9 at 2021-09-17T06:22:51.527
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node Agincourt batch 9 completed after 765 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node Agincourt batch 10 at 2021-09-17T06:35:36.582
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node Agincourt batch 10 completed after 741 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Node Agincourt batch 11 at 2021-09-17T06:47:57.264
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:600
+┌ Info: Node Agincourt batch 11 completed after 105 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:626
+┌ Info: Agincourt extraction complete 2021-09-17 09:05:18 duration 16160 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:353
+┌ Info: ========== Start Agincourt create basic episodes at 2021-09-17 09:05:19
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:369
+┌ Info: Node Agincourt batch 1 at 2021-09-17T09:17:25.539
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node Agincourt batch 1 completed with 35437 episodes after 760 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node Agincourt batch 2 at 2021-09-17T09:30:05.475
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node Agincourt batch 2 completed with 35314 episodes after 700 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node Agincourt batch 3 at 2021-09-17T09:41:45.490
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node Agincourt batch 3 completed with 36679 episodes after 793 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node Agincourt batch 4 at 2021-09-17T09:54:58.217
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node Agincourt batch 4 completed with 40544 episodes after 786 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node Agincourt batch 5 at 2021-09-17T10:08:04.629
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node Agincourt batch 5 completed with 40010 episodes after 774 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node Agincourt batch 6 at 2021-09-17T10:20:58.823
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node Agincourt batch 6 completed with 39923 episodes after 778 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node Agincourt batch 7 at 2021-09-17T10:33:56.849
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node Agincourt batch 7 completed with 40155 episodes after 792 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node Agincourt batch 8 at 2021-09-17T10:47:09.045
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node Agincourt batch 8 completed with 40407 episodes after 764 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node Agincourt batch 9 at 2021-09-17T10:59:52.863
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node Agincourt batch 9 completed with 39935 episodes after 774 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node Agincourt batch 10 at 2021-09-17T11:12:46.706
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node Agincourt batch 10 completed with 40374 episodes after 740 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node Agincourt batch 11 at 2021-09-17T11:25:06.975
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node Agincourt batch 11 completed with 38309 episodes after 4 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Agincourt basic episode creation complete 2021-09-17 11:25:11 duration 8392 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:373
+┌ Info: ========== Start DIMAMO create basic episodes at 2021-09-17 11:25:11
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:377
+┌ Info: Node DIMAMO batch 1 at 2021-09-17T11:31:01.776
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node DIMAMO batch 1 completed with 22395 episodes after 246 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node DIMAMO batch 2 at 2021-09-17T11:35:07.649
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node DIMAMO batch 2 completed with 23277 episodes after 253 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node DIMAMO batch 3 at 2021-09-17T11:39:20.364
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node DIMAMO batch 3 completed with 23350 episodes after 244 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node DIMAMO batch 4 at 2021-09-17T11:43:24.652
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node DIMAMO batch 4 completed with 23324 episodes after 249 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node DIMAMO batch 5 at 2021-09-17T11:47:33.325
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node DIMAMO batch 5 completed with 23295 episodes after 252 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node DIMAMO batch 6 at 2021-09-17T11:51:45.234
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node DIMAMO batch 6 completed with 23385 episodes after 55 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: Node DIMAMO batch 7 at 2021-09-17T11:52:40.263
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:8
+┌ Info: Node DIMAMO batch 7 completed with 6287 episodes after 1 second
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:90
+┌ Info: DIMAMO basic episode creation complete 2021-09-17 11:52:41 duration 1650 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:381
+┌ Info: ========== Start Agincourt do basic episodes QA at 2021-09-17 11:52:41
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:394
+┌ Info: Agincourt basic episode QA complete 2021-09-17 11:52:57 duration 16 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:398
+┌ Info: ========== Start DIMAMO basic episodes QA at 2021-09-17 11:52:57
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:402
+┌ Info: DIMAMO basic episode QA complete 2021-09-17 11:53:02 duration 5 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:406
+┌ Info: ========== Start DIMAMO create YrAge episodes at 2021-09-17 11:53:02
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:419
+┌ Info: Node DIMAMO batch 1 at 2021-09-17T11:58:56.861
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node DIMAMO batch 1 completed with 183824 episodes after 258 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node DIMAMO batch 2 at 2021-09-17T12:03:14.539
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node DIMAMO batch 2 completed with 151114 episodes after 255 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node DIMAMO batch 3 at 2021-09-17T12:07:29.473
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node DIMAMO batch 3 completed with 151783 episodes after 249 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node DIMAMO batch 4 at 2021-09-17T12:11:38.214
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node DIMAMO batch 4 completed with 152179 episodes after 256 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node DIMAMO batch 5 at 2021-09-17T12:15:54.124
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node DIMAMO batch 5 completed with 153112 episodes after 250 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node DIMAMO batch 6 at 2021-09-17T12:20:04.328
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node DIMAMO batch 6 completed with 153442 episodes after 53 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node DIMAMO batch 7 at 2021-09-17T12:20:57.731
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node DIMAMO batch 7 completed with 40362 episodes after 3 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: DIMAMO YrAge episode creation complete 2021-09-17 12:21:02 duration 1680 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:423
+┌ Info: ========== Start DIMAMO YrAge episodes QA at 2021-09-17 12:21:02
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:426
+┌ Info: DIMAMO YrAge episode QA complete 2021-09-17 12:21:31 duration 29 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:430
+┌ Info: ========== Start Agincourt create YrAge episodes at 2021-09-17 12:21:31
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:434
+┌ Info: Node Agincourt batch 1 at 2021-09-17T12:33:54.666
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node Agincourt batch 1 completed with 368838 episodes after 760 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node Agincourt batch 2 at 2021-09-17T12:46:35.086
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node Agincourt batch 2 completed with 371466 episodes after 717 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node Agincourt batch 3 at 2021-09-17T12:58:32.514
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node Agincourt batch 3 completed with 397509 episodes after 806 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node Agincourt batch 4 at 2021-09-17T13:11:58.351
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node Agincourt batch 4 completed with 447069 episodes after 805 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node Agincourt batch 5 at 2021-09-17T13:25:23.222
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node Agincourt batch 5 completed with 451816 episodes after 791 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node Agincourt batch 6 at 2021-09-17T13:38:33.756
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node Agincourt batch 6 completed with 445478 episodes after 795 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node Agincourt batch 7 at 2021-09-17T13:51:49.237
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node Agincourt batch 7 completed with 450326 episodes after 807 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node Agincourt batch 8 at 2021-09-17T14:05:16.708
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node Agincourt batch 8 completed with 452546 episodes after 782 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node Agincourt batch 9 at 2021-09-17T14:18:18.476
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node Agincourt batch 9 completed with 442699 episodes after 787 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node Agincourt batch 10 at 2021-09-17T14:31:25.899
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node Agincourt batch 10 completed with 450422 episodes after 756 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Node Agincourt batch 11 at 2021-09-17T14:44:01.811
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:143
+┌ Info: Node Agincourt batch 11 completed with 428850 episodes after 19 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:281
+┌ Info: Agincourt YrAge episode creation complete 2021-09-17 14:44:29 duration 8578 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:438
+┌ Info: ========== Start Agincourt YrAge episodes QA at 2021-09-17 14:44:29
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:441
+┌ Info: Agincourt YrAge episode QA complete 2021-09-17 14:45:08 duration 39 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:445
+┌ Info: ========== Start DIMAMO read pregnancies at 2021-09-17 14:45:08
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:466
+┌ Info: Read 9556 DIMAMO pregnancies
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1292
+┌ Info: Read 125436 DIMAMO individualmap entries
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1295
+┌ Info: Read 9556 DIMAMO pregnancies after join
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1297
+┌ Info: Wrote 9516 DIMAMO pregnancies
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1302
+┌ Info: LiveBirths breakdown DIMAMO
+│   livebirths = 3-element Named Vector{Int64}
+LiveBirths  │ 
+────────────┼─────
+0           │   36
+1           │ 9391
+2           │   89
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1304
+┌ Info: StillBirths breakdown DIMAMO
+│   stillbirths = 2-element Named Vector{Int64}
+StillBirths  │ 
+─────────────┼─────
+0            │ 9501
+1            │   15
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1306
+┌ Info: DIMAMO read pregnancies complete 2021-09-17 14:45:10 duration 2 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:470
+┌ Info: ========== Start DIMAMO create delivery days at 2021-09-17 14:45:10
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:473
+┌ Info: Node DIMAMO Batch size 20000 Minimum id 1, maximum Id 125436, idrange 125436, batches 7
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\SAPRINCore.jl:109
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 7 from 120001 to 125436
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: DIMAMO create delivery days complete 2021-09-17 14:45:45 duration 35 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:477
+┌ Info: ========== Start DIMAMO create YrAgeDel episodes at 2021-09-17 14:45:45
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:480
+┌ Info: Node DIMAMO batch 1 at 2021-09-17T14:51:56.215
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node DIMAMO batch 1 completed with 184602 episodes after 19 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node DIMAMO batch 2 at 2021-09-17T14:56:04.605
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node DIMAMO batch 2 completed with 152351 episodes after 13 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node DIMAMO batch 3 at 2021-09-17T15:00:12.712
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node DIMAMO batch 3 completed with 152976 episodes after 12 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node DIMAMO batch 4 at 2021-09-17T15:04:35.027
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node DIMAMO batch 4 completed with 153264 episodes after 13 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node DIMAMO batch 5 at 2021-09-17T15:08:58.089
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node DIMAMO batch 5 completed with 154301 episodes after 13 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node DIMAMO batch 6 at 2021-09-17T15:13:25.870
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node DIMAMO batch 6 completed with 154691 episodes after 13 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node DIMAMO batch 7 at 2021-09-17T15:14:31.786
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node DIMAMO batch 7 completed with 40699 episodes after 6 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: DIMAMO YrAgeDel episode creation complete 2021-09-17 15:14:40 duration 1735 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:484
+┌ Info: ========== Start DIMAMO YrAgeDel episodes QA at 2021-09-17 15:14:40
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:487
+┌ Info: DIMAMO YrAgeDel episode QA complete 2021-09-17 15:15:11 duration 31 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:491
+┌ Info: ========== Start Agincourt read pregnancies at 2021-09-17 15:15:11
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:495
+┌ Info: Read 68808 Agincourt pregnancies
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1292
+┌ Info: Read 218775 Agincourt individualmap entries
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1295
+┌ Info: Read 68808 Agincourt pregnancies after join
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1297
+┌ Info: Wrote 67300 Agincourt pregnancies
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1302
+┌ Info: LiveBirths breakdown Agincourt
+│   livebirths = 5-element Named Vector{Int64}
+LiveBirths  │ 
+────────────┼──────
+0           │  1502
+1           │ 65009
+2           │   782
+3           │     6
+4           │     1
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1304
+┌ Info: StillBirths breakdown Agincourt
+│   stillbirths = 4-element Named Vector{Int64}
+StillBirths  │ 
+─────────────┼──────
+0            │ 66243
+1            │  1054
+2            │     2
+9            │     1
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\staging.jl:1306
+┌ Info: Agincourt read pregnancies complete 2021-09-17 15:15:12 duration 1 second
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:499
+┌ Info: ========== Start Agincourt create delivery days at 2021-09-17 15:15:12
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:502
+┌ Info: Node Agincourt Batch size 20000 Minimum id 1, maximum Id 218775, idrange 218775, batches 11
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\SAPRINCore.jl:109
+┌ Info: Batch 1 from 1 to 20000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 2 from 20001 to 40000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 3 from 40001 to 60000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 4 from 60001 to 80000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 5 from 80001 to 100000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 6 from 100001 to 120000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 7 from 120001 to 140000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 8 from 140001 to 160000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 9 from 160001 to 180000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 10 from 180001 to 200000
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Batch 11 from 200001 to 218775
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\dayextraction.jl:722
+┌ Info: Agincourt create delivery days complete 2021-09-17 15:21:26 duration 374 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:506
+┌ Info: ========== Start Agincourt create YrAgeDel episodes at 2021-09-17 15:21:26
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:509
+┌ Info: Node Agincourt batch 1 at 2021-09-17T15:33:47.169
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node Agincourt batch 1 completed with 369826 episodes after 29 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node Agincourt batch 2 at 2021-09-17T15:46:35.472
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node Agincourt batch 2 completed with 372405 episodes after 26 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node Agincourt batch 3 at 2021-09-17T15:58:47.278
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node Agincourt batch 3 completed with 399968 episodes after 32 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node Agincourt batch 4 at 2021-09-17T16:12:40.788
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node Agincourt batch 4 completed with 452506 episodes after 33 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node Agincourt batch 5 at 2021-09-17T16:27:07.045
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node Agincourt batch 5 completed with 457383 episodes after 35 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node Agincourt batch 6 at 2021-09-17T16:40:49.831
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node Agincourt batch 6 completed with 450960 episodes after 34 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node Agincourt batch 7 at 2021-09-17T16:55:01.495
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node Agincourt batch 7 completed with 455767 episodes after 33 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node Agincourt batch 8 at 2021-09-17T17:09:13.425
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node Agincourt batch 8 completed with 458012 episodes after 35 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node Agincourt batch 9 at 2021-09-17T17:22:51.184
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node Agincourt batch 9 completed with 448202 episodes after 33 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node Agincourt batch 10 at 2021-09-17T17:36:50.284
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node Agincourt batch 10 completed with 455979 episodes after 32 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Node Agincourt batch 11 at 2021-09-17T17:50:08.662
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:401
+┌ Info: Node Agincourt batch 11 completed with 434125 episodes after 33 seconds
+└ @ SAPRINCore c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\episodecreation.jl:527
+┌ Info: Agincourt YrAgeDel episode creation complete 2021-09-17 17:50:52 duration 8966 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:513
+┌ Info: ========== Start Agincourt YrAgeDel episodes QA at 2021-09-17 17:50:52
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:516
+┌ Info: Agincourt YrAgeDel episode QA complete 2021-09-17 17:51:34 duration 42 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:520
+┌ Info: ========== Start Agincourt output basic STATA episodes at 2021-09-17 17:51:34
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:556
+┌ Info: Agincourt output basic STATA episodes at 2021-09-17 17:51:47 duration 13 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:560
+┌ Info: ========== Start DIMAMO output basic STATA episodes at 2021-09-17 17:51:47
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:564
+┌ Info: DIMAMO output basic STATA episodes at 2021-09-17 17:51:53 duration 5 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:568
+┌ Info: ========== Start Agincourt output YrAge STATA episodes at 2021-09-17 17:51:53
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:580
+┌ Info: Agincourt output YrAge STATA episodes at 2021-09-17 17:53:32 duration 99 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:584
+┌ Info: ========== Start DIMAMO output YrAge STATA episodes at 2021-09-17 17:53:32
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:588
+┌ Info: DIMAMO output YrAge STATA episodes at 2021-09-17 17:53:55 duration 23 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:592
+┌ Info: ========== Start Agincourt output YrAgeDel STATA episodes at 2021-09-17 17:53:55
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:604
+┌ Info: Agincourt output YrAgeDel STATA episodes at 2021-09-17 17:55:33 duration 98 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:608
+┌ Info: ========== Start DIMAMO output YrAgeDel STATA episodes at 2021-09-17 17:55:33
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:612
+┌ Info: DIMAMO output YrAgeDel STATA episodes at 2021-09-17 17:55:56 duration 23 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:616
+┌ Info: ========== Start Agincourt output YrAgeDel STATA episodes at 2021-09-17 17:55:56
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:628
+┌ Info: Agincourt output YrAgeDel STATA episodes at 2021-09-17 17:57:33 duration 97 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:632
+┌ Info: ========== Start DIMAMO output YrAgeDel STATA episodes at 2021-09-17 17:57:33
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:636
+┌ Info: DIMAMO output YrAgeDel STATA episodes at 2021-09-17 17:57:55 duration 23 seconds
+└ @ Main c:\Users\Administrator\Documents\GitHub\SaprinJulia\src\main.jl:640
