@@ -15,7 +15,7 @@ using Statistics
 using CategoricalArrays
 using CSV
 using NamedArrays
-using StataCall
+# using StataCall - causing need for old version of DataFrames
 using RCall
 
 export BatchSize, individualbatch, nextidrange, addsheet!, writeXLSX, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, arrowtostata, arrowtostatar,
