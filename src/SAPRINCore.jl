@@ -16,8 +16,9 @@ using CategoricalArrays
 using CSV
 using NamedArrays
 using StataCall
+using RCall
 
-export BatchSize, individualbatch, nextidrange, addsheet!, writeXLSX, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, arrowtostata,
+export BatchSize, individualbatch, nextidrange, addsheet!, writeXLSX, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, arrowtostata, arrowtostatar,
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships, readpregnancies,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, deliverydays,
@@ -176,6 +177,20 @@ function arrowtostata(node, inputfile, outputfile)
     statafile = joinpath(episodepath(node), outputfile * ".dta")
     cmds = ["compress", "la da \"SAPRIN Episodes v4\"", "saveold \"$(statafile)\", replace"]
     stataCall(cmds, df, false, false, true)
+    return nothing
+end
+"Convert episode file in Arrow format to Stata using R"
+function arrowtostatar(node, inputfile, outputfile)
+    df = Arrow.Table(joinpath(episodepath(node), inputfile * ".arrow")) |> DataFrame
+    arrowfile = joinpath(episodepath(node), outputfile * ".arrow")
+    Arrow.write(arrowfile, df, compress = :zstd)
+    statafile = joinpath(episodepath(node), outputfile * ".dta")
+    R"""
+    library(arrow)
+    library(rio)
+    x <- read_feather($arrowfile)
+    export(x, $statafile)
+    """
     return nothing
 end
 #endregion
