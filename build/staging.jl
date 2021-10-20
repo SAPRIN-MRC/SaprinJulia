@@ -932,7 +932,7 @@ function batchmemberships(basedirectory::String, node::String, batchsize::Int64 
     end
     select!(memberships,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType])
     @info "Node $(node) $(nrow(memberships)) memberships episodes"
-    minId, maxId, batches = individualbatch(basedirectory, node, batchsize)
+    minId, maxId, batches = individualbatch(node, batchsize)
     Threads.@threads for i = 1:batches
         fromId, toId = nextidrange(minId, maxId, i, batchsize)
         @info "Batch $(i) from $(fromId) to $(toId)"

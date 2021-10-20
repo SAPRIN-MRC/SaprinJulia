@@ -12,11 +12,12 @@ flush(io)
 #endregion
 
 #region Set-up execution flags
-dostaging = true
+dostaging = false
 dostagebase = false
-doreadstatusobs = true
-dodayextraction = true
-doepisodecreation = true
+doreadstatusobs = false
+dodayextraction = false
+doepisodecreation = false
+dostataoutput = true
 # Node specific flags
 doAgincourt = true
 doDIMAMO = true
@@ -550,12 +551,14 @@ if doepisodecreation
         flush(io)
     end
     #endregion
+end #doepisodecreation
     #
     #region Stata output
+if dostataoutput
     if doAgincourt
         @info "========== Start Agincourt output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostata("Agincourt", "SurveillanceEpisodesBasic_batched", "SurveillanceEpisodesBasic")
+        arrowtostatar("Agincourt", "SurveillanceEpisodesBasic_batched", "SurveillanceEpisodesBasicV5")
         d = now()-t
         @info "Agincourt output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -563,7 +566,7 @@ if doepisodecreation
     if doDIMAMO
         @info "========== Start DIMAMO output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostata("DIMAMO", "SurveillanceEpisodesBasic_batched", "SurveillanceEpisodesBasic")
+        arrowtostatar("DIMAMO", "SurveillanceEpisodesBasic_batched", "SurveillanceEpisodesBasicV5")
         d = now()-t
         @info "DIMAMO output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -571,7 +574,7 @@ if doepisodecreation
     if doAHRI
         @info "========== Start AHRI output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostata("AHRI", "SurveillanceEpisodesBasic_batched", "SurveillanceEpisodesBasic")
+        arrowtostatar("AHRI", "SurveillanceEpisodesBasic_batched", "SurveillanceEpisodesBasicV5")
         d = now()-t
         @info "AHRI output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -579,7 +582,7 @@ if doepisodecreation
     if doAgincourt
         @info "========== Start Agincourt output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostata("Agincourt", "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesYrAge")
+        arrowtostatar("Agincourt", "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesYrAgeV5")
         d = now()-t
         @info "Agincourt output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -587,7 +590,7 @@ if doepisodecreation
     if doDIMAMO
         @info "========== Start DIMAMO output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostata("DIMAMO", "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesYrAge")
+        arrowtostatar("DIMAMO", "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesYrAgeV5")
         d = now()-t
         @info "DIMAMO output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -595,7 +598,7 @@ if doepisodecreation
     if doAHRI
         @info "========== Start AHRI output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostata("AHRI", "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesYrAge")
+        arrowtostatar("AHRI", "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesYrAgeV5")
         d = now()-t
         @info "AHRI output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -603,7 +606,7 @@ if doepisodecreation
     if doAgincourt
         @info "========== Start Agincourt output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostata("Agincourt", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
+        arrowtostatar("Agincourt", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDeliveryV5")
         d = now()-t
         @info "Agincourt output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -611,7 +614,7 @@ if doepisodecreation
     if doDIMAMO
         @info "========== Start DIMAMO output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostata("DIMAMO", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
+        arrowtostatar("DIMAMO", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDeliveryV5")
         d = now()-t
         @info "DIMAMO output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -619,7 +622,7 @@ if doepisodecreation
     if doAHRI
         @info "========== Start AHRI output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostata("AHRI", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
+        arrowtostatar("AHRI", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDeliveryV5")
         d = now()-t
         @info "AHRI output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -627,7 +630,7 @@ if doepisodecreation
     if doAgincourt
         @info "========== Start Agincourt output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostata("Agincourt", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
+        arrowtostatar("Agincourt", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDeliveryV5")
         d = now()-t
         @info "Agincourt output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -635,7 +638,7 @@ if doepisodecreation
     if doDIMAMO
         @info "========== Start DIMAMO output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostata("DIMAMO", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
+        arrowtostatar("DIMAMO", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDeliveryV5")
         d = now()-t
         @info "DIMAMO output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -643,12 +646,12 @@ if doepisodecreation
     if doAHRI
         @info "========== Start AHRI output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostata("AHRI", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
+        arrowtostatar("AHRI", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDeliveryV5")
         d = now()-t
         @info "AHRI output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
     end
-end #doepisodecreation
+end #dostataoutput
 #endregion
 #region Parent co-residency
 #=
