@@ -133,7 +133,25 @@ function combinebatches(path::String, file::String, batches)
     end
     return nothing
 end #combinebatches
-"Add a sheet to an exisiting Excel spreadsheet and transfer the contents of df NAmedArray to the sheet"
+"Combines a set of serialized DataFrames into a single DataFrame and save it in Arrow format"
+function combineserializedbatches(path::String, file::String, batches)
+    i = 1
+    df = open(f -> Serialization.deserialize(f), joinpath(path, "$(file)$(i).jls"), "r")
+    while i < batches
+        i = i + 1
+        s = open(f -> Serialization.deserialize(f), joinpath(path, "$(file)$(i).jls"), "r")
+        df = vcat(df, s)
+    end
+    open(joinpath(path, "$(file).arrow"), "w") do io
+        Arrow.write(io, df, compress=:zstd)
+    end
+    #delete chunks
+    for i = 1:batches
+        rm(joinpath(path, "$(file)$(i).jls"))
+    end
+    return nothing
+end #combineserializedbatches
+"Add a sheet to an existing Excel spreadsheet and transfer the contents of df NamedArray to the sheet"
 function addsheet!(path::String, df::NamedArray, sheetname::String)
     XLSX.openxlsx(path, mode ="rw") do xf
         sheet = XLSX.addsheet!(xf, sheetname)
@@ -150,7 +168,9 @@ function addsheet!(path::String, df::AbstractDataFrame, sheetname::String)
     end
     transform!(df, names(df, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     transform!(df, names(df, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Union{Int16, Missing}) .=> ByRow(passmissing(Int64)), renamecols=false) #needed by XLSX
     transform!(df, names(df, Int32) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Union{Int32, Missing}) .=> ByRow(passmissing(Int64)), renamecols=false) #needed by XLSX
     XLSX.openxlsx(path, mode ="rw") do xf
         sheet = XLSX.addsheet!(xf, sheetname)
         data = collect(eachcol(df))
@@ -159,11 +179,19 @@ function addsheet!(path::String, df::AbstractDataFrame, sheetname::String)
     end
     return nothing
 end
+function writeXLSX(path::String, df::NamedArray, sheetname::String)
+    XLSX.writetable(path, collect([NamedArrays.names(df)[1], df.array]), [String(dimnames(df)[1]), "n"], overwrite = true, sheetname = sheetname)
+end
 "Write a dataframe to an Excel spreadsheet, overwrite file if it exists"
 function writeXLSX(path::String, df::AbstractDataFrame, sheetname::String)
-    transform!(df, names(df, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(df, names(df, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(df, names(df, Int32) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    if !isdir(dirname(path))
+        mkpath(dirname(path))
+    end
+    transform!(df, names(df, Int8) .=> ByRow(Int64), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Int16) .=> ByRow(Int64), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Union{Int16, Missing}) .=> ByRow(passmissing(Int64)), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Int32) .=> ByRow(Int64), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Union{Int32, Missing}) .=> ByRow(passmissing(Int64)), renamecols=false) #needed by XLSX
     XLSX.writetable(path, collect(eachcol(df)), names(df), overwrite = true, sheetname = sheetname)
 end
 "Write dataset as CSV"
@@ -192,6 +220,23 @@ function arrowtostatar(node, inputfile, outputfile)
     export(x, $statafile)
     """
     return nothing
+end
+"Execute a STATA do-file, STATA_BIN environment variable must be set"
+function runstata(dofile)
+    stata_executable = ""
+    if haskey(ENV, "STATA_BIN")
+        stata_executable = ENV["STATA_BIN"]
+    else
+        error("Could not find the Stata executable. Please set the \"STATA_BIN\" environment variable.")
+    end
+    if !isfile(dofile)
+        #try looking for file in src
+        dofile = joinpath(pwd(),"src",dofile)
+        if !isfile(dofile)
+            error("Can't find do file '$do_file'")
+        end
+    end
+    run(`"$stata_executable" /e do $dofile`)
 end
 #endregion
 
