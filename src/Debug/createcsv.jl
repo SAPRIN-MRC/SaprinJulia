@@ -4,4 +4,4 @@ using SAPRINCore
 
 arrowtocsv("Agincourt", "Staging", "IndividualMap")
 arrowtocsv("Agincourt", "Staging", "LocationMap")
-arrowtocsv("Agincourt", "Staging", "HouseholdMap")]
+arrowtocsv("Agincourt", "Staging", "HouseholdMap")
