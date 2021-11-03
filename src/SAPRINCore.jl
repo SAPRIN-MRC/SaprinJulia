@@ -18,7 +18,7 @@ using NamedArrays
 # using StataCall - causing need for old version of DataFrames
 using RCall
 
-export BatchSize, individualbatch, nextidrange, addsheet!, writeXLSX, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, arrowtostata, arrowtostatar,
+export BatchSize, individualbatch, nextidrange, addsheet!, writeXLSX, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, arrowtostatar,
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships, readpregnancies,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, deliverydays,
@@ -193,20 +193,21 @@ function writeXLSX(path::String, df::AbstractDataFrame, sheetname::String)
     transform!(df, names(df, Int32) .=> ByRow(Int64), renamecols=false) #needed by XLSX
     transform!(df, names(df, Union{Int32, Missing}) .=> ByRow(passmissing(Int64)), renamecols=false) #needed by XLSX
     XLSX.writetable(path, collect(eachcol(df)), names(df), overwrite = true, sheetname = sheetname)
+    return nothing
 end
 "Write dataset as CSV"
 function arrowtocsv(node::String, subdir::String, dataset::String)
     Arrow.Table(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).arrow")) |> CSV.write(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).csv"))
     return nothing
 end
-"Convert episode file in Arrow format to Stata"
-function arrowtostata(node, inputfile, outputfile)
-    df = readpartitionfile(joinpath(episodepath(node), inputfile * ".arrow"), lock = false) |> DataFrame
-    statafile = joinpath(episodepath(node), outputfile * ".dta")
-    cmds = ["compress", "la da \"SAPRIN Episodes v4\"", "saveold \"$(statafile)\", replace"]
-    stataCall(cmds, df, false, false, true)
-    return nothing
-end
+#"Convert episode file in Arrow format to Stata - deprecated using StatCall"
+# function arrowtostata(node, inputfile, outputfile)
+#     df = readpartitionfile(joinpath(episodepath(node), inputfile * ".arrow"), lock = false) |> DataFrame
+#     statafile = joinpath(episodepath(node), outputfile * ".dta")
+#     cmds = ["compress", "la da \"SAPRIN Episodes v4\"", "saveold \"$(statafile)\", replace"]
+#     stataCall(cmds, df, false, false, true)
+#     return nothing
+# end
 "Convert episode file in Arrow format to Stata using R"
 function arrowtostatar(node, inputfile, outputfile)
     df = Arrow.Table(joinpath(episodepath(node), inputfile * ".arrow")) |> DataFrame
