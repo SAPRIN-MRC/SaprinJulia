@@ -1,140 +1,711 @@
-┌ Info: Execution started 2021-10-11 17:28
+┌ Info: Execution started 2021-11-09 12:16
 └ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:10
-┌ Info: ========== Start Agincourt output basic STATA episodes at 2021-10-11 17:28:12
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:559
-┌ Info: Agincourt output basic STATA episodes at 2021-10-11 17:28:27 duration 15 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:563
-┌ Info: ========== Start DIMAMO output basic STATA episodes at 2021-10-11 17:28:27
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:567
-┌ Info: DIMAMO output basic STATA episodes at 2021-10-11 17:28:28 duration 1 second
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:571
-┌ Info: ========== Start Agincourt output YrAge STATA episodes at 2021-10-11 17:28:28
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:583
-┌ Info: Agincourt output YrAge STATA episodes at 2021-10-11 17:28:37 duration 9 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:587
-┌ Info: ========== Start DIMAMO output YrAge STATA episodes at 2021-10-11 17:28:37
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:591
-┌ Info: DIMAMO output YrAge STATA episodes at 2021-10-11 17:28:40 duration 3 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:595
-┌ Info: ========== Start Agincourt output YrAgeDel STATA episodes at 2021-10-11 17:28:40
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:607
-┌ Info: Agincourt output YrAgeDel STATA episodes at 2021-10-11 17:28:48 duration 8 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:611
-┌ Info: ========== Start DIMAMO output YrAgeDel STATA episodes at 2021-10-11 17:28:48
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:615
-┌ Info: DIMAMO output YrAgeDel STATA episodes at 2021-10-11 17:28:50 duration 2 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:619
-┌ Info: ========== Start Agincourt output YrAgeDel STATA episodes at 2021-10-11 17:28:50
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:631
-┌ Info: Agincourt output YrAgeDel STATA episodes at 2021-10-11 17:28:55 duration 5 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:635
-┌ Info: ========== Start DIMAMO output YrAgeDel STATA episodes at 2021-10-11 17:28:55
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:639
-┌ Info: DIMAMO output YrAgeDel STATA episodes at 2021-10-11 17:28:56 duration 1 second
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:643
-┌ Info: Execution started 2021-10-11 17:37
+┌ Info: Execution started 2021-11-09 12:27
 └ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:10
-┌ Info: ========== Start Agincourt output basic STATA episodes at 2021-10-11 17:37:17
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:559
-┌ Info: Agincourt output basic STATA episodes at 2021-10-11 17:37:17 duration 0 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:563
-┌ Info: ========== Start DIMAMO output basic STATA episodes at 2021-10-11 17:37:17
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:567
-┌ Info: DIMAMO output basic STATA episodes at 2021-10-11 17:37:18 duration 0 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:571
-┌ Info: ========== Start Agincourt output YrAge STATA episodes at 2021-10-11 17:37:18
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:583
-┌ Info: Agincourt output YrAge STATA episodes at 2021-10-11 17:37:23 duration 5 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:587
-┌ Info: ========== Start DIMAMO output YrAge STATA episodes at 2021-10-11 17:37:23
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:591
-┌ Info: DIMAMO output YrAge STATA episodes at 2021-10-11 17:37:24 duration 1 second
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:595
-┌ Info: ========== Start Agincourt output YrAgeDel STATA episodes at 2021-10-11 17:37:24
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:607
-┌ Info: Agincourt output YrAgeDel STATA episodes at 2021-10-11 17:37:30 duration 6 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:611
-┌ Info: ========== Start DIMAMO output YrAgeDel STATA episodes at 2021-10-11 17:37:30
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:615
-┌ Info: DIMAMO output YrAgeDel STATA episodes at 2021-10-11 17:37:31 duration 1 second
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:619
-┌ Info: ========== Start Agincourt output YrAgeDel STATA episodes at 2021-10-11 17:37:31
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:631
-┌ Info: Agincourt output YrAgeDel STATA episodes at 2021-10-11 17:37:36 duration 5 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:635
-┌ Info: ========== Start DIMAMO output YrAgeDel STATA episodes at 2021-10-11 17:37:36
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:639
-┌ Info: DIMAMO output YrAgeDel STATA episodes at 2021-10-11 17:37:37 duration 1 second
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:643
-┌ Info: Execution started 2021-10-11 17:52
+┌ Info: Execution started 2021-11-09 12:35
 └ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:10
-┌ Info: ========== Start Agincourt output basic STATA episodes at 2021-10-11 17:52:27
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:559
-┌ Info: Agincourt output basic STATA episodes at 2021-10-11 17:52:41 duration 14 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:563
-┌ Info: ========== Start DIMAMO output basic STATA episodes at 2021-10-11 17:52:41
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:567
-┌ Info: DIMAMO output basic STATA episodes at 2021-10-11 17:52:41 duration 1 second
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:571
-┌ Info: ========== Start Agincourt output YrAge STATA episodes at 2021-10-11 17:52:41
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:583
-┌ Info: Agincourt output YrAge STATA episodes at 2021-10-11 17:52:48 duration 7 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:587
-┌ Info: ========== Start DIMAMO output YrAge STATA episodes at 2021-10-11 17:52:48
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:591
-┌ Info: DIMAMO output YrAge STATA episodes at 2021-10-11 17:52:50 duration 2 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:595
-┌ Info: ========== Start Agincourt output YrAgeDel STATA episodes at 2021-10-11 17:52:50
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:607
-┌ Info: Agincourt output YrAgeDel STATA episodes at 2021-10-11 17:52:56 duration 6 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:611
-┌ Info: ========== Start DIMAMO output YrAgeDel STATA episodes at 2021-10-11 17:52:56
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:615
-┌ Info: DIMAMO output YrAgeDel STATA episodes at 2021-10-11 17:52:57 duration 1 second
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:619
-┌ Info: ========== Start Agincourt output YrAgeDel STATA episodes at 2021-10-11 17:52:57
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:631
-┌ Info: Agincourt output YrAgeDel STATA episodes at 2021-10-11 17:53:03 duration 6 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:635
-┌ Info: ========== Start DIMAMO output YrAgeDel STATA episodes at 2021-10-11 17:53:03
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:639
-┌ Info: DIMAMO output YrAgeDel STATA episodes at 2021-10-11 17:53:04 duration 1 second
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:643
-┌ Info: Execution started 2021-10-11 17:54
+┌ Info: Execution started 2021-11-09 12:41
 └ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:10
-┌ Info: Execution started 2021-10-11 17:59
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:10
-┌ Info: Execution started 2021-10-11 18:03
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:10
-┌ Info: ========== Start Agincourt output basic STATA episodes at 2021-10-11 18:03:01
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:559
-┌ Info: Agincourt output basic STATA episodes at 2021-10-11 18:03:04 duration 3 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:563
-┌ Info: ========== Start DIMAMO output basic STATA episodes at 2021-10-11 18:03:04
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:567
-┌ Info: DIMAMO output basic STATA episodes at 2021-10-11 18:03:05 duration 1 second
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:571
-┌ Info: ========== Start Agincourt output YrAge STATA episodes at 2021-10-11 18:03:05
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:583
-┌ Info: Agincourt output YrAge STATA episodes at 2021-10-11 18:03:39 duration 34 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:587
-┌ Info: ========== Start DIMAMO output YrAge STATA episodes at 2021-10-11 18:03:39
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:591
-┌ Info: DIMAMO output YrAge STATA episodes at 2021-10-11 18:03:46 duration 7 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:595
-┌ Info: ========== Start Agincourt output YrAgeDel STATA episodes at 2021-10-11 18:03:46
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:607
-┌ Info: Agincourt output YrAgeDel STATA episodes at 2021-10-11 18:04:20 duration 34 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:611
-┌ Info: ========== Start DIMAMO output YrAgeDel STATA episodes at 2021-10-11 18:04:20
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:615
-┌ Info: DIMAMO output YrAgeDel STATA episodes at 2021-10-11 18:04:28 duration 8 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:619
-┌ Info: ========== Start Agincourt output YrAgeDel STATA episodes at 2021-10-11 18:04:28
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:631
-┌ Info: Agincourt output YrAgeDel STATA episodes at 2021-10-11 18:05:01 duration 33 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:635
-┌ Info: ========== Start DIMAMO output YrAgeDel STATA episodes at 2021-10-11 18:05:01
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:639
-┌ Info: DIMAMO output YrAgeDel STATA episodes at 2021-10-11 18:05:08 duration 7 seconds
-└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:643
+┌ Info: ========== Start Agincourt readhouseholdsocioeconomic at 2021-11-09 12:41:27
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:201
+┌ Info: Read 3000064 Agincourt asset statuses from database
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1068
+┌ Info: 2201150 Agincourt grouped asset statuses
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1078
+┌ Info: 1229518 Agincourt present asset statuses
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1080
+┌ Info: 374331 Agincourt asset groups
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1082
+┌ Info: Modern asset breakdown for Agincourt
+│   a = 10-element Named Vector{Int64}
+Modern  │ 
+────────┼──────
+0       │  6596
+1       │ 12999
+2       │ 14266
+3       │ 19562
+4       │ 36475
+5       │ 59837
+6       │ 32535
+7       │ 15854
+8       │  1959
+9       │   161
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1089
+┌ Info: Livestock asset breakdown for Agincourt
+│   a = 3-element Named Vector{Int64}
+Livestock  │ 
+───────────┼───────
+0          │  19561
+1          │    459
+2          │ 180224
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1091
+┌ Info: Read 227002 Agincourt HSE observations from database
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1122
+┌ Info: Read 227002 Agincourt HSE observations after household map
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1126
+┌ Info: Watersource breakdown for Agincourt
+│   a = 9-element Named Vector{Int64}
+WaterSource  │ 
+─────────────┼───────
+0            │  26800
+1            │  73844
+2            │ 110386
+3            │   4293
+4            │    166
+5            │   1715
+6            │    257
+8            │   6495
+11           │   3046
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1131
+┌ Info: Watersource breakdown for Agincourt after recode
+│   a = 5-element Named Vector{Int64}
+WaterSource  │ 
+─────────────┼───────
+0            │  26800
+1            │  11679
+2            │   4293
+3            │ 110386
+4            │  73844
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1134
+┌ Info: Toilet breakdown for Agincourt
+│   a = 4-element Named Vector{Int64}
+Toilet  │ 
+────────┼───────
+0       │  58967
+1       │   1953
+2       │  16499
+3       │ 149583
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1136
+┌ Info: Toilet breakdown for Agincourt after recode
+│   a = 4-element Named Vector{Int64}
+Toilet  │ 
+────────┼───────
+0       │  58967
+1       │ 149583
+2       │  16499
+3       │   1953
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1139
+┌ Info: CookingFuel breakdown for Agincourt
+│   a = 6-element Named Vector{Int64}
+CookingFuel  │ 
+─────────────┼───────
+0            │  27193
+1            │ 104871
+2            │   1452
+4            │  90866
+5            │   2374
+6            │    246
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1141
+┌ Info: CookingFuel breakdown for Agincourt after recode
+│   a = 5-element Named Vector{Int64}
+CookingFuel  │ 
+─────────────┼───────
+0            │  27193
+1            │ 104871
+3            │   2620
+4            │   1452
+5            │  90866
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1144
+┌ Info: WallMaterial breakdown for Agincourt
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1146
+┌ Info: WallMaterial breakdown for Agincourt after recode
+│   a = 5-element Named Vector{Int64}
+WallMaterial  │ 
+──────────────┼───────
+0             │  26706
+1             │   5431
+2             │   4532
+3             │    510
+4             │ 189823
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1149
+┌ Info: FloorMaterial breakdown for Agincourt
+│   a = 10-element Named Vector{Int64}
+FloorMaterial  │ 
+───────────────┼───────
+0              │      5
+1              │  26752
+2              │ 169653
+6              │     72
+8              │  26679
+9              │    300
+10             │    136
+11             │   2302
+12             │    141
+13             │    962
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1151
+┌ Info: FloorMaterial breakdown for Agincourt after recode
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1154
+┌ Info: Bedrooms breakdown for Agincourt
+│   a = 34-element Named Vector{Int64}
+Bedrooms  │ 
+──────────┼──────
+-2        │     1
+0         │   796
+1         │ 39363
+2         │ 66902
+3         │ 54298
+4         │ 30237
+5         │  6852
+6         │  1652
+7         │   325
+8         │   111
+9         │    33
+10        │    12
+11        │     2
+12        │     3
+13        │     1
+14        │     2
+20        │     1
+21        │     7
+22        │     7
+23        │     3
+25        │     4
+30        │    15
+32        │     1
+33        │     2
+36        │     4
+44        │     2
+54        │     1
+56        │     1
+58        │     1
+93        │     1
+201       │     1
+202       │     2
+2014      │     1
+missing   │ 26358
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1156
+┌ Info: Bedrooms breakdown for Agincourt after recode
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1158
+┌ Info: ConnectedToGrid breakdown for Agincourt
+│   a = 3-element Named Vector{Int64}
+ConnectedToGrid  │ 
+─────────────────┼───────
+false            │  12616
+true             │ 187606
+missing          │  26780
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1160
+┌ Info: ConnectedToGrid for Agincourt after recode
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1163
+┌ Info: ========== Finished Agincourt readhouseholdsocioeconomic at 2021-11-09 12:42:51
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:203
+┌ Info: ========== Start DIMAMO readhouseholdsocioeconomic at 2021-11-09 12:42:51
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:207
+┌ Info: Started execution 2021-11-10T10:16:57.137
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:34
+┌ Info: Started execution 2021-11-10T10:18:01.563
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:33
+┌ Info: Read 186372 DIMAMO asset statuses from database
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:22
+┌ Info: Started execution 2021-11-10T10:19:06.611
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:40
+┌ Info: Read 186372 DIMAMO asset statuses from database
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:29
+┌ Info: Finished DIMAMO 2021-11-10T10:19:07.552
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:43
+┌ Info: Stopped DIMAMO execution 2021-11-10T10:19:07.561 duration 1 second
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:45
+┌ Info: Started execution 2021-11-10T10:36:54.512
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:40
+┌ Info: Read 186372 DIMAMO asset statuses from database
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:33
+┌ Info: Finished DIMAMO 2021-11-10T10:36:55.596
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:43
+┌ Info: Stopped DIMAMO execution 2021-11-10T10:36:55.598 duration 1 second
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:45
+┌ Info: Started execution 2021-11-10T10:40:09.312
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:41
+┌ Info: Read 186372 DIMAMO asset statuses from database
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:33
+┌ Info: Finished DIMAMO 2021-11-10T10:40:10.152
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:44
+┌ Info: Stopped DIMAMO execution 2021-11-10T10:40:10.155 duration 1 second
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\tmp.jl:46
+┌ Error: Failed to revise c:\Users\kobus.herbst\repos\SaprinJulia\src\SAPRINCore.jl
+│   exception = Revise.ReviseEvalException("C:\\Users\\kobus.herbst\\.julia\\packages\\Parameters\\MK0O4\\src\\Parameters.jl:611", ErrorException("invalid redefinition of constant Settings"), Any[(top-level scope at Parameters.jl:611, 1)])
+└ @ Revise C:\Users\kobus.herbst\.julia\packages\Revise\3RMhb\src\packagedef.jl:714
+┌ Warning: The running code does not match the saved version for the following files:
+│ 
+│   c:\Users\kobus.herbst\repos\SaprinJulia\src\SAPRINCore.jl
+│ 
+│ If the error was due to evaluation order, it can sometimes be resolved by calling `Revise.retry()`.
+│ Use Revise.errors() to report errors again. Only the first error in each file is shown.
+│ Your prompt color may be yellow until the errors are resolved.
+└ @ Revise C:\Users\kobus.herbst\.julia\packages\Revise\3RMhb\src\packagedef.jl:824
+t breakdown for Agincourt after recode
+│   a = 4-element Named Vector{Int64}
+Toilet  │ 
+────────┼───────
+0       │  58967
+1       │ 149583
+2       │  16499
+3       │   1953
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1139
+┌ Info: CookingFuel breakdown for Agincourt
+│   a = 6-element Named Vector{Int64}
+CookingFuel  │ 
+─────────────┼───────
+0            │  27193
+1            │ 104871
+2            │   1452
+4            │  90866
+5            │   2374
+6            │    246
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1141
+┌ Info: CookingFuel breakdown for Agincourt after recode
+│   a = 5-element Named Vector{Int64}
+CookingFuel  │ 
+─────────────┼───────
+0            │  27193
+1            │ 104871
+3            │   2620
+4            │   1452
+5            │  90866
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1144
+┌ Info: WallMaterial breakdown for Agincourt
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1146
+┌ Info: WallMaterial breakdown for Agincourt after recode
+│   a = 5-element Named Vector{Int64}
+WallMaterial  │ 
+──────────────┼───────
+0             │  26706
+1             │   5431
+2             │   4532
+3             │    510
+4             │ 189823
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1149
+┌ Info: FloorMaterial breakdown for Agincourt
+│   a = 10-element Named Vector{Int64}
+FloorMaterial  │ 
+───────────────┼───────
+0              │      5
+1              │  26752
+2              │ 169653
+6              │     72
+8              │  26679
+9              │    300
+10             │    136
+11             │   2302
+12             │    141
+13             │    962
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1151
+┌ Info: FloorMaterial breakdown for Agincourt after recode
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1154
+┌ Info: Bedrooms breakdown for Agincourt
+│   a = 34-element Named Vector{Int64}
+Bedrooms  │ 
+──────────┼──────
+-2        │     1
+0         │   796
+1         │ 39363
+2         │ 66902
+3         │ 54298
+4         │ 30237
+5         │  6852
+6         │  1652
+7         │   325
+8         │   111
+9         │    33
+10        │    12
+11        │     2
+12        │     3
+13        │     1
+14        │     2
+20        │     1
+21        │     7
+22        │     7
+23        │     3
+25        │     4
+30        │    15
+32        │     1
+33        │     2
+36        │     4
+44        │     2
+54        │     1
+56        │     1
+58        │     1
+93        │     1
+201       │     1
+202       │     2
+2014      │     1
+missing   │ 26358
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1156
+┌ Info: Bedrooms breakdown for Agincourt after recode
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1158
+┌ Info: ConnectedToGrid breakdown for Agincourt
+│   a = 3-element Named Vector{Int64}
+ConnectedToGrid  │ 
+─────────────────┼───────
+false            │  12616
+true             │ 187606
+missing          │  26780
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1160
+┌ Info: ConnectedToGrid for Agincourt after recode
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1163
+┌ Info: ========== Finished Agincourt readhouseholdsocioeconomic at 2021-11-09 12:50:41
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:203
+┌ Info: ========== Start DIMAMO readhouseholdsocioeconomic at 2021-11-09 12:50:41
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:207
+┌ Info: Read 186372 DIMAMO asset statuses from database
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1068
+┌ Info: 123510 DIMAMO grouped asset statuses
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1078
+┌ Info: 83880 DIMAMO present asset statuses
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1080
+┌ Info: 24928 DIMAMO asset groups
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1082
+┌ Info: Modern asset breakdown for DIMAMO
+│   a = 10-element Named Vector{Int64}
+Modern  │ 
+────────┼─────
+0       │   26
+1       │  308
+2       │  379
+3       │  594
+4       │ 1655
+5       │ 5327
+6       │ 2036
+7       │  782
+8       │  145
+9       │   22
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1089
+┌ Info: Livestock asset breakdown for DIMAMO
+│   a = 3-element Named Vector{Int64}
+Livestock  │ 
+───────────┼─────
+0          │ 8444
+1          │ 2240
+2          │  590
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1091
+┌ Info: Read 11634 DIMAMO HSE observations from database
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1122
+┌ Info: Read 11634 DIMAMO HSE observations after household map
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1126
+┌ Info: Watersource breakdown for DIMAMO
+│   a = 10-element Named Vector{Int64}
+WaterSource  │ 
+─────────────┼─────
+0            │  333
+1            │ 5619
+2            │ 4867
+3            │  171
+4            │   42
+6            │  152
+7            │   21
+8            │  233
+10           │  187
+11           │    9
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1131
+┌ Info: Watersource breakdown for DIMAMO after recode
+│   a = 5-element Named Vector{Int64}
+WaterSource  │ 
+─────────────┼─────
+0            │  333
+1            │  457
+2            │  358
+3            │ 4867
+4            │ 5619
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1134
+┌ Info: Toilet breakdown for DIMAMO
+│   a = 6-element Named Vector{Int64}
+Toilet  │ 
+────────┼─────
+0       │  374
+1       │  357
+2       │ 7851
+3       │ 2950
+4       │   86
+5       │   16
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1136
+┌ Info: Toilet breakdown for DIMAMO after recode
+│   a = 4-element Named Vector{Int64}
+Toilet  │ 
+────────┼─────
+0       │  374
+1       │ 3036
+2       │ 7867
+3       │  357
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1139
+┌ Info: CookingFuel breakdown for DIMAMO
+│   a = 6-element Named Vector{Int64}
+CookingFuel  │ 
+─────────────┼─────
+0            │  396
+1            │ 1082
+2            │   77
+3            │   20
+4            │ 9525
+5            │  534
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1141
+┌ Info: CookingFuel breakdown for DIMAMO after recode
+│   a = 6-element Named Vector{Int64}
+CookingFuel  │ 
+─────────────┼─────
+0            │  396
+1            │ 1082
+2            │   20
+3            │  534
+4            │   77
+5            │ 9525
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1144
+┌ Info: WallMaterial breakdown for DIMAMO
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1146
+┌ Info: WallMaterial breakdown for DIMAMO after recode
+│   a = 5-element Named Vector{Int64}
+WallMaterial  │ 
+──────────────┼──────
+0             │   309
+1             │   173
+2             │    76
+3             │   343
+4             │ 10733
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1149
+┌ Info: FloorMaterial breakdown for DIMAMO
+│   a = 9-element Named Vector{Int64}
+FloorMaterial  │ 
+───────────────┼─────
+0              │  284
+2              │ 8658
+3              │  346
+6              │    3
+8              │ 2175
+9              │   27
+11             │  101
+12             │   26
+13             │   14
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1151
+┌ Info: FloorMaterial breakdown for DIMAMO after recode
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1154
+┌ Info: Bedrooms breakdown for DIMAMO
+│   a = 27-element Named Vector{Int64}
+Bedrooms  │ 
+──────────┼─────
+0         │    2
+1         │  567
+2         │ 1533
+3         │ 2320
+4         │ 2376
+5         │ 1350
+6         │ 1074
+7         │  777
+8         │  572
+9         │  337
+10        │  207
+11        │   91
+12        │   78
+13        │   40
+14        │   19
+15        │   19
+16        │    8
+17        │    2
+18        │    3
+19        │    2
+20        │    2
+25        │    1
+33        │    1
+36        │    1
+81        │    1
+91        │    1
+missing   │  250
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1156
+┌ Info: Bedrooms breakdown for DIMAMO after recode
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1158
+┌ Info: ConnectedToGrid breakdown for DIMAMO
+│   a = 3-element Named Vector{Int64}
+ConnectedToGrid  │ 
+─────────────────┼──────
+false            │   677
+true             │ 10551
+missing          │   406
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1160
+┌ Info: ConnectedToGrid for DIMAMO after recode
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1163
+┌ Info: ========== Finished DIMAMO readhouseholdsocioeconomic at 2021-11-09 12:50:43
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:209
+┌ Info: ========== Start AHRI readhouseholdsocioeconomic at 2021-11-09 12:50:43
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:213
+┌ Info: Read 1875783 AHRI asset statuses from database
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1068
+┌ Info: 1419570 AHRI grouped asset statuses
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1078
+┌ Info: 1414620 AHRI present asset statuses
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1080
+┌ Info: 482950 AHRI asset groups
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1082
+┌ Info: Modern asset breakdown for AHRI
+│   a = 10-element Named Vector{Int64}
+Modern  │ 
+────────┼──────
+0       │   785
+1       │  7406
+2       │ 16155
+3       │ 23796
+4       │ 35697
+5       │ 65375
+6       │ 27462
+7       │  9629
+8       │  1521
+9       │   268
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1089
+┌ Info: Livestock asset breakdown for AHRI
+│   a = 3-element Named Vector{Int64}
+Livestock  │ 
+───────────┼──────
+0          │ 75650
+1          │ 81288
+2          │ 31156
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1091
+┌ Info: Read 195225 AHRI HSE observations from database
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1122
+┌ Info: Read 195225 AHRI HSE observations after household map
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1126
+┌ Info: Watersource breakdown for AHRI
+│   a = 9-element Named Vector{Int64}
+WaterSource  │ 
+─────────────┼──────
+0            │ 10648
+1            │ 33187
+2            │ 89532
+3            │ 17557
+4            │  6151
+5            │ 15664
+6            │  8301
+7            │  1471
+8            │ 12714
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1131
+┌ Info: Watersource breakdown for AHRI after recode
+│   a = 5-element Named Vector{Int64}
+WaterSource  │ 
+─────────────┼──────
+0            │ 10648
+1            │ 44301
+2            │ 17557
+3            │ 89532
+4            │ 33187
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1134
+┌ Info: Toilet breakdown for AHRI
+│   a = 6-element Named Vector{Int64}
+Toilet  │ 
+────────┼───────
+0       │  33643
+1       │  20264
+2       │  31287
+3       │ 106393
+4       │   1220
+5       │   2418
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1136
+┌ Info: Toilet breakdown for AHRI after recode
+│   a = 4-element Named Vector{Int64}
+Toilet  │ 
+────────┼───────
+0       │  33643
+1       │ 107613
+2       │  33705
+3       │  20264
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1139
+┌ Info: CookingFuel breakdown for AHRI
+│   a = 6-element Named Vector{Int64}
+CookingFuel  │ 
+─────────────┼───────
+0            │  23223
+1            │  41687
+2            │   8354
+3            │    288
+4            │ 119372
+5            │   2301
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1141
+┌ Info: CookingFuel breakdown for AHRI after recode
+│   a = 6-element Named Vector{Int64}
+CookingFuel  │ 
+─────────────┼───────
+0            │  23223
+1            │  41687
+2            │    288
+3            │   2301
+4            │   8354
+5            │ 119372
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1144
+┌ Info: WallMaterial breakdown for AHRI
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1146
+┌ Info: WallMaterial breakdown for AHRI after recode
+│   a = 5-element Named Vector{Int64}
+WallMaterial  │ 
+──────────────┼───────
+0             │ 138815
+1             │   3233
+2             │   1203
+3             │   2542
+4             │  49432
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1149
+┌ Info: FloorMaterial breakdown for AHRI
+│   a = 9-element Named Vector{Int64}
+FloorMaterial  │ 
+───────────────┼───────
+0              │ 149926
+2              │  21302
+3              │   1632
+6              │    109
+8              │  12276
+9              │    808
+11             │   2330
+12             │   5974
+13             │    868
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1151
+┌ Info: FloorMaterial breakdown for AHRI after recode
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1154
+┌ Info: Bedrooms breakdown for AHRI
+│   a = 39-element Named Vector{Int64}
+Bedrooms  │ 
+──────────┼───────
+0         │     71
+1         │   4445
+2         │  10860
+3         │  14511
+4         │  10554
+5         │   7345
+6         │   4056
+7         │   1677
+8         │   1270
+9         │    663
+10        │    385
+11        │    191
+12        │    136
+13        │     62
+14        │     50
+15        │     40
+16        │     13
+17        │     13
+18        │     14
+19        │      9
+20        │      2
+21        │      1
+22        │      1
+24        │      1
+25        │      1
+26        │      2
+27        │      1
+30        │      1
+32        │      3
+33        │      1
+34        │      1
+40        │      1
+52        │      1
+54        │      2
+82        │      1
+83        │      6
+84        │      1
+86        │      1
+missing   │ 138832
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1156
+┌ Info: Bedrooms breakdown for AHRI after recode
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1158
+┌ Info: ConnectedToGrid breakdown for AHRI
+│   a = 2-element Named Vector{Int64}
+ConnectedToGrid  │ 
+─────────────────┼───────
+false            │  43818
+true             │ 151407
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1160
+┌ Info: ConnectedToGrid for AHRI after recode
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:1163
+┌ Info: ========== Finished AHRI readhouseholdsocioeconomic at 2021-11-09 12:51:05
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:215

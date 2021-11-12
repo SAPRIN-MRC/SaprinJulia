@@ -12,16 +12,17 @@ flush(io)
 #endregion
 
 #region Set-up execution flags
-dostaging = false
+dostaging = true
 dostagebase = false
 doreadstatusobs = false
+dosocioeconomic = true
 dodayextraction = false
 doepisodecreation = false
-dostataoutput = true
+dostataoutput = false
 # Node specific flags
 doAgincourt = true
 doDIMAMO = true
-doAHRI = false
+doAHRI = true
 #endregion
 
 #region Staging
@@ -159,24 +160,6 @@ if dostaging
             flush(io)
         end
         if doAgincourt
-            @info "========== Start Agincourt readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readhouseholdsocioeconomic("Agincourt")
-            @info "========== Finished Agincourt readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            flush(io)
-        end
-        if doDIMAMO
-            @info "========== Start DIMAMO readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readhouseholdsocioeconomic("DIMAMO")
-            @info "========== Finished DIMAMO readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            flush(io)
-        end
-        if doAHRI
-            @info "========== Start AHRI readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readhouseholdsocioeconomic("AHRI")
-            @info "========== Finished AHRI readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            flush(io)
-        end
-        if doAgincourt
             @info "========== Start Agincourt readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readmaritalstatuses("Agincourt")
             @info "========== Finished Agincourt readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -213,7 +196,40 @@ if dostaging
             flush(io)
         end
     end #doreadstatusobs
+    if dosocioeconomic
+        if doAgincourt
+            @info "========== Start Agincourt readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            readhouseholdsocioeconomic("Agincourt")
+            arrowtostatar("Agincourt", stagingpath("Agincourt"), "AssetStatusRaw", "AssetStatusRaw")
+            runstata("assets.do", settings.Version, "Agincourt", joinpath(stagingpath("Agincourt"), "AssetStatusRaw.dta"))
+            arrowtostatar("Agincourt", stagingpath("Agincourt"), "SocioEconomicRaw", "SocioEconomicRaw")
+            runstata("socioeconomic.do", settings.Version, "Agincourt", joinpath(stagingpath("Agincourt"), "SocioEconomicRaw.dta"))
+            @info "========== Finished Agincourt readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            flush(io)
+        end
+        if doDIMAMO
+            @info "========== Start DIMAMO readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            readhouseholdsocioeconomic("DIMAMO")
+            arrowtostatar("DIMAMO", stagingpath("DIMAMO"), "AssetStatusRaw", "AssetStatusRaw")
+            runstata("assets.do", settings.Version, "DIMAMO", joinpath(stagingpath("DIMAMO"), "AssetStatusRaw.dta"))
+            arrowtostatar("DIMAMO", stagingpath("DIMAMO"), "SocioEconomicRaw", "SocioEconomicRaw")
+            runstata("socioeconomic.do", settings.Version, "DIMAMO", joinpath(stagingpath("DIMAMO"), "SocioEconomicRaw.dta"))
+            @info "========== Finished DIMAMO readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            flush(io)
+        end
+        if doAHRI
+            @info "========== Start AHRI readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            readhouseholdsocioeconomic("AHRI")
+            arrowtostatar("AHRI", stagingpath("AHRI"), "AssetStatusRaw", "AssetStatusRaw")
+            runstata("assets.do", settings.Version, "AHRI", joinpath(stagingpath("AHRI"), "AssetStatusRaw.dta"))
+            arrowtostatar("AHRI", stagingpath("AHRI"), "SocioEconomicRaw", "SocioEconomicRaw")
+            runstata("socioeconomic.do", settings.Version, "AHRI", joinpath(stagingpath("AHRI"), "SocioEconomicRaw.dta"))
+            @info "========== Finished AHRI readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            flush(io)
+        end
+    end #dosocioeconomic
 end #dostaging
+
 #endregion
 #
 #region Day Extraction

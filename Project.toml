@@ -1,7 +1,7 @@
 name = "SAPRINCore"
 uuid = "91cb36e9-1cc9-47a6-ad06-060ecc79be4b"
 authors = ["Kobus Herbst"]
-version = "0.1.0"
+version = "1.0.8"
 
 [deps]
 Arrow = "69666777-d1a9-59fb-9406-91d4454c9d45"
