@@ -18,7 +18,8 @@ using NamedArrays
 # using StataCall - causing need for old version of DataFrames
 using RCall
 
-export BatchSize, individualbatch, nextidrange, addsheet!, writeXLSX, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, arrowtostata, arrowtostatar,
+export BatchSize, individualbatch, nextidrange, addsheet!, writeXLSX, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, 
+       arrowtostatar, runstata,
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships, readpregnancies,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, deliverydays,
@@ -40,6 +41,7 @@ end
     Databases = s["Databases"]
     LeftCensorDates = s["LeftCensorDates"]
     Nodes = s["Nodes"]
+    Version::VersionNumber = VersionNumber(s["Version"])
 end # struct
 "Create directories to output staging data"
 function createdirectories(basedirectory,directory)
@@ -133,7 +135,25 @@ function combinebatches(path::String, file::String, batches)
     end
     return nothing
 end #combinebatches
-"Add a sheet to an exisiting Excel spreadsheet and transfer the contents of df NAmedArray to the sheet"
+"Combines a set of serialized DataFrames into a single DataFrame and save it in Arrow format"
+function combineserializedbatches(path::String, file::String, batches)
+    i = 1
+    df = open(f -> Serialization.deserialize(f), joinpath(path, "$(file)$(i).jls"), "r")
+    while i < batches
+        i = i + 1
+        s = open(f -> Serialization.deserialize(f), joinpath(path, "$(file)$(i).jls"), "r")
+        df = vcat(df, s)
+    end
+    open(joinpath(path, "$(file).arrow"), "w") do io
+        Arrow.write(io, df, compress=:zstd)
+    end
+    #delete chunks
+    for i = 1:batches
+        rm(joinpath(path, "$(file)$(i).jls"))
+    end
+    return nothing
+end #combineserializedbatches
+"Add a sheet to an existing Excel spreadsheet and transfer the contents of df NamedArray to the sheet"
 function addsheet!(path::String, df::NamedArray, sheetname::String)
     XLSX.openxlsx(path, mode ="rw") do xf
         sheet = XLSX.addsheet!(xf, sheetname)
@@ -150,7 +170,9 @@ function addsheet!(path::String, df::AbstractDataFrame, sheetname::String)
     end
     transform!(df, names(df, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
     transform!(df, names(df, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Union{Int16, Missing}) .=> ByRow(passmissing(Int64)), renamecols=false) #needed by XLSX
     transform!(df, names(df, Int32) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Union{Int32, Missing}) .=> ByRow(passmissing(Int64)), renamecols=false) #needed by XLSX
     XLSX.openxlsx(path, mode ="rw") do xf
         sheet = XLSX.addsheet!(xf, sheetname)
         data = collect(eachcol(df))
@@ -159,39 +181,92 @@ function addsheet!(path::String, df::AbstractDataFrame, sheetname::String)
     end
     return nothing
 end
+function writeXLSX(path::String, df::NamedArray, sheetname::String)
+    XLSX.writetable(path, collect([NamedArrays.names(df)[1], df.array]), [String(dimnames(df)[1]), "n"], overwrite = true, sheetname = sheetname)
+end
 "Write a dataframe to an Excel spreadsheet, overwrite file if it exists"
 function writeXLSX(path::String, df::AbstractDataFrame, sheetname::String)
-    transform!(df, names(df, Int8) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(df, names(df, Int16) .=> ByRow(Int), renamecols=false) #needed by XLSX
-    transform!(df, names(df, Int32) .=> ByRow(Int), renamecols=false) #needed by XLSX
+    if !isdir(dirname(path))
+        mkpath(dirname(path))
+    end
+    transform!(df, names(df, Int8) .=> ByRow(Int64), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Int16) .=> ByRow(Int64), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Union{Int16, Missing}) .=> ByRow(passmissing(Int64)), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Int32) .=> ByRow(Int64), renamecols=false) #needed by XLSX
+    transform!(df, names(df, Union{Int32, Missing}) .=> ByRow(passmissing(Int64)), renamecols=false) #needed by XLSX
     XLSX.writetable(path, collect(eachcol(df)), names(df), overwrite = true, sheetname = sheetname)
+    return nothing
 end
 "Write dataset as CSV"
 function arrowtocsv(node::String, subdir::String, dataset::String)
     Arrow.Table(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).arrow")) |> CSV.write(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).csv"))
     return nothing
 end
-"Convert episode file in Arrow format to Stata"
-function arrowtostata(node, inputfile, outputfile)
-    df = readpartitionfile(joinpath(episodepath(node), inputfile * ".arrow"), lock = false) |> DataFrame
-    statafile = joinpath(episodepath(node), outputfile * ".dta")
-    cmds = ["compress", "la da \"SAPRIN Episodes v4\"", "saveold \"$(statafile)\", replace"]
-    stataCall(cmds, df, false, false, true)
-    return nothing
-end
-"Convert episode file in Arrow format to Stata using R"
-function arrowtostatar(node, inputfile, outputfile)
-    df = Arrow.Table(joinpath(episodepath(node), inputfile * ".arrow")) |> DataFrame
-    arrowfile = joinpath(episodepath(node), outputfile * ".arrow")
+#"Convert episode file in Arrow format to Stata - deprecated using StatCall"
+# function arrowtostata(node, inputfile, outputfile)
+#     df = readpartitionfile(joinpath(episodepath(node), inputfile * ".arrow"), lock = false) |> DataFrame
+#     statafile = joinpath(episodepath(node), outputfile * ".dta")
+#     cmds = ["compress", "la da \"SAPRIN Episodes v4\"", "saveold \"$(statafile)\", replace"]
+#     stataCall(cmds, df, false, false, true)
+#     return nothing
+# end
+"Convert file in Arrow format to Stata using R"
+function arrowtostatar(node, path, inputfile, outputfile)
+    df = Arrow.Table(joinpath(path, inputfile * ".arrow")) |> DataFrame
+    arrowfile = joinpath(path, outputfile * "_tmp.arrow")
     Arrow.write(arrowfile, df, compress = :zstd)
-    statafile = joinpath(episodepath(node), outputfile * ".dta")
+    statafile = joinpath(path, outputfile * ".dta")
     R"""
     library(arrow)
     library(rio)
     x <- read_feather($arrowfile)
     export(x, $statafile)
     """
+    rm(arrowfile)
     return nothing
+end
+"""
+Execute a STATA do-file, STATA_BIN environment variable must be set
+Parameters:
+  dofile: STATA dofile to be executed, can contain the fullpath to the file, if not will try to find the file in ./src/dofiles
+  version: The dataset version number
+  node: The SAPRIN node associated with the datafile
+  datafile: the path to the datafile including the .dta file extension,  will be substituted in the dofile, usually in the "use" statement
+Substitutions:
+  #datafile# with datafile
+  #node# with node
+  #version# with version
+"""
+function runstata(dofile, version::VersionNumber, node::String, datafile::String)
+    stata_executable = ""
+    if haskey(ENV, "STATA_BIN")
+        stata_executable = ENV["STATA_BIN"]
+    else
+        error("Could not find the Stata executable. Please set the \"STATA_BIN\" environment variable.")
+    end
+    if !isfile(dofile)
+        #try looking for file in src\dofiles
+        dofile = joinpath(pwd(), "src", "dofiles", dofile)
+        if !isfile(dofile)
+            error("Can't find do file '$do_file'")
+        end
+    end
+    #Replace version number and node in do_file
+    dolines = readlines(dofile)
+    for i in 1:length(dolines)
+        dolines[i] = replace(dolines[i], "#datafile#" => datafile)
+        dolines[i] = replace(dolines[i], "#node#" => node)
+        dolines[i] = replace(dolines[i], "#version#" => "$(version)")
+    end
+    fname = tempname() * ".do"
+    open(fname,"w") do f
+        for i in 1:length(dolines)
+            println(f, dolines[i])
+        end
+    end
+    run(`"$stata_executable" /e do $fname`)
+    #println(fname)
+    rm(fname)
 end
 #endregion
 

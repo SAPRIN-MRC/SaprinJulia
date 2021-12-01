@@ -1,7 +1,7 @@
 name = "SAPRINCore"
 uuid = "91cb36e9-1cc9-47a6-ad06-060ecc79be4b"
 authors = ["Kobus Herbst"]
-version = "0.1.0"
+version = "1.0.8"
 
 [deps]
 Arrow = "69666777-d1a9-59fb-9406-91d4454c9d45"
@@ -37,6 +37,7 @@ TableBrowse = "6e67061e-404e-11e9-1a3e-5767bb74205e"
 TableOperations = "ab02a1b2-a7df-11e8-156e-fb1833f50b87"
 TableView = "40c74d1a-b44c-5b06-a7c1-6cbea58ea978"
 Tables = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
+TimeZones = "f269a46b-ccf7-5d73-abea-4c690281aa53"
 TimerOutputs = "a759f4b9-e2f1-59dc-863e-4aeb61b1ea8f"
 XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
 

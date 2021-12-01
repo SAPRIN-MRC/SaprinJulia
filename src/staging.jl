@@ -1053,6 +1053,8 @@ end
 function readhouseholdsocioeconomic(node::String)
     householdassets(settings.Databases[node], node)
     householdsocioeconomic(settings.Databases[node], node)
+    retrieve_asset_items(settings.Databases[node], node)
+    retrieve_hse(settings.Databases[node], node)
 end
 function householdassets(db::String, node::String)
     con = ODBC.Connection(db)
@@ -1171,6 +1173,66 @@ function householdsocioeconomic(db::String, node::String)
     Arrow.write(joinpath(stagingpath(node), "SocioEconomic.arrow"), s, compress=:zstd)
     return nothing
 end #householdsocioeconomic
+"Retrieve asset items"
+function retrieve_asset_items(db::String, node::String)
+    con = ODBC.Connection(db)
+    sql = """
+    SELECT
+        UPPER(CONVERT(varchar(50),HO.HouseholdUid)) HouseholdUid,
+        CONVERT(date,E.EventDate) ObservationDate,
+        HA.AssetId,
+        HA.AssetStatusId
+    FROM dbo.HouseholdAssets HA
+    JOIN dbo.HouseholdObservations HO ON HA.HouseholdObservationUid = HO.HouseholdObservationUid
+    JOIN dbo.Events E ON HO.ObservationUid=E.EventUid
+    WHERE HA.AssetStatusId>0;
+    """
+    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    DBInterface.close!(con)
+    @info "Read $(nrow(s)) $(node) asset statuses from database"
+    householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
+    si = innerjoin(s, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
+    disallowmissing!(si, :ObservationDate)
+    select!(si, :HouseholdId, :ObservationDate, :AssetId, :AssetStatusId)
+    Arrow.write(joinpath(stagingpath(node), "AssetStatusRaw.arrow"), si, compress=:zstd)
+    return nothing
+end
+"Retrieve household socioeconmic variables"
+function retrieve_hse(db::String, node::String)
+    con = ODBC.Connection(db)
+    sql = """SELECT
+        UPPER(CONVERT(varchar(50),HouseholdUid)) HouseholdUid,
+        CONVERT(date,E.EventDate) ObservationDate,
+        WaterSource,
+        Toilet,
+        ConnectedToGrid,
+        CookingFuel,
+        WallMaterial,
+        FloorMaterial,
+        Bedrooms,
+        Crime,
+        FinancialStatus,
+        CutMeals,
+        CutMealsFrequency,
+        NotEat,
+        NotEatFrequency,
+        ChildMealSkipCut,
+        ChildMealSkipCutFrequency,
+        ConsentToCall
+    FROM dbo.HouseholdObservations HO
+        JOIN dbo.Events E ON HO.ObservationUid = E.EventUid;
+    """
+    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    DBInterface.close!(con)
+    @info "Read $(nrow(s)) $(node) HSE observations from database"
+    householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
+    si = innerjoin(s, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
+    @info "Read $(nrow(si)) $(node) HSE observations after household map"
+    select!(si, Not([:HouseholdUid]))
+    sort!(si, [:HouseholdId,:ObservationDate])
+    Arrow.write(joinpath(stagingpath(node), "SocioEconomicRaw.arrow"), si, compress=:zstd)
+    return nothing
+end
 #endregion
 #region Marital status
 "Read and save individual marital status observations"
