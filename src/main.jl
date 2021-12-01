@@ -218,6 +218,7 @@ end #dostaging
 #
 #region Day Extraction
 if dodayextraction
+#region Residency Days
     if doAgincourt
         @info "========== Start Agincourt extractresidencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
@@ -242,6 +243,8 @@ if dodayextraction
         @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
     end
+#endregion
+#region Household Residency Days
     if doAgincourt
         @info "========== Start Agincourt extract household residencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
@@ -266,6 +269,8 @@ if dodayextraction
         @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
     end
+#endregion
+#region Household Membership Days
     if doAgincourt
         @info "========== Start Agincourt extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
@@ -290,6 +295,8 @@ if dodayextraction
         @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
     end
+#endregion
+#region Preferred Household Days
     if doAgincourt
         @info "========== Start Agincourt residency days at preferred household at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
@@ -314,6 +321,8 @@ if dodayextraction
         @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
     end
+#endregion
+#region Set Residency Flags
     if doAgincourt
         @info "========== Start Agincourt set residency flags at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
@@ -338,6 +347,8 @@ if dodayextraction
         @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
     end
+#endregion
+#region Set Individual Attributes
     if doDIMAMO
         @info "========== Start DIMAMO get individual attributes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
@@ -362,8 +373,10 @@ if dodayextraction
         @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
     end
+#endregion
 end #dodayextraction
 #endregion
+#region Episode Creation
 if doepisodecreation
 #region Basic Episodes
     if doAgincourt
@@ -462,7 +475,7 @@ if doepisodecreation
         flush(io)
     end
 #endregion
-#region YrAgeDel 
+#region YrAgeDel Episodes
     if doDIMAMO
         @info "========== Start DIMAMO read pregnancies at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
@@ -552,8 +565,8 @@ if doepisodecreation
     end
     #endregion
 end #doepisodecreation
-    #
-    #region Stata output
+#endregion
+#region Stata output
 if dostataoutput
     if doAgincourt
         @info "========== Start Agincourt output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
