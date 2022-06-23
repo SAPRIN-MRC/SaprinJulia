@@ -4,6 +4,9 @@ function extractresidencydays(node::String, batchsize::Int64 = BatchSize)
 end
 function processresidencydays(individualid, locationid, startdate, enddate, starttype, endtype)
     #println("Proccess days $(individualid) length $(length(startdate))")
+    if length(startdate) == 0
+        return (locationid = [], daydate = [], starttype = [], endtype = [], episode = [], startflag = [], endflag = [])
+    end
     start = startdate[1]
     stop = enddate[1]
     startt = starttype[1]
@@ -71,7 +74,8 @@ function batchresidencydays(node::String, batchsize::Int64)
     end
     select!(residencies,[:IndividualId, :LocationId, :StartDate, :StartType, :EndDate, :EndType])
     @info "Node $(node) $(nrow(residencies)) residency episodes"
-#    Threads.@threads for i = 1:batches
+    sort!(residencies, [:IndividualId, :StartDate])
+    # Threads.@threads for i = 1:batches #Cause julia termination
     for i = 1:batches
         fromId, toId = nextidrange(minId, maxId, i, batchsize)
         @info "Batch $(i) from $(fromId) to $(toId)"
@@ -84,7 +88,9 @@ end #batchresidencydays
 #endregion
 #region Household residency days
 function extracthhresidencydays(node::String)
-    processresidencydays(node)
+    @info "Started extracting household residencydays for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
+    processhousholdresidencydays(node)
+    @info "=== Finished extracting household residencydays for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
 end
 function processhhresidencydays(locationid, startdate, enddate, starttype, endtype)
     start = startdate[1]
@@ -153,7 +159,7 @@ function normalisehouseholdresidencies(node::String)
     return mr
 end
 "Extract household residency days"
-function processresidencydays(node::String)
+function processhousholdresidencydays(node::String)
     residencies = normalisehouseholdresidencies(node)
     select!(residencies,[:HouseholdId, :LocationId, :StartDate, :StartType, :EndDate, :EndType])
     @info "Node $(node) $(nrow(residencies)) household residency episodes"
@@ -167,7 +173,9 @@ end #processresidencydays
 #endregion
 #region Household Membership days
 function extractmembershipdays(node::String, batchsize::Int64 = BatchSize)
+    @info "Started extractmembershipdays for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     batchmembershipdays(node, batchsize)
+    @info "=== Finished extractmembershipdays for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
 end
 function processhhmembershipdays(startdate, enddate, starttype, endtype)
     start = startdate[1]
@@ -250,10 +258,11 @@ function batchonindividualid(node, file, batchsize = BatchSize)
         Arrow.write(io, Tables.partitioner(partitions), compress=:zstd)
     end
 end
-function batchmembershipdayswithlocation(node::String)
-    hhresidencies = Arrow.Table(joinpath(dayextractionpath(node), "HouseholdResidencyDays.arrow")) |> DataFrame
-    @info "$(node) read $(nrow(hhresidencies)) household residency days at $(now())"
-    membershipdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "HouseholdMembershipDays_batched.arrow"));
+"Create arrow file with memberships that include household location"
+function batchmembershipdayswithlocation()
+    hhresidencies = Arrow.Table(joinpath(dayextractionpath(), "HouseholdResidencyDays.arrow")) |> DataFrame
+    @info "Read $(nrow(hhresidencies)) household residency days at $(now())"
+    membershipdaybatches = Arrow.Stream(joinpath(dayextractionpath(), "HouseholdMembershipDays_batched.arrow"));
     batch = 1
     for b in membershipdaybatches
         memberships = b |> DataFrame
@@ -270,7 +279,8 @@ function batchmembershipdayswithlocation(node::String)
     @info "Completed writing membership with location on $(now())"
     return nothing
 end
-function processconsolidatehhbatch(node::String, md, rd, batch)
+"Process household membership batch to allocate preferred household"
+function processconsolidatehhbatch(md, rd, batch)
     rename!(rd,[:LocationId => :IndResLocationId, :StartType => :IndResStartType, :EndType => :IndResEndType, :Start => :IndResStart, :End => :IndResEnd])
     df = outerjoin(md, rd, on = [:IndividualId, :DayDate], makeunique=true, indicator=:result)
     open(joinpath(dayextractionpath(node), "ResDaysNoMember$(batch).arrow"),"w"; lock = true) do io
@@ -297,9 +307,10 @@ function processconsolidatehhbatch(node::String, md, rd, batch)
     end
     @info "$(node) batch $(batch) wrote $(nrow(s)) preferred household days at $(now())"
 end
-function consolidatepreferredhousehold(node::String)
-    membershipbatches = Arrow.Stream(joinpath(dayextractionpath(node), "HouseholdMembershipDaysWithLocation_batched.arrow"))
-    residencybatches = Arrow.Stream(joinpath(dayextractionpath(node), "IndividualResidencyDays_batched.arrow"))
+"Produce day file with with preferred household of household member for each day"
+function consolidatepreferredhousehold()
+    membershipbatches = Arrow.Stream(joinpath(dayextractionpath(), "HouseholdMembershipDaysWithLocation_batched.arrow"))
+    residencybatches = Arrow.Stream(joinpath(dayextractionpath(), "IndividualResidencyDays_batched.arrow"))
     mstate = iterate(membershipbatches)
     rstate = iterate(residencybatches)
     i = 1
@@ -449,6 +460,7 @@ function ltfuflag(r, visittypes, ltfcutoff::DateTime)
         return Int8(0)
     end
 end
+"Determine whether the out-migration end flag should be set"
 function outmigrationflag(r, outtypes)
     if (ismissing(r.NextResident) && r.Resident == 1 && in(r.EndType, outtypes)) ||
        (r.Resident ==1 && r.GapStart == 1 && in(r.EndType, outtypes)) ||
@@ -458,6 +470,7 @@ function outmigrationflag(r, outtypes)
         return Int8(0)
     end
 end
+"Determine whether the end of external residency end flag should be set"
 function extresendflag(r, outtypes)
     if (ismissing(r.NextResident) && r.Resident == 0 && in(r.EndType, outtypes)) ||
        (r.Resident == 0 && r.GapStart == 1 && in(r.EndType, outtypes)) ||
@@ -467,6 +480,7 @@ function extresendflag(r, outtypes)
         return Int8(0)
     end
 end
+"Determine whether the current member end flag should be set"
 function currentflag(r, visittypes, ltfcutoff::DateTime)
     if (ismissing(r.NextResident) && r.DayDate >= ltfcutoff && in(r.EndType, visittypes)) ||
         (!ismissing(r.NextResident) && r.NextResident == 0 && r.Resident ==1 && r.DayDate >= ltfcutoff && in(r.EndType, visittypes))
@@ -475,6 +489,7 @@ function currentflag(r, visittypes, ltfcutoff::DateTime)
         return Int8(0)
     end
 end
+"Determine whether the location exit end flag should be set"
 function locationexitflag(r)
     if (r.Died == 0 && r.Refusal == 0 && r.LostToFollowUp == 0 && r.OutMigration == 0 && r.ExtResEnd ==0) &&
        (!ismissing(r.NextResident) && r.NextResident == r.Resident && !ismissing(r.NextLocation) && r.LocationId != r.NextLocation)
@@ -573,10 +588,12 @@ function setresidencyflags(node::String)
         i = i + 1
     end
     combinebatches(dayextractionpath(node),"DayDatasetStep01", i-1)
+    @info "=== Finished setresidencyflags for $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
 #endregion
 #region Individual Attributes
+"Set individual parent alive or dead status"
 function setparentstatus!(r)
     if ismissing(r.MotherDoD)
         r.MotherDead = Int8(-1)
@@ -589,8 +606,9 @@ function setparentstatus!(r)
         r.FatherDead = Int8(1)
     end
 end
-"Add individual characteristics to to day records"
+"Add individual characteristics to day records"
 function addindividualattributes(node)
+    @info "Started addindividualattributes for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     individuals = Arrow.Table(joinpath(stagingpath(node), "Individuals.arrow")) |> DataFrame
     residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep01_batched.arrow"))
     hstate = iterate(residentdaybatches)
@@ -627,6 +645,7 @@ function addindividualattributes(node)
         i = i + 1
     end
     combinebatches(dayextractionpath(node), "DayDatasetStep02", i-1)
+    @info "=== Finished addindividualattributes for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
 #endregion
@@ -678,9 +697,9 @@ function processdeliverydays(motherId, deliveryDate, nextDelivery, endDate, chil
     end
     return (daydate = res_daydate, childrenBorn = res_childrenBorn, childrenEverBorn = res_childrenEverBorn)
 end
-"Generate delivery days"
+"Get delivery days"
 function getdeliverydays(node::String, f, batch::Int64)
-    println("Batch $(batch) $(nrow(f)) episodes to extract")
+    @info "Delivery day node $(node) batch $(batch) $(nrow(f)) episodes to extract"
     dfs = sort(f, [:DeliveryDate])
     dropmissing!(dfs,[:IndividualId])
     gdf = groupby(dfs, :IndividualId, sort=true)
@@ -694,6 +713,7 @@ end
 #Create deliveries dataset
 "Extract delivery day data"
 function deliverydays(node)
+    @info "Started deliverydays node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     pregnancies = open(joinpath(stagingpath(node), "Pregnancies.arrow")) do io
         return Arrow.Table(io) |> DataFrame
     end
@@ -724,6 +744,7 @@ function deliverydays(node)
         getdeliverydays(node, d, i)
     end
     combinebatches(dayextractionpath(node), "DeliveryDays", batches)
+    @info "=== Finished deliverydays node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
 #endregion
