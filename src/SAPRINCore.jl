@@ -27,7 +27,7 @@ export BatchSize, individualbatch, nextidrange, addsheet!, writeXLSX, arrowtocsv
        basicepisodes, basicepisodeQA, yrage_episodes, yrage_episodeQA, yragedel_episodes, yragedel_episodeQA
        
 #region Constants
-const BatchSize = 20000
+const BatchSize = 25000
 #endregion
 #region Settings
 function readsettings(f)
@@ -122,13 +122,16 @@ function readpartitionfile(file::String; lock = true)
         return Arrow.Table(io)
     end
 end
-"Concatenate record batches"
+"Concatenate record batches in separate Arrow files to a single partitioned Arrow file"
 function combinebatches(path::String, file::String, batches)
     files = Array{String,1}()
     for i = 1:batches
         push!(files,joinpath(path, "$(file)$(i).arrow"))
     end
-    Arrow.write(joinpath(path, "$(file)_batched.arrow"), Tables.partitioner(x->readpartitionfile(x),files), compress=:zstd)
+    arrow_parts = Tables.partitioner(Arrow.Table, files)
+    open(joinpath(path, "$(file)_batched.arrow"), "w") do io
+        Arrow.write(io, arrow_parts, ntasks = 1, compress=:zstd)
+    end
     #delete chunks
     for i = 1:batches
         rm(joinpath(path, "$(file)$(i).arrow"))
@@ -197,9 +200,9 @@ function writeXLSX(path::String, df::AbstractDataFrame, sheetname::String)
     XLSX.writetable(path, collect(eachcol(df)), names(df), overwrite = true, sheetname = sheetname)
     return nothing
 end
-"Write dataset as CSV"
+"Write Arrow file as CSV"
 function arrowtocsv(node::String, subdir::String, dataset::String)
-    Arrow.Table(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).arrow")) |> CSV.write(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).csv"))
+    Arrow.Table(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).arrow")) |> CSV.write(joinpath(settings.BaseDirectory, node, subdir, "$(dataset).gzip"), compress = true)
     return nothing
 end
 #"Convert episode file in Arrow format to Stata - deprecated using StatCall"

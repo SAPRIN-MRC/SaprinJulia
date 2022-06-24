@@ -1,5 +1,6 @@
 "Group day records into basic exposure records"
 function basicepisodes(node)
+    @info "Started basic episode creation for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep02_batched.arrow"))
     hstate = iterate(residentdaybatches)
     i = 1
@@ -91,10 +92,12 @@ function basicepisodes(node)
         i = i + 1
     end
     combinebatches(episodepath(node), "SurveillanceEpisodesBasic", i-1)
+    @info "=== Finished basic episode creation for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
 "Do basic episodes QA"
 function basicepisodeQA(node)
+    @info "Started basic episode QA for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     df = Arrow.Table(joinpath(episodepath(node), "SurveillanceEpisodesBasic_batched.arrow")) |> DataFrame
     sf = combine(groupby(df, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart]), nrow => :n)
     sort!(sf)
@@ -112,29 +115,43 @@ function basicepisodeQA(node)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "LastEpisodeEndFlags")
     #Current before end
     sf = filter(r -> r.Episode < r.Episodes & r.Current == 1, df)
-    addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "CurrentBeforeEnd")
+    if nrow(sf) > 0
+    	addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "CurrentBeforeEnd")
+    end
     #Died before end
     sf = filter(r -> r.Episode < r.Episodes & r.Died == 1, df)
-    addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "DiedBeforeEnd")
+    if nrow(sf) > 0
+    	addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "DiedBeforeEnd")
+    end
     #Enumeration after episode 1
     sf = filter(r -> r.Episode > 1 & r.Enumeration == 1, df)
-    addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "EnumerationAfterStart")
+    if nrow(sf) > 0
+    	addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "EnumerationAfterStart")
+    end
     #Died prior to or at end of episode, without Died flags
     sf = filter(r -> !ismissing(r.DoD) && r.DoD <= r.EndDate && r.Died == 0, df)
-    addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "MissingDiedFlag")
+    if nrow(sf) > 0
+    	addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "MissingDiedFlag")
+    end
     #Died flag but no DoD
     sf = filter(r -> ismissing(r.DoD) && r.Died == 1, df)
-    addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "DiedWithoutDoD")
+    if nrow(sf) > 0
+    	addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "DiedWithoutDoD")
+    end
     #Died flag with ExtResEnd
     sf = filter(r -> r.Died == 1 && r.ExtResEnd == 1, df)
-    addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "DiedFlagWithExtResEnd")
+    if nrow(sf) > 0
+    	addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), sf, "DiedFlagWithExtResEnd")
+    end
     #Episodes breakdown
     e = freqtable(df, :Episodes)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesQA.xlsx"), e, "EpisodesFreq")
+    @info "=== Finished basic episode QA for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
 "Group day records into basic exposure records"
 function yrage_episodes(node)
+    @info "Started Yr Age episode creation node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep02_batched.arrow"))
     hstate = iterate(residentdaybatches)
     i = 1
@@ -282,10 +299,12 @@ function yrage_episodes(node)
         i = i + 1
     end
     combinebatches(episodepath(node),"SurveillanceEpisodesYrAge", i-1)
+    @info "=== Finished Yr Age episode creation $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
 "Do yr-age episodes QA"
 function yrage_episodeQA(node)
+    @info "Started Yr Age episode QA $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     df = Arrow.Table(joinpath(episodepath(node), "SurveillanceEpisodesYrAge_batched.arrow")) |> DataFrame
     # StartFlags
     sf = combine(groupby(df, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart, :YrStart, :AgeStart]), nrow => :n)
@@ -372,25 +391,39 @@ function yrage_episodeQA(node)
     end
     #Died before end
     sf = filter(r -> r.Episode < r.Episodes & r.Died == 1, df)
+    if nrow(sf) > 0
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "DiedBeforeEnd")
+    end
     #Enumeration after episode 1
     sf = filter(r -> r.Episode > 1 & r.Enumeration == 1, df)
+    sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "EnumerationAfterStart")
     #Died prior to or at end of episode, without Died flags
     sf = filter(r -> !ismissing(r.DoD) && r.DoD <= r.EndDate && r.Died == 0, df)
+    if nrow(sf) > 0
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "MissingDiedFlag")
+    end
     #Died flag but no DoD
     sf = filter(r -> ismissing(r.DoD) && r.Died == 1, df)
+    if nrow(sf) > 0
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "DiedWithoutDoD")
+    end
     #Died flag with ExtResEnd
     sf = filter(r -> r.Died == 1 && r.ExtResEnd == 1, df)
+    if nrow(sf) > 0
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), sf, "DiedFlagWithExtResEnd")
+    end
     #Episodes breakdown
     e = freqtable(df, :Episodes)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeQA.xlsx"), e, "EpisodesFreq")
+    @info "=== Finished Yr Age episode QA node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
+"""
+Create individual exposure episodes split on calendar year, age, and child birth (delivery)
+"""
 function yragedel_episodes(node)
+    @info "Started Year Age Delivery episode creation $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep02_batched.arrow"))
     hstate = iterate(residentdaybatches)
     deliverydaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DeliveryDays_batched.arrow"))
@@ -530,10 +563,12 @@ function yragedel_episodes(node)
         i = i + 1
     end
     combinebatches(episodepath(node),"SurveillanceEpisodesYrAgeDelivery", i-1)
+    @info "=== Finished Year Age Delivery episode creation $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
-"Do yr-age episodes QA"
+"Do yr-age-delivery episodes QA"
 function yragedel_episodeQA(node)
+    @info "Started Year Age Delivery episode QA $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     df = Arrow.Table(joinpath(episodepath(node), "SurveillanceEpisodesYrAgeDelivery_batched.arrow")) |> DataFrame
     # StartFlags
     sf = combine(groupby(df, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart, :YrStart, :AgeStart, :Delivery]), nrow => :n)
@@ -630,22 +665,32 @@ function yragedel_episodeQA(node)
     end
     #Died before end
     sf = filter(r -> r.Episode < r.Episodes & r.Died == 1, df)
+    if nrow(sf) > 0
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "DiedBeforeEnd")
+    end
     #Enumeration after episode 1
     sf = filter(r -> r.Episode > 1 & r.Enumeration == 1, df)
+    sf = combine(groupby(sf, [:CalendarYear]), nrow => :n)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "EnumerationAfterStart")
     #Died prior to or at end of episode, without Died flags
     sf = filter(r -> !ismissing(r.DoD) && r.DoD <= r.EndDate && r.Died == 0, df)
+    if nrow(sf) > 0
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "MissingDiedFlag")
+    end
     #Died flag but no DoD
     sf = filter(r -> ismissing(r.DoD) && r.Died == 1, df)
+    if nrow(sf) > 0
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "DiedWithoutDoD")
+    end
     #Died flag with ExtResEnd
     sf = filter(r -> r.Died == 1 && r.ExtResEnd == 1, df)
+    if nrow(sf) > 0
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "DiedFlagWithExtResEnd")
+    end
     #Episodes breakdown
     e = freqtable(df, :Episodes)
     addsheet!(joinpath(episodepath(node),"QC", "EpisodesYrAgeDeliveryQA.xlsx"), e, "EpisodesFreq")
+    @info "=== Finished Year Age Delivery episode QA $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
 "Group day records into parent co-residency records"
