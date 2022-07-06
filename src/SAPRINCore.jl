@@ -132,6 +132,8 @@ function combinebatches(path::String, file::String, batches)
     open(joinpath(path, "$(file)_batched.arrow"), "w") do io
         Arrow.write(io, arrow_parts, ntasks = 1, compress=:zstd)
     end
+    arrow_parts = nothing
+    GC.gc()
     #delete chunks
     for i = 1:batches
         rm(joinpath(path, "$(file)$(i).arrow"))
@@ -150,6 +152,8 @@ function combineserializedbatches(path::String, file::String, batches)
     open(joinpath(path, "$(file).arrow"), "w") do io
         Arrow.write(io, df, compress=:zstd)
     end
+    df = nothing
+    GC.gc()
     #delete chunks
     for i = 1:batches
         rm(joinpath(path, "$(file)$(i).jls"))
@@ -214,7 +218,7 @@ end
 #     return nothing
 # end
 "Convert file in Arrow format to Stata using R"
-function arrowtostatar(node, path, inputfile, outputfile)
+function arrowtostatar(path, inputfile, outputfile)
     df = Arrow.Table(joinpath(path, inputfile * ".arrow")) |> DataFrame
     arrowfile = joinpath(path, outputfile * "_tmp.arrow")
     Arrow.write(arrowfile, df, compress = :zstd)
@@ -225,6 +229,8 @@ function arrowtostatar(node, path, inputfile, outputfile)
     x <- read_feather($arrowfile)
     export(x, $statafile)
     """
+    df = nothing
+    GC.gc()
     rm(arrowfile)
     return nothing
 end
@@ -240,7 +246,7 @@ Substitutions:
   #node# with node
   #version# with version
 """
-function runstata(dofile, version::VersionNumber, node::String, datafile::String)
+function runstata(dofile::String, version::VersionNumber, node::String, datafile::String)
     stata_executable = ""
     if haskey(ENV, "STATA_BIN")
         stata_executable = ENV["STATA_BIN"]
@@ -251,7 +257,7 @@ function runstata(dofile, version::VersionNumber, node::String, datafile::String
         #try looking for file in src\dofiles
         dofile = joinpath(pwd(), "src", "dofiles", dofile)
         if !isfile(dofile)
-            error("Can't find do file '$do_file'")
+            error("Can't find do file '$dofile'")
         end
     end
     #Replace version number and node in do_file

@@ -259,10 +259,10 @@ function batchonindividualid(node, file, batchsize = BatchSize)
     end
 end
 "Create arrow file with memberships that include household location"
-function batchmembershipdayswithlocation()
-    hhresidencies = Arrow.Table(joinpath(dayextractionpath(), "HouseholdResidencyDays.arrow")) |> DataFrame
-    @info "Read $(nrow(hhresidencies)) household residency days at $(now())"
-    membershipdaybatches = Arrow.Stream(joinpath(dayextractionpath(), "HouseholdMembershipDays_batched.arrow"));
+function batchmembershipdayswithlocation(node::String)
+    hhresidencies = Arrow.Table(joinpath(dayextractionpath(node), "HouseholdResidencyDays.arrow")) |> DataFrame
+    @info "Read $(nrow(hhresidencies)) household residency days for node $(node) at $(now())"
+    membershipdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "HouseholdMembershipDays_batched.arrow"));
     batch = 1
     for b in membershipdaybatches
         memberships = b |> DataFrame
@@ -280,7 +280,7 @@ function batchmembershipdayswithlocation()
     return nothing
 end
 "Process household membership batch to allocate preferred household"
-function processconsolidatehhbatch(md, rd, batch)
+function processconsolidatehhbatch(node, md, rd, batch)
     rename!(rd,[:LocationId => :IndResLocationId, :StartType => :IndResStartType, :EndType => :IndResEndType, :Start => :IndResStart, :End => :IndResEnd])
     df = outerjoin(md, rd, on = [:IndividualId, :DayDate], makeunique=true, indicator=:result)
     open(joinpath(dayextractionpath(node), "ResDaysNoMember$(batch).arrow"),"w"; lock = true) do io
@@ -308,9 +308,9 @@ function processconsolidatehhbatch(md, rd, batch)
     @info "$(node) batch $(batch) wrote $(nrow(s)) preferred household days at $(now())"
 end
 "Produce day file with with preferred household of household member for each day"
-function consolidatepreferredhousehold()
-    membershipbatches = Arrow.Stream(joinpath(dayextractionpath(), "HouseholdMembershipDaysWithLocation_batched.arrow"))
-    residencybatches = Arrow.Stream(joinpath(dayextractionpath(), "IndividualResidencyDays_batched.arrow"))
+function consolidatepreferredhousehold(node::String)
+    membershipbatches = Arrow.Stream(joinpath(dayextractionpath(node), "HouseholdMembershipDaysWithLocation_batched.arrow"))
+    residencybatches = Arrow.Stream(joinpath(dayextractionpath(node), "IndividualResidencyDays_batched.arrow"))
     mstate = iterate(membershipbatches)
     rstate = iterate(residencybatches)
     i = 1

@@ -12,13 +12,17 @@ flush(io)
 #endregion
 
 #region Set-up execution flags
-dostaging = true
+dostaging = false
 dostagebase = false
+dostagememberships = false
 doreadstatusobs = false
-dosocioeconomic = true
+dosocioeconomic = false
 dodayextraction = false
+dobasedayextraction = false
+dopreferredhouseholdextraction = false
 doepisodecreation = false
 dostataoutput = false
+doparentalcoresidency = true
 # Node specific flags
 doAgincourt = true
 doDIMAMO = true
@@ -118,28 +122,30 @@ if dostaging
         if doAHRI
             @info "========== Start readhouseholdmemberships AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readhouseholdmemberships("AHRI")
-            @info "========== Finished readhouseholdmemberships at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            @info "========== Finished readhouseholdmemberships AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
+    end #dostagebase
+    if dostagememberships
         if doAgincourt
             @info "========== Start readindividualmemberships Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readindividualmemberships("Agincourt", 25000)
+            readindividualmemberships("Agincourt")
             @info "========== Finished readindividualmemberships Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doDIMAMO 
             @info "========== Start readindividualmemberships DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readindividualmemberships("DIMAMO", 25000)
+            readindividualmemberships("DIMAMO")
             @info "========== Finished readindividualmemberships DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doAHRI
             @info "========== Start readindividualmemberships AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readindividualmemberships("AHRI", 25000)
+            readindividualmemberships("AHRI")
             @info "========== Finished readindividualmemberships AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
-    end #dostagebase
+    end #dostagememberships
     if doreadstatusobs
         if doAgincourt
             @info "========== Start readeducationstatuses Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -229,166 +235,169 @@ if dostaging
         end
     end #dosocioeconomic
 end #dostaging
-
 #endregion
 #
 #region Day Extraction
 if dodayextraction
+    if dobasedayextraction
 #region Residency Days
-    if doAgincourt
-        @info "========== Start Agincourt extractresidencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        extractresidencydays("Agincourt")
-        d = now()-t
-        @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doDIMAMO
-        @info "========== Start DIMAMO extractresidencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        extractresidencydays("DIMAMO")
-        d = now()-t
-        @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doAHRI
-    @info "========== Start AHRI extract residency days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        extractresidencydays("AHRI")
-        d = now()-t
-        @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
+        if doAgincourt
+            @info "========== Start Agincourt extractresidencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            extractresidencydays("Agincourt")
+            d = now()-t
+            @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+        if doDIMAMO
+            @info "========== Start DIMAMO extractresidencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            extractresidencydays("DIMAMO")
+            d = now()-t
+            @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+        if doAHRI
+        @info "========== Start AHRI extract residency days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            extractresidencydays("AHRI")
+            d = now()-t
+            @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+    #endregion
+    #region Household Residency Days
+        if doAgincourt
+            @info "========== Start Agincourt extract household residencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            extracthhresidencydays("Agincourt")
+            d = now()-t
+            @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+        if doDIMAMO
+            @info "========== Start DIMAMO extract household residencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            extracthhresidencydays("DIMAMO")
+            d = now()-t
+            @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+        if doAHRI
+            @info "========== Start AHRI extract household residencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            extracthhresidencydays("AHRI")
+            d = now()-t
+            @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+    #endregion
+    #region Household Membership Days
+        if doAgincourt
+            @info "========== Start Agincourt extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            extractmembershipdays("Agincourt")
+            d = now()-t
+            @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+        if doDIMAMO
+            @info "========== Start DIMAMO extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            extractmembershipdays("DIMAMO")
+            d = now()-t
+            @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+        if doAHRI
+            @info "========== Start AHRI extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            extractmembershipdays("AHRI")
+            d = now()-t
+            @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
 #endregion
-#region Household Residency Days
-    if doAgincourt
-        @info "========== Start Agincourt extract household residencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        extracthhresidencydays("Agincourt")
-        d = now()-t
-        @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doDIMAMO
-        @info "========== Start DIMAMO extract household residencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        extracthhresidencydays("DIMAMO")
-        d = now()-t
-        @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doAHRI
-        @info "========== Start AHRI extract household residencydays at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        extracthhresidencydays("AHRI")
-        d = now()-t
-        @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-#endregion
-#region Household Membership Days
-    if doAgincourt
-        @info "========== Start Agincourt extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        extractmembershipdays("Agincourt")
-        d = now()-t
-        @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doDIMAMO
-        @info "========== Start DIMAMO extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        extractmembershipdays("DIMAMO")
-        d = now()-t
-        @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doAHRI
-        @info "========== Start AHRI extract household membership days at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        extractmembershipdays("AHRI")
-        d = now()-t
-        @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-#endregion
+    end #dobasedayextraction
 #region Preferred Household Days
-    if doAgincourt
-        @info "========== Start Agincourt residency days at preferred household at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        preferredhousehold("Agincourt")
-        d = now()-t
-        @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doDIMAMO
-        @info "========== Start DIMAMO residency days at preferred household at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        preferredhousehold("DIMAMO")
-        d = now()-t
-        @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doAHRI
-        @info "========== Start AHRI residency days at preferred household at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        preferredhousehold("AHRI")
-        d = now()-t
-        @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-#endregion
-#region Set Residency Flags
-    if doAgincourt
-        @info "========== Start Agincourt set residency flags at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        setresidencyflags("Agincourt")
-        d = now()-t
-        @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doDIMAMO
-        @info "========== Start DIMAMO set residency flags at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        setresidencyflags("DIMAMO")
-        d = now()-t
-        @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doAHRI
-        @info "========== Start AHRI set residency flags at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        setresidencyflags("AHRI")
-        d = now()-t
-        @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-#endregion
-#region Set Individual Attributes
-    if doDIMAMO
-        @info "========== Start DIMAMO get individual attributes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        addindividualattributes("DIMAMO")
-        d = now()-t
-        @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doAgincourt
-        @info "========== Start Agincourt get individual attributes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        addindividualattributes("Agincourt")
-        d = now()-t
-        @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doAHRI
-        @info "========== Start AHRI get individual attributes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        addindividualattributes("AHRI")
-        d = now()-t
-        @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
+    if dopreferredhouseholdextraction
+        if doAgincourt
+            @info "========== Start Agincourt residency days at preferred household at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            preferredhousehold("Agincourt")
+            d = now()-t
+            @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+        if doDIMAMO
+            @info "========== Start DIMAMO residency days at preferred household at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            preferredhousehold("DIMAMO")
+            d = now()-t
+            @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+        if doAHRI
+            @info "========== Start AHRI residency days at preferred household at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            preferredhousehold("AHRI")
+            d = now()-t
+            @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+    #endregion
+    #region Set Residency Flags
+        if doAgincourt
+            @info "========== Start Agincourt set residency flags at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            setresidencyflags("Agincourt")
+            d = now()-t
+            @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+        if doDIMAMO
+            @info "========== Start DIMAMO set residency flags at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            setresidencyflags("DIMAMO")
+            d = now()-t
+            @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+        if doAHRI
+            @info "========== Start AHRI set residency flags at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            setresidencyflags("AHRI")
+            d = now()-t
+            @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+    #endregion
+    #region Set Individual Attributes
+        if doDIMAMO
+            @info "========== Start DIMAMO get individual attributes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            addindividualattributes("DIMAMO")
+            d = now()-t
+            @info "DIMAMO extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+        if doAgincourt
+            @info "========== Start Agincourt get individual attributes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            addindividualattributes("Agincourt")
+            d = now()-t
+            @info "Agincourt extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+        if doAHRI
+            @info "========== Start AHRI get individual attributes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            t = now()
+            addindividualattributes("AHRI")
+            d = now()-t
+            @info "AHRI extraction complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+            flush(io)
+        end
+    end #dopreferredhouseholdextraction
 #endregion
 end #dodayextraction
 #endregion
@@ -587,7 +596,8 @@ if dostataoutput
     if doAgincourt
         @info "========== Start Agincourt output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostatar("Agincourt", "SurveillanceEpisodesBasic_batched", "SurveillanceEpisodesBasicV5")
+        arrowtostatar(episodepath("Agincourt"), "SurveillanceEpisodesBasic_batched", "SurveillanceEpisodesBasic")
+        runstata("label_basicepisodes.do",settings.Version, "Agincourt", joinpath(episodepath("Agincourt"),"SurveillanceEpisodesBasic.dta"))
         d = now()-t
         @info "Agincourt output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -595,7 +605,8 @@ if dostataoutput
     if doDIMAMO
         @info "========== Start DIMAMO output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostatar("DIMAMO", "SurveillanceEpisodesBasic_batched", "SurveillanceEpisodesBasicV5")
+        arrowtostatar(episodepath("DIMAMO"), "SurveillanceEpisodesBasic_batched", "SurveillanceEpisodesBasic")
+        runstata("label_basicepisodes.do",settings.Version, "DIMAMO", joinpath(episodepath("DIMAMO"),"SurveillanceEpisodesBasic.dta"))
         d = now()-t
         @info "DIMAMO output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -603,7 +614,8 @@ if dostataoutput
     if doAHRI
         @info "========== Start AHRI output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostatar("AHRI", "SurveillanceEpisodesBasic_batched", "SurveillanceEpisodesBasicV5")
+        arrowtostatar(episodepath("AHRI"), "SurveillanceEpisodesBasic_batched", "SurveillanceEpisodesBasic")
+        runstata("label_basicepisodes.do",settings.Version, "AHRI", joinpath(episodepath("AHRI"),"SurveillanceEpisodesBasic.dta"))
         d = now()-t
         @info "AHRI output basic STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -611,7 +623,8 @@ if dostataoutput
     if doAgincourt
         @info "========== Start Agincourt output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostatar("Agincourt", "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesYrAgeV5")
+        arrowtostatar(episodepath("Agincourt"), "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesYrAge")
+        runstata("label_yragepisodes.do", settings.Version, "Agincourt", joinpath(episodepath("Agincourt"),"SurveillanceEpisodesYrAge.dta"))
         d = now()-t
         @info "Agincourt output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -619,7 +632,8 @@ if dostataoutput
     if doDIMAMO
         @info "========== Start DIMAMO output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostatar("DIMAMO", "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesYrAgeV5")
+        arrowtostatar(episodepath("DIMAMO"), "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesYrAge")
+        runstata("label_yragepisodes.do", settings.Version, "DIMAMO", joinpath(episodepath("DIMAMO"),"SurveillanceEpisodesYrAge.dta"))
         d = now()-t
         @info "DIMAMO output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -627,7 +641,8 @@ if dostataoutput
     if doAHRI
         @info "========== Start AHRI output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostatar("AHRI", "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesYrAgeV5")
+        arrowtostatar(episodepath("AHRI"), "SurveillanceEpisodesYrAge_batched", "SurveillanceEpisodesYrAge")
+        runstata("label_yragepisodes.do", settings.Version, "AHRI", joinpath(episodepath("AHRI"),"SurveillanceEpisodesYrAge.dta"))
         d = now()-t
         @info "AHRI output YrAge STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -635,7 +650,8 @@ if dostataoutput
     if doAgincourt
         @info "========== Start Agincourt output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostatar("Agincourt", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDeliveryV5")
+        arrowtostatar(episodepath("Agincourt"), "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
+        runstata("label_yragedeliveryepisodes.do", settings.Version, "Agincourt", joinpath(episodepath("Agincourt"),"SurveillanceEpisodesYrAgeDelivery.dta"))
         d = now()-t
         @info "Agincourt output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -643,7 +659,8 @@ if dostataoutput
     if doDIMAMO
         @info "========== Start DIMAMO output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostatar("DIMAMO", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDeliveryV5")
+        arrowtostatar(episodepath("DIMAMO"), "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
+        runstata("label_yragedeliveryepisodes.do", settings.Version, "DIMAMO", joinpath(episodepath("DIMAMO"),"SurveillanceEpisodesYrAgeDelivery.dta"))
         d = now()-t
         @info "DIMAMO output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -651,31 +668,8 @@ if dostataoutput
     if doAHRI
         @info "========== Start AHRI output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        arrowtostatar("AHRI", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDeliveryV5")
-        d = now()-t
-        @info "AHRI output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doAgincourt
-        @info "========== Start Agincourt output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        arrowtostatar("Agincourt", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDeliveryV5")
-        d = now()-t
-        @info "Agincourt output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doDIMAMO
-        @info "========== Start DIMAMO output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        arrowtostatar("DIMAMO", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDeliveryV5")
-        d = now()-t
-        @info "DIMAMO output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-        flush(io)
-    end
-    if doAHRI
-        @info "========== Start AHRI output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-        t = now()
-        arrowtostatar("AHRI", "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDeliveryV5")
+        arrowtostatar(episodepath("AHRI"), "SurveillanceEpisodesYrAgeDelivery_batched", "SurveillanceEpisodesYrAgeDelivery")
+        runstata("label_yragedeliveryepisodes.do", settings.Version, "AHRI", joinpath(episodepath("AHRI"),"SurveillanceEpisodesYrAgeDelivery.dta"))
         d = now()-t
         @info "AHRI output YrAgeDel STATA episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -683,51 +677,58 @@ if dostataoutput
 end #dostataoutput
 #endregion
 #region Parent co-residency
-#=
-@info "========== Start Agincourt mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-mothercoresident("Agincourt")
-d = now()-t
-@info "Agincourt mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
-#
-@info "========== Start Agincourt father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-fathercoresident("Agincourt")
-d = now()-t
-@info "Agincourt father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
-#=
-@info "========== Start DIMAMO mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-mothercoresident("DIMAMO")
-d = now()-t
-@info "DIMAMO mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
-#
-@info "========== Start DIMAMO father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-fathercoresident("DIMAMO")
-d = now()-t
-@info "DIMAMO father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
-=#
-@info "========== Start AHRI mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-mothercoresident("AHRI")
-d = now()-t
-@info "AHRI mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
-#
-@info "========== Start AHRI father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-t = now()
-fathercoresident("AHRI")
-d = now()-t
-@info "AHRI father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
-flush(io)
+if doparentalcoresidency
+    if doAgincourt
+        @info "========== Start Agincourt mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+        t = now()
+        mothercoresident("Agincourt")
+        d = now()-t
+        @info "Agincourt mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+        flush(io)
+        #
+        @info "========== Start Agincourt father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+        t = now()
+        fathercoresident("Agincourt")
+        d = now()-t
+        @info "Agincourt father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+        flush(io)
+    end
+    #
+    if doDIMAMO
+        @info "========== Start DIMAMO mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+        t = now()
+        mothercoresident("DIMAMO")
+        d = now()-t
+        @info "DIMAMO mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+        flush(io)
+        #
+        @info "========== Start DIMAMO father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+        t = now()
+        fathercoresident("DIMAMO")
+        d = now()-t
+        @info "DIMAMO father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+        flush(io)
+    end
+    #
+    if doAHRI
+        @info "========== Start AHRI mother co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+        t = now()
+        mothercoresident("AHRI")
+        d = now()-t
+        @info "AHRI mother co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+        flush(io)
+        #
+        @info "========== Start AHRI father co-residency at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+        t = now()
+        fathercoresident("AHRI")
+        d = now()-t
+        @info "AHRI father co-residency completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+        flush(io)
+    end
+end 
 #
 #endregion
-=#
+#
 #region clean up
 global_logger(old_logger)
 close(io)

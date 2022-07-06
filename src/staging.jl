@@ -949,13 +949,19 @@ function individualmemberships(node::String, m, r, batch::Int64)
     end
     memberships = combine(groupby(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :Episode]), :DayDate => minimum => :StartDate, :StartType => first => :StartType,
                                                                                             :DayDate => maximum => :EndDate, :EndType => last => :EndType)
-    Arrow.write(joinpath(stagingpath(node), "IndividualMemberships$(batch).arrow"), memberships)
+    open(joinpath(stagingpath(node), "IndividualMemberships$(batch).arrow"),"w"; lock = false) do io
+        Arrow.write(io, memberships)
+    end
     @info "Wrote $(nrow(memberships)) $(node) individual membership episodes in batch $(batch)"
+    memberships = nothing
     return nothing
 end #individualmemberships
 function openchunk(node::String, chunk::Int64)
-    open(joinpath(stagingpath(node), "IndividualMemberships$(chunk).arrow")) do io
-        return Arrow.Table(io) |> DataFrame
+    open(joinpath(stagingpath(node), "IndividualMemberships$(chunk).arrow"),"r"; lock = false) do io
+        t = Arrow.Table(io)
+        d = DataFrame(t)
+        t = nothing
+        return d
     end;
 end
 "Concatenate membership batches"
@@ -965,9 +971,14 @@ function combinemembershipbatch(node::String, batches)
     for i = 1:batches
         m = openchunk(node::String, i)
         append!(r, m)
+        m = nothing
     end
-    Arrow.write(joinpath(stagingpath(node), "IndividualMemberships.arrow"), r, compress=:zstd)
+    open(joinpath(stagingpath(node), "IndividualMemberships.arrow"),"w"; lock = false) do io
+        Arrow.write(io, r, compress=:zstd)
+    end
     @info "Final individual membership rows $(nrow(r)) for $(node)"
+    r = nothing
+    GC.gc()
     #delete chunks
     for i = 1:batches
         rm(joinpath(stagingpath(node), "IndividualMemberships$(i).arrow"))
@@ -987,7 +998,8 @@ function batchmemberships(node::String, batchsize::Int64 = BatchSize)
     select!(memberships,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType])
     @info "Node $(node) $(nrow(memberships)) memberships episodes"
     minId, maxId, batches = individualbatch(node, batchsize)
-    Threads.@threads for i = 1:batches
+#    Threads.@threads for i = 1:batches
+    for i = 1:batches
         fromId, toId = nextidrange(minId, maxId, i, batchsize)
         @info "Batch $(i) from $(fromId) to $(toId)"
         m = filter([:IndividualId] => id -> fromId <= id <= toId, memberships)
