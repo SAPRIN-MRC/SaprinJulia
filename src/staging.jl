@@ -1136,53 +1136,33 @@ function householdsocioeconomic(db::String, node::String)
     householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
     si = innerjoin(s, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(si)) $(node) HSE observations after household map"
-    householdassets = Arrow.Table(joinpath(stagingpath(node), "AssetStatus.arrow")) |> DataFrame
-    s = leftjoin(si,householdassets,on = :HouseholdObservationUid => :HouseholdObservationUid, makeunique=true, matchmissing=:equal)
-    select!(s,Not([:HouseholdObservationUid,:HouseholdUid]))
-    a = freqtable(s,:WaterSource)
+    a = freqtable(si,:WaterSource)
     @info "Watersource breakdown for $(node)" a
-    recode!(s[!,:WaterSource], missing =>0, 1 =>4, 2 => 3, 3 => 2, 4 => 1, 5 => 1, 6 => 1, 7 => 1, 8 => 1, 9 => 0, 10 => 2, 11 => 1)
-    a = freqtable(s,:WaterSource)
-    @info "Watersource breakdown for $(node) after recode" a
-    a = freqtable(s,:Toilet)
+    a = freqtable(si,:Toilet)
     @info "Toilet breakdown for $(node)" a
-    recode!(s[!,:Toilet], missing => 0, 0 => 0, 1 => 3, [2,5] => 2, [3, 4] => 1)
-    a = freqtable(s,:Toilet)
+    recode!(si[!,:Toilet], missing => 0, [0,8] => 0, [1,15,16,17] => 1, 2 => 2, 3 => 3, 4 => 4, [5,18] => 5, [6,19] => 6, [7,11] => 7)
+    a = freqtable(si,:Toilet)
     @info "Toilet breakdown for $(node) after recode" a
-    a = freqtable(s,:CookingFuel)
+    a = freqtable(si,:CookingFuel)
     @info "CookingFuel breakdown for $(node)" a
-    recode!(s[!,:CookingFuel], missing => 0, 0 => 0, 1 => 1, 2 => 4, 3 => 2, 4 => 5, [5,6] => 3)
-    a = freqtable(s,:CookingFuel)
-    @info "CookingFuel breakdown for $(node) after recode" a
-    a = freqtable(s,:WallMaterial)
-    @info "WallMaterial breakdown for $(node)"
-    recode!(s[!,:WallMaterial], missing => 0, 0 => 0, [1, 2] => 4, 3 => 3, 4 => 2, [5, 6, 7] => 1)
-    a = freqtable(s,:WallMaterial)
-    @info "WallMaterial breakdown for $(node) after recode" a
-    a = freqtable(s,:FloorMaterial)
+    a = freqtable(si,:WallMaterial)
+    @info "WallMaterial breakdown for $(node)" a
+    a = freqtable(si,:FloorMaterial)
     @info "FloorMaterial breakdown for $(node)" a
-    recode!(s[!,:FloorMaterial], missing => 0, 0 => 0, [1, 2, 8, 9] => 3, [3, 6, 10] => 2, [11, 12, 13] => 1)
-    a = freqtable(s,:FloorMaterial)
-    @info "FloorMaterial breakdown for $(node) after recode"
-    a = freqtable(s,:Bedrooms)
+    a = freqtable(si,:Bedrooms)
     @info "Bedrooms breakdown for $(node)" a
-    recode!(s[!,:Bedrooms], missing => 0, 0 => 0, [1, 2] => 1, [3, 4] => 2, [5, 6] => 3, 7:90 => 4, 91:99 => 0, 100:9999 => 4)
-    @info "Bedrooms breakdown for $(node) after recode"
-    a = freqtable(s,:ConnectedToGrid)
+    recode!(si[!,:Bedrooms], missing => 0, 0 => 0, [1, 2] => 1, [3, 4] => 2, [5, 6] => 3, 7:90 => 4, 91:99 => 0, 100:9999 => 4)
+    a = freqtable(si,:Bedrooms)
+    @info "Bedrooms breakdown for $(node) after recode" a
+    a = freqtable(si,:ConnectedToGrid)
     @info "ConnectedToGrid breakdown for $(node)" a
-    replace!(s.ConnectedToGrid, missing => 0, true => 1, false => 0)
-    a = freqtable(s,:ConnectedToGrid)
-    @info "ConnectedToGrid for $(node) after recode"
-    transform!(s,[:Bedrooms,:WallMaterial,:FloorMaterial] => ByRow((b,w,f) -> (b/4 + w/4 + f/3)/3) => :DwellingIdx, 
-                 [:WaterSource,:Toilet] => ByRow((w,t) -> (w/4 + t/3)/2) => :WaterSanitationIdx, 
-                 [:ConnectedToGrid, :CookingFuel] => ByRow((x,y) -> ((x + y/5)/2)) => :PowerSupplyIdx,
-                 [:Livestock] => ByRow(x -> x/2) => :LivestockIdx,
-                 [:Modern] => ByRow(x -> x/9) => :ModernAssetIdx)
-    transform!(s,[:DwellingIdx,:WaterSanitationIdx,:PowerSupplyIdx,:LivestockIdx, :ModernAssetIdx] => ByRow((a,b,c,d,e) -> (a + b + c + d + e)) => :SEIdx)
-    select!(s, [:HouseholdId,:ObservationDate,:SEIdx,:DwellingIdx,:WaterSanitationIdx,:PowerSupplyIdx,:LivestockIdx, :ModernAssetIdx, 
+    replace!(si.ConnectedToGrid, missing => 0, true => 1, false => 0)
+    a = freqtable(si,:ConnectedToGrid)
+    @info "ConnectedToGrid for $(node) after recode" a
+    select!(si, [:HouseholdId,:ObservationDate,:WaterSource,:Toilet,:ConnectedToGrid,:CookingFuel,:WallMaterial, :FloorMaterial, :Bedrooms,
                 :Crime, :FinancialStatus, :CutMeals, :CutMealsFrequency, :NotEat, :NotEatFrequency, :ChildMealSkipCut, :ChildMealSkipCutFrequency, :ConsentToCall])
-    sort!(s, [:HouseholdId,:ObservationDate])
-    Arrow.write(joinpath(stagingpath(node), "SocioEconomic.arrow"), s, compress=:zstd)
+    sort!(si, [:HouseholdId,:ObservationDate])
+    Arrow.write(joinpath(stagingpath(node), "SocioEconomic.arrow"), si, compress=:zstd)
     return nothing
 end #householdsocioeconomic
 "Retrieve asset items"
@@ -1305,11 +1285,12 @@ function labourstatus(db::String, node::String, periodend::Date, leftcensor::Dat
     , EmploymentSector
     , EmploymentType
     , Employer
+    , Unemployment
     FROM dbo.IndividualObservations IO
         JOIN dbo.Events EO ON IO.ObservationUid=EO.EventUid  
     --WHERE NOT (CurrentEmployment IN (0,100)
     --AND EmploymentSector IN (0,100)
-    --AND EmploymentType   IN (0,200)
+    --AND EmploymentType IN (0,200)
     --AND Employer IN (0,300));
     """
     s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
@@ -1318,7 +1299,7 @@ function labourstatus(db::String, node::String, periodend::Date, leftcensor::Dat
     individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     si = innerjoin(s, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     @info "$(nrow(si)) $(node) labour statuses after individual map"
-    select!(si,[:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer])
+    select!(si,[:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer, :Unemployment])
     individualbounds = Arrow.Table(joinpath(stagingpath(node), "IndividualBounds.arrow")) |> DataFrame
     m = leftjoin(si, individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
     insertcols!(m,:OutsideBounds => false)
@@ -1332,7 +1313,7 @@ function labourstatus(db::String, node::String, periodend::Date, leftcensor::Dat
     end
     #filter if outside bounds
     filter!([:OutsideBounds] => x -> !x, m)
-    select!(m,[:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer])
+    select!(m,[:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer, :Unemployment])
     disallowmissing!(m,:ObservationDate)
     @info "Read $(nrow(m)) $(node) labour statuses inside bounds"
     a = freqtable(m,:CurrentEmployment)
@@ -1343,6 +1324,8 @@ function labourstatus(db::String, node::String, periodend::Date, leftcensor::Dat
     @info "EmploymentType breakdown for $(node)" a
     a = freqtable(m,:Employer)
     @info "Employer breakdown for $(node)" a
+    a = freqtable(m,:Unemployment)
+    @info "Unemployment breakdown for $(node)" a
     sort!(m, [:IndividualId, :ObservationDate])
     Arrow.write(joinpath(stagingpath(node), "LabourStatus.arrow"), m, compress=:zstd)
     return nothing

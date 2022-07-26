@@ -12,17 +12,17 @@ flush(io)
 #endregion
 
 #region Set-up execution flags
-dostaging = false
+dostaging = true
 dostagebase = false
 dostagememberships = false
-doreadstatusobs = false
-dosocioeconomic = false
+doreadstatusobs = true
+dosocioeconomic = true
 dodayextraction = false
 dobasedayextraction = false
 dopreferredhouseholdextraction = false
 doepisodecreation = false
 dostataoutput = false
-doparentalcoresidency = true
+doparentalcoresidency = false
 # Node specific flags
 doAgincourt = true
 doDIMAMO = true
@@ -150,54 +150,72 @@ if dostaging
         if doAgincourt
             @info "========== Start readeducationstatuses Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readeducationstatuses("Agincourt")
-            @info "========== Finished Agincourt readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+            arrowtostatar(stagingpath("Agincourt"), "EducationStatuses", "EducationStatuses")
+            runstata("education.do", settings.Version, "Agincourt", joinpath(stagingpath("Agincourt"), "EducationStatuses.dta"))
+             @info "========== Finished Agincourt readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doDIMAMO
             @info "========== Start DIMAMO readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readeducationstatuses("DIMAMO")
+            arrowtostatar(stagingpath("DIMAMO"), "EducationStatuses", "EducationStatuses")
+            runstata("education.do", settings.Version, "DIMAMO", joinpath(stagingpath("DIMAMO"), "EducationStatuses.dta"))
             @info "========== Finished DIMAMO readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doAHRI
             @info "========== Start AHRI readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readeducationstatuses("AHRI")
+            arrowtostatar(stagingpath("AHRI"), "EducationStatuses", "EducationStatuses")
+            runstata("education.do", settings.Version, "AHRI", joinpath(stagingpath("AHRI"), "EducationStatuses.dta"))
             @info "========== Finished AHRI readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doAgincourt
             @info "========== Start Agincourt readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readmaritalstatuses("Agincourt")
+            arrowtostatar(stagingpath("Agincourt"), "MaritalStatus", "MaritalStatus")
+            runstata("marital.do", settings.Version, "Agincourt", joinpath(stagingpath("Agincourt"), "MaritalStatus.dta"))
             @info "========== Finished Agincourt readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doDIMAMO
             @info "========== Start DIMAMO readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readmaritalstatuses("DIMAMO")
+            arrowtostatar(stagingpath("DIMAMO"), "MaritalStatus", "MaritalStatus")
+            runstata("marital.do", settings.Version, "DIMAMO", joinpath(stagingpath("DIMAMO"), "MaritalStatus.dta"))
             @info "========== Finished DIMAMO readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doAHRI
             @info "========== Start AHRI readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readmaritalstatuses("AHRI")
+            arrowtostatar(stagingpath("AHRI"), "MaritalStatus", "MaritalStatus")
+            runstata("marital.do", settings.Version, "AHRI", joinpath(stagingpath("AHRI"), "MaritalStatus.dta"))
             @info "========== Finished AHRI readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doAgincourt
             @info "========== Start Agincourt readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readlabourstatuses("Agincourt")
+            arrowtostatar(stagingpath("Agincourt"), "LabourStatus", "LabourStatus")
+            runstata("labour.do", settings.Version, "Agincourt", joinpath(stagingpath("Agincourt"), "LabourStatus.dta"))
             @info "========== Finished Agincourt readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doDIMAMO
             @info "========== Start DIMAMO readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readlabourstatuses("DIMAMO")
+            arrowtostatar(stagingpath("DIMAMO"), "LabourStatus", "LabourStatus")
+            runstata("labour.do", settings.Version, "DIMAMO", joinpath(stagingpath("DIMAMO"), "LabourStatus.dta"))
             @info "========== Finished DIMAMO readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doAHRI
             @info "========== Start AHRI readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readlabourstatuses("AHRI")
+            arrowtostatar(stagingpath("AHRI"), "LabourStatus", "LabourStatus")
+            runstata("labour.do", settings.Version, "AHRI", joinpath(stagingpath("AHRI"), "LabourStatus.dta"))
             @info "========== Finished AHRI readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
@@ -206,9 +224,9 @@ if dostaging
         if doAgincourt
             @info "========== Start Agincourt readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readhouseholdsocioeconomic("Agincourt")
-            arrowtostatar("Agincourt", stagingpath("Agincourt"), "AssetStatusRaw", "AssetStatusRaw")
+            arrowtostatar(stagingpath("Agincourt"), "AssetStatusRaw", "AssetStatusRaw")
             runstata("assets.do", settings.Version, "Agincourt", joinpath(stagingpath("Agincourt"), "AssetStatusRaw.dta"))
-            arrowtostatar("Agincourt", stagingpath("Agincourt"), "SocioEconomicRaw", "SocioEconomicRaw")
+            arrowtostatar(stagingpath("Agincourt"), "SocioEconomicRaw", "SocioEconomicRaw")
             runstata("socioeconomic.do", settings.Version, "Agincourt", joinpath(stagingpath("Agincourt"), "SocioEconomicRaw.dta"))
             @info "========== Finished Agincourt readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
@@ -216,9 +234,9 @@ if dostaging
         if doDIMAMO
             @info "========== Start DIMAMO readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readhouseholdsocioeconomic("DIMAMO")
-            arrowtostatar("DIMAMO", stagingpath("DIMAMO"), "AssetStatusRaw", "AssetStatusRaw")
+            arrowtostatar(stagingpath("DIMAMO"), "AssetStatusRaw", "AssetStatusRaw")
             runstata("assets.do", settings.Version, "DIMAMO", joinpath(stagingpath("DIMAMO"), "AssetStatusRaw.dta"))
-            arrowtostatar("DIMAMO", stagingpath("DIMAMO"), "SocioEconomicRaw", "SocioEconomicRaw")
+            arrowtostatar(stagingpath("DIMAMO"), "SocioEconomicRaw", "SocioEconomicRaw")
             runstata("socioeconomic.do", settings.Version, "DIMAMO", joinpath(stagingpath("DIMAMO"), "SocioEconomicRaw.dta"))
             @info "========== Finished DIMAMO readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
@@ -226,9 +244,9 @@ if dostaging
         if doAHRI
             @info "========== Start AHRI readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             readhouseholdsocioeconomic("AHRI")
-            arrowtostatar("AHRI", stagingpath("AHRI"), "AssetStatusRaw", "AssetStatusRaw")
+            arrowtostatar(stagingpath("AHRI"), "AssetStatusRaw", "AssetStatusRaw")
             runstata("assets.do", settings.Version, "AHRI", joinpath(stagingpath("AHRI"), "AssetStatusRaw.dta"))
-            arrowtostatar("AHRI", stagingpath("AHRI"), "SocioEconomicRaw", "SocioEconomicRaw")
+            arrowtostatar(stagingpath("AHRI"), "SocioEconomicRaw", "SocioEconomicRaw")
             runstata("socioeconomic.do", settings.Version, "AHRI", joinpath(stagingpath("AHRI"), "SocioEconomicRaw.dta"))
             @info "========== Finished AHRI readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)

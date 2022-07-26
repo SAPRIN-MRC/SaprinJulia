@@ -1,0 +1,15 @@
+ToiletId	ToiletName
+0	Missing/Refused
+1	Flush
+2	Ventilated Improved Pit
+3	Other Pit Latrine
+4	Bucket
+5	Chemical
+8	Don't know
+9	None
+11	Other type
+15	Flush toilet to public sewerage system
+16	Flush toilet connected to septic tank
+17	Pour flush toilet connected to a septic tank
+18	Ecological sanitation system
+19	Open defecation (e.g. no facilities, field, bush)

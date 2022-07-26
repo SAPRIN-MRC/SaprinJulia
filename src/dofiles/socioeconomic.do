@@ -35,14 +35,16 @@ label define lblWaterSource 6 "Dam/standing", add
 label define lblWaterSource 7 "Protected spring", add
 label define lblWaterSource 8 "Tanker", add
 label define lblWaterSource 10 "Other purified", add
-label define lblWaterSource 11 "Other unourified", add
+label define lblWaterSource 11 "Other unpurified", add
 
-label define lblToilet 0 "Missing/Refused", add
+label define lblToilet 0 "Missing/Refused/DKN", add
 label define lblToilet 1 "Flush", add
 label define lblToilet 2 "VIP", add
 label define lblToilet 3 "Other Pit", add
 label define lblToilet 4 "Bucket", add
 label define lblToilet 5 "Chemical", add
+label define lblToilet 6 "None", add
+label define lblToilet 7 "Other", add
 
 label define lblYesNo 0 "No", add
 label define lblYesNo 1 "Yes", add
