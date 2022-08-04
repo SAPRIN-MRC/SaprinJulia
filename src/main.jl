@@ -12,20 +12,21 @@ flush(io)
 #endregion
 
 #region Set-up execution flags
-dostaging = true
+dostaging = false
 dostagebase = false
 dostagememberships = false
-doreadstatusobs = true
-dosocioeconomic = true
+doreadstatusobs = false
+dosocioeconomic = false
 dodayextraction = false
 dobasedayextraction = false
 dopreferredhouseholdextraction = false
 doepisodecreation = false
 dostataoutput = false
 doparentalcoresidency = false
+doparentalepisodes = true
 # Node specific flags
 doAgincourt = true
-doDIMAMO = true
+doDIMAMO = false
 doAHRI = true
 #endregion
 
@@ -744,6 +745,38 @@ if doparentalcoresidency
         flush(io)
     end
 end 
+if doparentalepisodes
+    if doAgincourt
+        @info "========== Start Agincourt parental episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+        t = now()
+        yragedelparentalstatus_episodes("Agincourt")
+        arrowtostatar(episodepath("Agincourt"), "SurveillanceEpisodesYrAgeDeliveryParents_batched", "SurveillanceEpisodesYrAgeDeliveryParents")
+        runstata("label_yragedeliveryparentepisodes.do", settings.Version, "Agincourt", joinpath(episodepath("Agincourt"),"SurveillanceEpisodesYrAgeDeliveryParents.dta"))
+        d = now()-t
+        @info "Agincourt parental episodes completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+        flush(io)
+    end
+    if doDIMAMO
+        @info "========== Start DIMAMO parental episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+        t = now()
+        yragedelparentalstatus_episodes("DIMAMO")
+        arrowtostatar(episodepath("DIMAMO"), "SurveillanceEpisodesYrAgeDeliveryParents_batched", "SurveillanceEpisodesYrAgeDeliveryParents")
+        runstata("label_yragedeliveryparentepisodes.do", settings.Version, "DIMAMO", joinpath(episodepath("DIMAMO"),"SurveillanceEpisodesYrAgeDeliveryParents.dta"))
+        d = now()-t
+        @info "DIMAMO parental episodes completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+        flush(io)
+    end
+    if doAHRI
+        @info "========== Start AHRI parental episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+        t = now()
+        yragedelparentalstatus_episodes("AHRI")
+        arrowtostatar(episodepath("AHRI"), "SurveillanceEpisodesYrAgeDeliveryParents_batched", "SurveillanceEpisodesYrAgeDeliveryParents")
+        runstata("label_yragedeliveryparentepisodes.do", settings.Version, "AHRI", joinpath(episodepath("AHRI"),"SurveillanceEpisodesYrAgeDeliveryParents.dta"))
+        d = now()-t
+        @info "AHRI parental episodes completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+        flush(io)
+    end
+end
 #
 #endregion
 #

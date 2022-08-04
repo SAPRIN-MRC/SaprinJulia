@@ -424,7 +424,7 @@ Create individual exposure episodes split on calendar year, age, and child birth
 """
 function yragedel_episodes(node)
     @info "Started Year Age Delivery episode creation $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
-    residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep02_batched.arrow"))
+    residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep04_batched.arrow"))
     hstate = iterate(residentdaybatches)
     deliverydaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DeliveryDays_batched.arrow"))
     dstate = iterate(deliverydaybatches)
@@ -693,6 +693,7 @@ function yragedel_episodeQA(node)
     @info "=== Finished Year Age Delivery episode QA $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
+
 "Group day records into parent co-residency records"
 function parentresidentepisodes(node)
     residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep04_batched.arrow"))
@@ -786,5 +787,174 @@ function parentresidentepisodes(node)
         i = i + 1
     end
     combinebatches(episodepath(node), "SurveillanceEpisodesParentCoresident", i-1)
+    return nothing
+end
+"Determine parental status, 0 = unknown, 1 = coresident, 2 = alive living elsewhere, 3 = dead"
+function parentstatus(parentdead, parentcoresident)
+    if parentdead == 1
+        return Int8(3)
+    end
+    if !ismissing(parentcoresident) && parentcoresident == 1
+        return Int8(1)
+    end
+    if parentdead == 0
+        return Int8(2)
+    end
+    return Int8(0) 
+end
+"""
+Create individual exposure episodes split on calendar year, age, child birth (delivery), and parental status
+"""
+function yragedelparentalstatus_episodes(node)
+    @info "Started Year Age Delivery Parental Status episode creation $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
+    residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep04_batched.arrow"))
+    hstate = iterate(residentdaybatches)
+    deliverydaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DeliveryDays_batched.arrow"))
+    dstate = iterate(deliverydaybatches)
+    i = 1
+    while hstate !== nothing
+        t = now()
+        @info "Node $(node) batch $(i) at $(t)"
+        h, hst = hstate
+        hd = h |> DataFrame
+        hd = transform!(hd, :DayDate => (x -> Dates.year.(x)) => :CalendarYear, [:DoB,:DayDate] => ((x,y) -> age.(x,y)) => :Age, 
+                           [:MotherDead,:MotherCoResident] => ((x,y) -> parentstatus.(x,y)) => :MotherStatus,
+                           [:FatherDead,:FatherCoResident] => ((x,y) -> parentstatus.(x,y)) => :FatherStatus )
+        #get delivery days
+        d, dst = dstate
+        dd = d |> DataFrame
+        hd = leftjoin(hd, dd, on = [:IndividualId => :IndividualId, :DayDate => :DayDate])
+        transform!(hd, :ChildrenBorn => ByRow(x -> ismissing(x) ? 0 : x) => :ChildrenBorn, :ChildrenEverBorn => ByRow(x -> ismissing(x) ? 0 : x) => :ChildrenEverBorn)
+        e = combine(groupby(hd, [:IndividualId, :Episode, :CalendarYear, :Age, :ChildrenEverBorn, :MotherStatus, :FatherStatus]), :Resident => first => :Resident, :LocationId => first => :LocationId, :HouseholdId => first => :HouseholdId, 
+                    :Sex => first => :Sex, :DoB => first => :DoB, :DoD => first => :DoD, :MotherId => first => :MotherId, :FatherId => first => :FatherId,
+                    :DayDate => minimum => :StartDate, :DayDate => maximum => :EndDate, nrow => :Days, :ChildrenBorn => first => :ChildrenBorn,
+                    :Born => first => :Born, :Enumeration => first => :Enumeration, :InMigration => first => :InMigration, :LocationEntry => first => :LocationEntry, :ExtResStart => first => :ExtResStart, :Participation => first => :Participation,
+                    :Died => last => :Died, :OutMigration => last => :OutMigration, :LocationExit => last => :LocationExit, :ExtResEnd => last => :ExtResEnd, :Refusal => last => :Refusal, :LostToFollowUp => last => :LostToFollowUp, 
+                    :Current => last => :Current, :MembershipStart => first => :MembershipStart, :MembershipEnd => last => :MembershipEnd, :Memberships => maximum => :Memberships, 
+                    :HHRelationshipTypeId => first => :HHRelationshipTypeId, :GapStart => last => :Gap)
+        filter!(row -> ismissing(row.DoD) || (!ismissing(row.DoD) && (row.StartDate <= row.DoD || row.DoB == row.DoD)), e) #Episode start must be less or equal than DoD, unless person born and died on the same day
+        # Create episodes    
+        episodes = transform(groupby(sort(e, [:IndividualId, :Episode, :CalendarYear, :Age, :ChildrenEverBorn, :StartDate]), [:IndividualId]), nrow => :Episodes, :IndividualId => eachindex => :episode, 
+                   :CalendarYear => Base.Fix2(lead,1) => :NextYear, :CalendarYear => Base.Fix2(lag,1) => :PrevYear,
+                   :Age => Base.Fix2(lead,1) => :NextAge, :Age => Base.Fix2(lag,1) => :PrevAge,
+                   :ChildrenEverBorn => Base.Fix2(lag,1) => :PrevBorn,
+                   :MotherStatus => Base.Fix2(lag,1) => :PrevMotherStatus, :FatherStatus => Base.Fix2(lag,1) => :PrevFatherStatus)
+        insertcols!(episodes, :Delete =>  Int16(0), :YrStart => Int16(0),:YrEnd => Int16(0), :AgeStart => Int16(0), :AgeEnd => Int16(0), :Delivery => Int16(0), :ParentStatusChanged => Int16(0))
+        select!(episodes, Not(:Episode))
+        rename!(episodes, :episode => :Episode)
+        lastIndividual = -1
+        iscurrent = Int16(0)
+        for row in eachrow(episodes)
+            if !ismissing(row.DoD) && row.EndDate > row.DoD
+                row.EndDate = row.DoD
+                row.Days = Dates.value(row.EndDate - row.StartDate) + 1
+                row.Died = Int16(1)
+            end
+            # Fix Flags
+            if !ismissing(row.DoD) && row.DoD == row.EndDate
+                row.Died = Int16(1)
+            else
+                row.Died = Int16(0)
+            end
+            if row.DoB == row.StartDate
+                row.Born = Int16(1)
+            else
+                row.Born = Int16(0)
+            end
+            if row.Died == 1
+                row.OutMigration = Int16(0)
+                row.ExtResEnd = Int16(0)
+                row.LocationExit = Int16(0)
+                row.LostToFollowUp = Int16(0)
+                row.Refusal = Int16(0)
+                row.Current = Int16(0)
+            end
+            if row.Born == 1
+                row.Enumeration = Int16(0)
+                row.InMigration = Int16(0)
+                row.LocationEntry = Int16(0)
+                row.ExtResStart = Int16(0)
+                row.MembershipStart = Int16(1)
+            elseif row.Enumeration == 1
+                row.InMigration = Int16(0)
+                row.LocationEntry = Int16(0)
+                row.ExtResStart = Int16(0)
+                row.MembershipStart = Int16(1)
+            elseif row.InMigration == 1
+                row.LocationEntry = Int16(0)
+                row.ExtResStart = Int16(0)
+            end
+            if row.LostToFollowUp == 1 || row.Refusal == 1 || row.Died == 1
+                row.MembershipEnd = Int16(1)
+            elseif row.Current == 1
+                row.MembershipEnd = Int16(0)
+            end
+            if row.Episode == 1
+                row.MembershipStart = Int16(1)
+            end
+            if row.ExtResEnd == 1 && row.LostToFollowUp == 1
+                row.ExtResEnd = Int16(0)
+            end
+            if row.Episode != row.Episodes
+                row.Current = Int16(0)
+            end
+            # Set Year Start flag
+            if ismissing(row.PrevYear) && (Dates.month == 1 && Dates.day ==1)
+                row.YrStart = Int16(1)
+            elseif !ismissing(row.PrevYear) && (row.PrevYear != row.CalendarYear)    
+                row.YrStart = Int16(1)
+            end
+            # Set Age Start flag
+            if ismissing(row.PrevAge) && (row.DoB == row.StartDate)
+                row.AgeStart = Int16(1)
+            elseif !ismissing(row.PrevAge) && (row.PrevAge != row.Age)    
+                row.AgeStart = Int16(1)
+            end
+            # Set Year End flag
+            if ismissing(row.NextYear) && (Dates.month == 12 && Dates.day == 31)
+                row.YrEnd = Int16(1)
+            elseif !ismissing(row.NextYear) && (row.NextYear != row.CalendarYear)    
+                row.YrEnd = Int16(1)
+            end
+            # Set Age End flag
+            if ismissing(row.NextAge) && (row.EndDate == (row.DoB - Dates.Day(1)))
+                row.AgeEnd = Int16(1)
+            elseif !ismissing(row.NextAge) && (row.NextAge != row.Age)    
+                row.AgeEnd = Int16(1)
+            end
+            # Set Delivery flag
+            if ismissing(row.PrevBorn) && row.ChildrenBorn > 0
+               row.Delivery = Int16(1) 
+            elseif !ismissing(row.PrevBorn) && row.PrevBorn != row.ChildrenEverBorn
+               row.Delivery = Int16(1) 
+            end
+            # Set ParentStatusChanged flag
+            if (!ismissing(row.PrevMotherStatus) && !ismissing(row.PrevFatherStatus)) &&
+               (row.PrevMotherStatus != row.MotherStatus || row.PrevFatherStatus != row.FatherStatus)
+                row.ParentStatusChanged = Int16(1)
+            end
+            # mark for deletions all episodes after current
+            if lastIndividual != row.IndividualId
+                iscurrent = row.Current
+                lastIndividual = row.IndividualId
+            elseif iscurrent == 1
+                row.Delete == 1
+            else
+                iscurrent = row.Current
+            end
+        end
+        filter!(r -> r.Delete == 0, episodes)
+        select!(episodes,Not([:Delete, :Episode, :Episodes, :PrevYear, :NextYear, :PrevAge, :NextAge, :PrevBorn, :PrevMotherStatus, :PrevFatherStatus]))
+        e = transform(groupby(sort(episodes,[:IndividualId, :StartDate]), [:IndividualId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
+        open(joinpath(episodepath(node), "SurveillanceEpisodesYrAgeDeliveryParents$(i).arrow"),"w"; lock = true) do io
+            Arrow.write(io, e, compress=:zstd)
+        end
+        @info "Node $(node) batch $(i) completed with $(nrow(e)) episodes after $(round(now()-t, Dates.Second))"
+        hstate = iterate(residentdaybatches, hst)
+        dstate = iterate(deliverydaybatches, dst)
+        i = i + 1
+    end
+    combinebatches(episodepath(node),"SurveillanceEpisodesYrAgeDeliveryParents", i-1)
+    @info "=== Finished Year Age Delivery Parent status episode creation $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end

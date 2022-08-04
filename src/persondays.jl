@@ -20,8 +20,15 @@ function uniqueindividuals(node)
     individuals = combine(groupby(df, :IndividualId), nrow => :episodes)
     return nrow(individuals)
 end
-days = persondays("DIMAMO") + persondays("Agincourt") + persondays("AHRI")
-years = days/365.25
-individuals = uniqueindividuals("DIMAMO") + uniqueindividuals("Agincourt") + uniqueindividuals("AHRI")
+agincourtyrs = persondays("Agincourt")/365.25
+dimamoyrs = persondays("DIMAMO")/365.25
+ahriyrs = persondays("AHRI")/365.25
+years = agincourtyrs + dimamoyrs + ahriyrs
+agincourtindividuals = uniqueindividuals("Agincourt")
+dimamoindividuals = uniqueindividuals("DIMAMO")
+ahriindividuals = uniqueindividuals("AHRI")
+individuals =  agincourtindividuals + dimamoindividuals + dimamoindividuals
 episodes = basicepisodecount("DIMAMO") + basicepisodecount("Agincourt") + basicepisodecount("AHRI")
-println("Years $(@sprintf("%.2f", years)) days $(days) individuals $(individuals) episodes $(episodes)")
+println("Person years\t $(@sprintf("%.0f", agincourtyrs))\t $(@sprintf("%.0f", dimamoyrs))\t $(@sprintf("%.0f", ahriyrs))\t $(@sprintf("%.0f", years))")
+println("Unique individuals\t $(@sprintf("%.0f", agincourtindividuals))\t $(@sprintf("%.0f", dimamoindividuals))\t $(@sprintf("%.0f", ahriindividuals))\t $(@sprintf("%.0f", individuals))")
+println("Years $(@sprintf("%.2f", years)) individuals $(individuals) episodes $(episodes)")

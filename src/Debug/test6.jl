@@ -3,6 +3,8 @@ using Arrow
 using DataFrames
 using TableBrowse
 
-df = Arrow.Table(joinpath("D:\\Data\\SAPRIN_Data", "DIMAMO", "Episodes", "SurveillanceEpisodesParentCoresident_batched.arrow")) |> DataFrame
-# s = filter(row -> row.IndividualId == 151285, df)
-browse(df)
+df = Arrow.Stream(joinpath("D:\\Data\\SAPRIN_Data", "DIMAMO", "DayExtraction", "DayDatasetStep04_batched.arrow"))
+hstate = iterate(df)
+h, hst = hstate
+hd = h |> DataFrame
+println(names(hd))
