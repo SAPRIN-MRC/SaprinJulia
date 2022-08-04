@@ -262,14 +262,14 @@ function runstata(dofile::String, version::VersionNumber, node::String, datafile
     end
     #Replace version number and node in do_file
     dolines = readlines(dofile)
-    for i in 1:length(dolines)
+    for i in 1:lastindex(dolines)
         dolines[i] = replace(dolines[i], "#datafile#" => datafile)
         dolines[i] = replace(dolines[i], "#node#" => node)
         dolines[i] = replace(dolines[i], "#version#" => "$(version)")
     end
     fname = tempname() * ".do"
     open(fname,"w") do f
-        for i in 1:length(dolines)
+        for i in 1:lastindex(dolines)
             println(f, dolines[i])
         end
     end

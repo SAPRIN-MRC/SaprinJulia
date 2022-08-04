@@ -18,7 +18,7 @@ function processresidencydays(locationid, startdate, enddate, starttype, endtype
     episode = Int32(1)
     res_episode = fill(episode, length(res_daydate))
     res_location = fill(location, length(res_daydate))
-    for i in 2:length(startdate)
+    for i in 2:lastindex(startdate)
         if startdate[i] > res_daydate[end]
             start = startdate[i]
         elseif enddate[i] > res_daydate[end]
@@ -93,7 +93,7 @@ function processhhresidencydays(locationid, startdate, enddate, starttype, endty
     episode = Int32(1)
     res_episode = fill(episode, length(res_daydate))
     res_location = fill(location, length(res_daydate))
-    for i in 2:length(startdate)
+    for i in 2:lastindex(startdate)
         if startdate[i] > res_daydate[end]
             start = startdate[i]
         elseif enddate[i] > res_daydate[end]
@@ -174,7 +174,7 @@ function processhhmembershipdays(startdate, enddate, starttype, endtype)
     res_end[end] = Int8(1)
     episode = Int32(1)
     res_episode = fill(episode, length(res_daydate))
-    for i in 2:length(startdate)
+    for i in 2:lastindex(startdate)
         if startdate[i] > res_daydate[end]
             start = startdate[i]
         elseif enddate[i] > res_daydate[end]

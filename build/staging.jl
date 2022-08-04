@@ -331,7 +331,7 @@ function processresidencedays(startdate, enddate, starttype, endtype, residentid
     res_locationid = fill(location, length(res_daydate))
     episode = 1
     res_episode = fill(episode, length(res_daydate))
-    for i in 2:length(startdate)
+    for i in 2:lastindex(startdate)
         if startdate[i] > res_daydate[end]
             start = startdate[i]
         elseif enddate[i] > res_daydate[end]
@@ -801,7 +801,7 @@ function processmembershipdays(startdate, enddate, starttype, endtype)
     res_endtype = fill(endt, length(res_daydate))
     episode = 1
     res_episode = fill(episode, length(res_daydate))
-    for i in 2:length(startdate)
+    for i in 2:lastindex(startdate)
         if startdate[i] > res_daydate[end]
             start = startdate[i]
         elseif enddate[i] > res_daydate[end]
@@ -843,7 +843,7 @@ function processrelationshipdays(startdate, enddate, starttype, endtype, hhrelat
     res_relation = fill(relation, length(res_daydate))
     episode = 1
     res_episode = fill(episode, length(res_daydate))
-    for i in 2:length(startdate)
+    for i in 2:lastindex(startdate)
         if startdate[i] > res_daydate[end]
             start = startdate[i]
         elseif enddate[i] > res_daydate[end]
