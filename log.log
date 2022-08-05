@@ -97,3 +97,238 @@
 └ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:958
 ┌ Info: Agincourt parental episodes completed at 2022-08-04 15:55:18 duration 10908 seconds
 └ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:756
+┌ Info: ========== Start AHRI parental episodes at 2022-08-04 15:55:18
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:770
+┌ Info: Started Year Age Delivery Parental Status episode creation 2022-08-04 15:55
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:809
+┌ Info: Node AHRI batch 1 at 2022-08-04T16:09:04.492
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:817
+┌ Info: Node AHRI batch 1 completed with 700786 episodes after 106 seconds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:952
+┌ Info: Node AHRI batch 2 at 2022-08-04T16:24:20.153
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:817
+┌ Info: Node AHRI batch 2 completed with 704090 episodes after 113 seconds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:952
+┌ Info: Node AHRI batch 3 at 2022-08-04T16:39:43.157
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:817
+┌ Info: Node AHRI batch 3 completed with 704362 episodes after 108 seconds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:952
+┌ Info: Node AHRI batch 4 at 2022-08-04T16:51:40.941
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:817
+┌ Info: Node AHRI batch 4 completed with 508862 episodes after 93 seconds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:952
+┌ Info: Node AHRI batch 5 at 2022-08-04T17:01:59.782
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:817
+┌ Info: Node AHRI batch 5 completed with 448001 episodes after 81 seconds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:952
+┌ Info: Node AHRI batch 6 at 2022-08-04T17:11:47.768
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:817
+┌ Info: Node AHRI batch 6 completed with 447741 episodes after 83 seconds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:952
+┌ Info: Node AHRI batch 7 at 2022-08-04T17:21:43.530
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:817
+┌ Info: Node AHRI batch 7 completed with 439952 episodes after 82 seconds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:952
+┌ Info: Node AHRI batch 8 at 2022-08-04T17:31:38.413
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:817
+┌ Info: Node AHRI batch 8 completed with 447170 episodes after 84 seconds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:952
+┌ Info: Node AHRI batch 9 at 2022-08-04T17:41:52.547
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:817
+┌ Info: Node AHRI batch 9 completed with 447652 episodes after 84 seconds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:952
+┌ Info: Node AHRI batch 10 at 2022-08-04T17:51:37.537
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:817
+┌ Info: Node AHRI batch 10 completed with 417250 episodes after 78 seconds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:952
+┌ Info: === Finished Year Age Delivery Parent status episode creation 2022-08-04 17:53
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\episodecreation.jl:958
+┌ Info: AHRI parental episodes completed at 2022-08-04 17:54:27 duration 7149 seconds
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:776
+┌ Info: Execution started 2022-08-05 06:01
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:13
+┌ Info: ========== Start Agincourt Mental Health Data Prize episodes at 2022-08-05 06:01:24
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:789
+┌ Info: Agincourt Mental Health Data Prize episodes completed at 2022-08-05 06:02:26 duration 62 seconds
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:795
+┌ Info: ========== Start DIMAMO Mental Health Data Prize episodes at 2022-08-05 06:02:26
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:799
+┌ Info: DIMAMO Mental Health Data Prize episodes completed at 2022-08-05 06:02:44 duration 18 seconds
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:805
+┌ Info: Execution started 2022-08-05 06:04
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:13
+┌ Info: Execution started 2022-08-05 06:13
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:13
+┌ Info: Execution started 2022-08-05 06:18
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:13
+┌ Info: Execution started 2022-08-05 10:23
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:14
+┌ Info: ========== Start AHRI Mental Health Data Prize episodes at 2022-08-05 10:23:28
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:810
+┌ Info: IUR breakdown: 
+│   a = 5-element Named Vector{Int64}
+IUR     │ 
+────────┼──────
+0       │  1474
+1       │ 22417
+2       │  2250
+3       │  7648
+missing │   117
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:821
+┌ Info: IUR breakdown after join :
+│   a = 4-element Named Vector{Int64}
+IUR  │ 
+─────┼────────
+0    │   16137
+1    │ 3441821
+2    │  332497
+3    │ 1475411
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:826
+┌ Info: IsUrbanOrRural breakdown after transform :
+│   a = 1-element Named Vector{Int64}
+IsUrbanOrRural  │ 
+────────────────┼────────
+1               │ 5265866
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:833
+┌ Info: Columns after transform :
+│   names(episodes_new) = ["NodeId", "IndividualId", "DoB", "DoD", "CalendarYear", "Age", "Sex", "LocationId", "HouseholdId", "HHRelation", "IsUrbanOrRural", "MotherId", "FatherId", "SpouseId", "StartDate", "EndDate", "StartType", "EndType", "Episode", "Episodes", "Resident", "MotherStatus", "FatherStatus", "ChildrenEverBorn", "LocationUid", "IUR"]
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:834
+┌ Warning: RCall.jl: Warning: package 'arrow' was built under R version 4.1.3
+│ 
+│ Attaching package: 'arrow'
+│ 
+│ The following object is masked from 'package:utils':
+│ 
+│     timestamp
+│ 
+└ @ RCall C:\Users\kobus.herbst\.julia\packages\RCall\6kphM\src\io.jl:172
+┌ Warning: RCall.jl: Warning: package 'rio' was built under R version 4.1.3
+└ @ RCall C:\Users\kobus.herbst\.julia\packages\RCall\6kphM\src\io.jl:172
+┌ Info: AHRI Mental Health Data Prize episodes completed at 2022-08-05 10:25:21 duration 113 seconds
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:843
+┌ Info: Execution started 2022-08-05 10:28
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:14
+┌ Info: ========== Start AHRI Mental Health Data Prize episodes at 2022-08-05 10:28:05
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:810
+┌ Info: IUR breakdown: 
+│   a = 5-element Named Vector{Int64}
+IUR     │ 
+────────┼──────
+0       │  1474
+1       │ 22417
+2       │  2250
+3       │  7648
+missing │   117
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:821
+┌ Info: IUR breakdown after join :
+│   a = 4-element Named Vector{Int64}
+IUR  │ 
+─────┼────────
+0    │   16137
+1    │ 3441821
+2    │  332497
+3    │ 1475411
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:826
+┌ Info: IsUrbanOrRural breakdown after transform :
+│   a = 4-element Named Vector{Int64}
+IsUrbanOrRural  │ 
+────────────────┼────────
+0               │   16137
+1               │ 3441821
+2               │  332497
+3               │ 1475411
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:833
+┌ Info: Columns after transform :
+│   names(episodes_new) = ["NodeId", "IndividualId", "DoB", "DoD", "CalendarYear", "Age", "Sex", "LocationId", "HouseholdId", "HHRelation", "IsUrbanOrRural", "MotherId", "FatherId", "SpouseId", "StartDate", "EndDate", "StartType", "EndType", "Episode", "Episodes", "Resident", "MotherStatus", "FatherStatus", "ChildrenEverBorn"]
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:834
+┌ Info: Execution started 2022-08-05 10:32
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:14
+┌ Info: ========== Start AHRI Mental Health Data Prize episodes at 2022-08-05 10:32:37
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:810
+┌ Info: IUR breakdown: 
+│   a = 5-element Named Vector{Int64}
+IUR     │ 
+────────┼──────
+0       │  1474
+1       │ 22417
+2       │  2250
+3       │  7648
+missing │   117
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:821
+┌ Info: IUR breakdown after join :
+│   a = 4-element Named Vector{Int64}
+IUR  │ 
+─────┼────────
+0    │   16137
+1    │ 3441821
+2    │  332497
+3    │ 1475411
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:826
+┌ Info: IsUrbanOrRural breakdown after transform :
+│   a = 4-element Named Vector{Int64}
+IsUrbanOrRural  │ 
+────────────────┼────────
+0               │   16137
+1               │ 3441821
+2               │  332497
+3               │ 1475411
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:833
+┌ Info: Columns after transform :
+│   names(episodes_new) = ["NodeId", "IndividualId", "DoB", "DoD", "CalendarYear", "Age", "Sex", "LocationId", "HouseholdId", "HHRelation", "IsUrbanOrRural", "MotherId", "FatherId", "SpouseId", "StartDate", "EndDate", "StartType", "EndType", "Episode", "Episodes", "Resident", "MotherStatus", "FatherStatus", "ChildrenEverBorn"]
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:834
+┌ Info: Execution started 2022-08-05 10:44
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:14
+┌ Info: ========== Start AHRI Mental Health Data Prize episodes at 2022-08-05 10:44:10
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:810
+┌ Info: IUR breakdown: 
+│   a = 5-element Named Vector{Int64}
+IUR     │ 
+────────┼──────
+0       │  1474
+1       │ 22417
+2       │  2250
+3       │  7648
+missing │   117
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:821
+┌ Info: IUR breakdown after join :
+│   a = 4-element Named Vector{Int64}
+IUR  │ 
+─────┼────────
+0    │   16137
+1    │ 3441821
+2    │  332497
+3    │ 1475411
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:826
+┌ Info: IsUrbanOrRural breakdown after transform :
+│   a = 4-element Named Vector{Int64}
+IsUrbanOrRural  │ 
+────────────────┼────────
+0               │   16137
+1               │ 3441821
+2               │  332497
+3               │ 1475411
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:833
+┌ Info: Columns after transform :
+│   names(episodes_new) = ["NodeId", "IndividualId", "DoB", "DoD", "CalendarYear", "Age", "Sex", "LocationId", "HouseholdId", "HHRelation", "IsUrbanOrRural", "MotherId", "FatherId", "SpouseId", "StartDate", "EndDate", "StartType", "EndType", "Episode", "Episodes", "Resident", "MotherStatus", "FatherStatus", "ChildrenEverBorn"]
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:834
+┌ Warning: RCall.jl: Warning: package 'arrow' was built under R version 4.1.3
+│ 
+│ Attaching package: 'arrow'
+│ 
+│ The following object is masked from 'package:utils':
+│ 
+│     timestamp
+│ 
+└ @ RCall C:\Users\kobus.herbst\.julia\packages\RCall\6kphM\src\io.jl:172
+┌ Warning: RCall.jl: Warning: package 'rio' was built under R version 4.1.3
+└ @ RCall C:\Users\kobus.herbst\.julia\packages\RCall\6kphM\src\io.jl:172
+┌ Warning: RCall.jl: Warning: Coercing dictionary values to R character factor levels
+└ @ RCall C:\Users\kobus.herbst\.julia\packages\RCall\6kphM\src\io.jl:172
+┌ Info: AHRI Mental Health Data Prize episodes completed at 2022-08-05 10:45:24 duration 73 seconds
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:842
+┌ Info: Execution started 2022-08-05 11:39
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:14
+┌ Info: ========== Start Agincourt Mental Health Data Prize episodes at 2022-08-05 11:39:07
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:790
+┌ Info: Agincourt Mental Health Data Prize episodes completed at 2022-08-05 11:40:07 duration 59 seconds
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:796

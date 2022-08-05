@@ -1,6 +1,10 @@
 using Logging
 using SAPRINCore
+using Arrow
+using DataFrames
+using CSV
 using Dates
+using FreqTables
 
 #region Setup Logging
 l = open("log.log", "a+")
@@ -23,11 +27,12 @@ dopreferredhouseholdextraction = false
 doepisodecreation = false
 dostataoutput = false
 doparentalcoresidency = false
-doparentalepisodes = true
+doparentalepisodes = false
+domhprizeepisodes = true
 # Node specific flags
 doAgincourt = true
 doDIMAMO = false
-doAHRI = true
+doAHRI = false
 #endregion
 
 #region Staging
@@ -778,6 +783,66 @@ if doparentalepisodes
     end
 end
 #
+#endregion
+#region WellcomeMentalHealthDataPrize
+if domhprizeepisodes
+    if doAgincourt
+        @info "========== Start Agincourt Mental Health Data Prize episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+        t = now()
+        produce_mhepisodes("Agincourt")
+        arrowtostatar(episodepath("Agincourt"), "IndividualExposureEpisodes", "IndividualExposureEpisodes")
+        runstata("label_individualexposureepisodes.do", settings.Version, "Agincourt", joinpath(episodepath("Agincourt"),"IndividualExposureEpisodes.dta"))
+        d = now()-t
+        @info "Agincourt Mental Health Data Prize episodes completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+        flush(io)
+    end
+    if doDIMAMO
+        @info "========== Start DIMAMO Mental Health Data Prize episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+        t = now()
+        produce_mhepisodes("DIMAMO")
+        arrowtostatar(episodepath("DIMAMO"), "IndividualExposureEpisodes", "IndividualExposureEpisodes")
+        runstata("label_individualexposureepisodes.do", settings.Version, "DIMAMO", joinpath(episodepath("DIMAMO"),"IndividualExposureEpisodes.dta"))
+        d = now()-t
+        @info "DIMAMO Mental Health Data Prize episodes completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+        flush(io)
+    end
+    if doAHRI
+        @info "========== Start AHRI Mental Health Data Prize episodes at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
+        t = now()
+        produce_mhepisodes("AHRI")
+        # Update IsUrbanOrRural on AHRI data
+        location_iur = DataFrame(CSV.File(joinpath(stagingpath("AHRI"),"LocationIsUrbanOrRural.csv")))
+        # Recode IsUrbanOrRural from codes to integer
+        codeDict = Dict("DFT" => Int16(0), "RUR" => Int16(1), "URB" => Int16(2), "PER" => Int16(3))
+        transform!(location_iur, :IUR => ByRow(x -> codeDict[x]) => :IUR)
+        location_map = Arrow.Table(joinpath(stagingpath("AHRI"), "LocationMap.arrow")) |> DataFrame
+        locations = leftjoin(location_map, location_iur, on = :LocationUid => :LocationUid, makeunique=true, matchmissing=:equal)
+        a = freqtable(locations, :IUR)
+        @info "IUR breakdown: " a
+        flush(io)
+        episodes = Arrow.Table(joinpath(episodepath("AHRI"), "IndividualExposureEpisodes.arrow")) |> DataFrame
+        episodes_new = leftjoin(episodes, locations, on = :LocationId => :LocationId, makeunique=true, matchmissing=:equal)
+        a = freqtable(episodes_new, :IUR)
+        @info "IUR breakdown after join :" a
+        flush(io)
+        episodes = nothing
+        select!(episodes_new, :NodeId, :IndividualId, :DoB, :DoD, :CalendarYear, :Age, :Sex, :LocationId, :HouseholdId, :HHRelation, 
+                             :IUR => :IsUrbanOrRural, :MotherId, :FatherId, :SpouseId, :StartDate, :EndDate, :StartType, :EndType, 
+                             :Episode, :Episodes, :Resident, :MotherStatus, :FatherStatus, :ChildrenEverBorn)
+        a = freqtable(episodes_new, :IsUrbanOrRural)
+        @info "IsUrbanOrRural breakdown after transform :" a
+        @info "Columns after transform :" names(episodes_new)
+        flush(io)
+        open(joinpath(episodepath("AHRI"), "IndividualExposureEpisodesTmp.arrow"), "w") do io
+            Arrow.write(io, episodes_new, compress=:zstd)
+        end
+        arrowtostatar(episodepath("AHRI"), "IndividualExposureEpisodesTmp", "IndividualExposureEpisodes")
+        runstata("label_individualexposureepisodes.do", settings.Version, "AHRI", joinpath(episodepath("AHRI"),"IndividualExposureEpisodes.dta"))
+        d = now()-t
+        @info "AHRI Mental Health Data Prize episodes completed at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
+        flush(io)
+    end
+end
 #endregion
 #
 #region clean up

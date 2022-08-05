@@ -25,7 +25,7 @@ export BatchSize, individualbatch, nextidrange, addsheet!, writeXLSX, arrowtocsv
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, deliverydays,
        preferredhousehold, setresidencyflags, addindividualattributes, mothercoresident, fathercoresident,
        basicepisodes, basicepisodeQA, yrage_episodes, yrage_episodeQA, yragedel_episodes, yragedel_episodeQA,
-       yragedelparentalstatus_episodes
+       yragedelparentalstatus_episodes, produce_mhepisodes
 #region Constants
 const BatchSize = 25000
 #endregion

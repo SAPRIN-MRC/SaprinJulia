@@ -981,12 +981,13 @@ function produce_mhepisodes(node::String)
     df.IsUrbanOrRural .= nodeid == 1 || nodeid == 3 ? Int8(1) : Int8(3)
     df.SpouseId .= missing
     e = select(df, :NodeId, :IndividualId, :DoB, :DoD, :CalendarYear, :Age, :Sex, :LocationId, :HouseholdId, :HHRelationshipTypeId => :HHRelation, :IsUrbanOrRural,
-        :MotherId, :FatherId, :SpouseId, :StartDate, :EndDate,
+        :MotherId => ByRow(x -> x == 0 ? missing : x) => :MotherId, :FatherId, :SpouseId, :StartDate, :EndDate,
         [:Enumeration, :Born, :Participation, :InMigration, :LocationEntry, :ExtResStart] => ByRow((e, b, p, i, l, x) -> mapstart(e, b, p, i, l, x)) => :StartType,
         [:Died, :Refusal, :LostToFollowUp, :Current, :OutMigration, :LocationExit, :ExtResEnd] => ByRow((d, r, l, c, o, a, x) -> mapend(d, r, l, c, o, a, x)) => :EndType,
         :Episode, :Episodes, :Resident, :MotherStatus, :FatherStatus, :ChildrenEverBorn)
     open(joinpath(episodepath(node), "IndividualExposureEpisodes.arrow"), "w") do io
         Arrow.write(io, e, compress=:zstd)
     end
+    e = nothing
     return nothing
 end
