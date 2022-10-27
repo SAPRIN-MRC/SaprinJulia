@@ -63,6 +63,10 @@ label define lblEnd 7 "Current", add
 label define lblSettlement 1 "Rural"
 label define lblSettlement 2 "Urban", add
 label define lblSettlement 3 "Peri-urban", add
+label define lblIsUrbanOrRural 0 "Unknown"
+label define lblIsUrbanOrRural 1 "Rural", add
+label define lblIsUrbanOrRural 2 "Urban", add
+label define lblIsUrbanOrRural 3 "Peri-urban", add
 label values StartType lblStart
 label values EndType lblEnd
 label values Resident lblYesNo
@@ -70,4 +74,5 @@ label values Sex lblSex
 label values HHRelation lblHHRelation
 label values MotherStatus lblParentStatus
 label values FatherStatus lblParentStatus
+label values IsUrbanOrRural lblIsUrbanOrRural
 saveold "#datafile#", replace version(13)
