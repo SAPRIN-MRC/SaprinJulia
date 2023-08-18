@@ -30,9 +30,9 @@ doparentalcoresidency = false
 doparentalepisodes = false
 domhprizeepisodes = true
 # Node specific flags
-doAgincourt = true
+doAgincourt = false
 doDIMAMO = false
-doAHRI = false
+doAHRI = true
 #endregion
 
 #region Staging

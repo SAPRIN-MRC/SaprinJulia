@@ -1,3 +1,5 @@
+*Date 25-04-2022
+
 use "#datafile#", clear
 
 compress
@@ -19,7 +21,7 @@ cap label drop lblEmploymentSector
 cap label drop lblEmploymentType
 cap label drop lblEmployers
 
- 
+  
 label define lblEmploymentStatus 0	"Unknown employment status",add
 label define lblEmploymentStatus 1	"Currently employed", add
 label define lblEmploymentStatus 2	"Currently part-time employed", add
