@@ -1,85 +1,530 @@
-┌ Info: Execution started 2022-10-27 12:55
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:14
-┌ Info: ========== Start AHRI Mental Health Data Prize episodes at 2022-10-27 12:55:31
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:810
-┌ Info: IUR breakdown: 
-│   a = 5-element Named Vector{Int64}
-IUR     │ 
-────────┼──────
-0       │  1474
-1       │ 22417
-2       │  2250
-3       │  7648
-missing │   117
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:821
-┌ Info: IUR breakdown after join :
-│   a = 4-element Named Vector{Int64}
-IUR  │ 
-─────┼────────
-0    │   16137
-1    │ 3441821
-2    │  332497
-3    │ 1475411
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:826
-┌ Info: IsUrbanOrRural breakdown after transform :
-│   a = 4-element Named Vector{Int64}
-IsUrbanOrRural  │ 
-────────────────┼────────
-0               │   16137
-1               │ 3441821
-2               │  332497
-3               │ 1475411
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:833
-┌ Info: Columns after transform :
-│   names(episodes_new) = ["NodeId", "IndividualId", "DoB", "DoD", "CalendarYear", "Age", "Sex", "LocationId", "HouseholdId", "HHRelation", "IsUrbanOrRural", "MotherId", "FatherId", "SpouseId", "StartDate", "EndDate", "StartType", "EndType", "Episode", "Episodes", "Resident", "MotherStatus", "FatherStatus", "ChildrenEverBorn"]
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:834
-┌ Info: Execution started 2022-10-27 13:03
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:14
-┌ Info: ========== Start AHRI Mental Health Data Prize episodes at 2022-10-27 13:03:19
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:810
-┌ Info: IUR breakdown: 
-│   a = 5-element Named Vector{Int64}
-IUR     │ 
-────────┼──────
-0       │  1474
-1       │ 22417
-2       │  2250
-3       │  7648
-missing │   117
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:821
-┌ Info: IUR breakdown after join :
-│   a = 4-element Named Vector{Int64}
-IUR  │ 
-─────┼────────
-0    │   16137
-1    │ 3441821
-2    │  332497
-3    │ 1475411
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:826
-┌ Info: IsUrbanOrRural breakdown after transform :
-│   a = 4-element Named Vector{Int64}
-IsUrbanOrRural  │ 
-────────────────┼────────
-0               │   16137
-1               │ 3441821
-2               │  332497
-3               │ 1475411
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:833
-┌ Info: Columns after transform :
-│   names(episodes_new) = ["NodeId", "IndividualId", "DoB", "DoD", "CalendarYear", "Age", "Sex", "LocationId", "HouseholdId", "HHRelation", "IsUrbanOrRural", "MotherId", "FatherId", "SpouseId", "StartDate", "EndDate", "StartType", "EndType", "Episode", "Episodes", "Resident", "MotherStatus", "FatherStatus", "ChildrenEverBorn"]
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:834
-┌ Warning: RCall.jl: Warning: package 'arrow' was built under R version 4.1.3
-│ 
-│ Attaching package: 'arrow'
-│ 
-│ The following object is masked from 'package:utils':
-│ 
-│     timestamp
-│ 
-└ @ RCall C:\Users\kobus.herbst\.julia\packages\RCall\Wyd74\src\io.jl:172
-┌ Warning: RCall.jl: Warning: package 'rio' was built under R version 4.1.3
-└ @ RCall C:\Users\kobus.herbst\.julia\packages\RCall\Wyd74\src\io.jl:172
-┌ Warning: RCall.jl: Warning: Coercing dictionary values to R character factor levels
-└ @ RCall C:\Users\kobus.herbst\.julia\packages\RCall\Wyd74\src\io.jl:172
-┌ Info: AHRI Mental Health Data Prize episodes completed at 2022-10-27 13:05:16 duration 117 seconds
-└ @ Main c:\workshop\SaprinJulia\SaprinJulia\src\main.jl:842
+┌ Info: Execution started 2023-11-22 08:20
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:14
+┌ Info: Execution started 2023-11-22 08:32
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:14
+┌ Info: ========== Start readindividuals Agincourt at 2023-11-22 08:32:39
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:43
+┌ Info: Read 300795 Agincourt individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:52
+┌ Info: Sex breakdown Agincourt
+│   sex = [4, 134418, 166373]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:54
+┌ Info: Read 58753 Agincourt pregnancies
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:64
+┌ Info: Read 58753 Agincourt unique children
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:66
+┌ Info: Wrote 300795 Agincourt individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:112
+┌ Info: Read 3148617 Agincourt individual observations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:150
+┌ Info: Read 3148351 Agincourt individual observations after bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:153
+┌ Info: Read 300794 Agincourt individuals after group
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:156
+┌ Info: Wrote 300794 Agincourt individual bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:162
+┌ Info: ========== Finished readindividuals Agincourt at 2023-11-22 08:34:22
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:45
+┌ Info: ========== Start readindividuals DIMAMO at 2023-11-22 08:34:22
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:49
+┌ Info: Read 144320 DIMAMO individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:52
+┌ Info: Sex breakdown DIMAMO
+│   sex = [1, 67636, 76680, 3]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:54
+┌ Info: Read 10743 DIMAMO pregnancies
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:64
+┌ Info: Read 10743 DIMAMO unique children
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:66
+┌ Info: Wrote 144320 DIMAMO individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:112
+┌ Info: Read 1294713 DIMAMO individual observations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:150
+┌ Info: Read 1294594 DIMAMO individual observations after bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:153
+┌ Info: Read 144318 DIMAMO individuals after group
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:156
+┌ Info: Wrote 144318 DIMAMO individual bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:162
+┌ Info: ========== Finished readindividuals DIMAMO at 2023-11-22 08:34:30
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:51
+┌ Info: ========== Start readindividuals AHRI at 2023-11-22 08:34:30
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:55
+┌ Info: Read 256425 AHRI individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:52
+┌ Info: Sex breakdown AHRI
+│   sex = [4, 120505, 135916]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:54
+┌ Info: Read 82968 AHRI pregnancies
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:64
+┌ Info: Read 82968 AHRI unique children
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:66
+┌ Info: Wrote 256425 AHRI individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:112
+┌ Info: Read 6350376 AHRI individual observations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:150
+┌ Info: Read 6350208 AHRI individual observations after bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:153
+┌ Info: Read 255050 AHRI individuals after group
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:156
+┌ Info: Wrote 255050 AHRI individual bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:162
+┌ Info: ========== Finished readindividuals AHRI at 2023-11-22 08:35:05
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:57
+┌ Info: ========== Start readlocations Agincourt at 2023-11-22 08:35:05
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:62
+┌ Info: Read 29976 Agincourt locations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:191
+┌ Info: Area breakdown for Agincourt
+│   a = [281, 1218, 936, 1094, 551, 1360, 1363, 1604, 671, 471, 1059, 1725, 1203, 1615, 3009, 2271, 1674, 1045, 906, 597, 1609, 531, 1005, 701, 717, 79, 111, 338, 53, 158, 13, 6, 1, 1]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:207
+┌ Info: ========== Finished readlocations Agincourt at 2023-11-22 08:35:10
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:64
+┌ Info: Execution started 2023-11-22 08:45
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:14
+┌ Info: ========== Start readindividuals Agincourt at 2023-11-22 08:45:25
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:43
+┌ Info: Read 300795 Agincourt individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:52
+┌ Info: Sex breakdown Agincourt
+│   sex = [4, 134418, 166373]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:54
+┌ Info: Read 58753 Agincourt pregnancies
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:64
+┌ Info: Read 58753 Agincourt unique children
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:66
+┌ Info: Wrote 300795 Agincourt individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:112
+┌ Info: Read 3148617 Agincourt individual observations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:150
+┌ Info: Read 3148351 Agincourt individual observations after bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:153
+┌ Info: Read 300794 Agincourt individuals after group
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:156
+┌ Info: Wrote 300794 Agincourt individual bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:162
+┌ Info: ========== Finished readindividuals Agincourt at 2023-11-22 08:47:17
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:45
+┌ Info: ========== Start readindividuals DIMAMO at 2023-11-22 08:47:17
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:49
+┌ Info: Read 144320 DIMAMO individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:52
+┌ Info: Sex breakdown DIMAMO
+│   sex = [1, 67636, 76680, 3]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:54
+┌ Info: Read 10743 DIMAMO pregnancies
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:64
+┌ Info: Read 10743 DIMAMO unique children
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:66
+┌ Info: Wrote 144320 DIMAMO individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:112
+┌ Info: Read 1294713 DIMAMO individual observations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:150
+┌ Info: Read 1294594 DIMAMO individual observations after bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:153
+┌ Info: Read 144318 DIMAMO individuals after group
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:156
+┌ Info: Wrote 144318 DIMAMO individual bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:162
+┌ Info: ========== Finished readindividuals DIMAMO at 2023-11-22 08:47:25
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:51
+┌ Info: ========== Start readindividuals AHRI at 2023-11-22 08:47:25
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:55
+┌ Info: Read 256425 AHRI individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:52
+┌ Info: Sex breakdown AHRI
+│   sex = [4, 120505, 135916]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:54
+┌ Info: Read 82968 AHRI pregnancies
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:64
+┌ Info: Read 82968 AHRI unique children
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:66
+┌ Info: Wrote 256425 AHRI individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:112
+┌ Info: Read 6350376 AHRI individual observations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:150
+┌ Info: Read 6350208 AHRI individual observations after bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:153
+┌ Info: Read 255050 AHRI individuals after group
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:156
+┌ Info: Wrote 255050 AHRI individual bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:162
+┌ Info: ========== Finished readindividuals AHRI at 2023-11-22 08:48:02
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:57
+┌ Info: ========== Start readlocations Agincourt at 2023-11-22 08:48:02
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:62
+┌ Info: Read 29976 Agincourt locations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:191
+┌ Info: Area breakdown for Agincourt
+│   a = [281, 1218, 936, 1094, 551, 1360, 1363, 1604, 671, 471, 1059, 1725, 1203, 1615, 3009, 2271, 1674, 1045, 906, 597, 1609, 531, 1005, 701, 717, 79, 111, 338, 53, 158, 13, 6, 1, 1]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:207
+┌ Info: ========== Finished readlocations Agincourt at 2023-11-22 08:48:08
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:64
+┌ Info: ========== Start readlocations DIMAMO at 2023-11-22 08:48:08
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:68
+┌ Info: Read 24260 DIMAMO locations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:191
+┌ Info: Area breakdown for DIMAMO
+│   a = [1929, 246, 167, 248, 879, 198, 241, 304, 188, 634, 167, 1383, 150, 132, 560, 229, 1595, 72, 2073, 723, 2354, 197, 415, 999, 973, 605, 619, 800, 828, 387, 66, 158, 763, 170, 117, 113, 96, 162, 173, 65, 167, 101, 127, 244, 172, 208, 81, 66, 160, 95, 200, 12, 95, 33, 21, 47, 158, 82, 13]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:207
+┌ Info: ========== Finished readlocations DIMAMO at 2023-11-22 08:48:08
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:70
+┌ Info: ========== Start readlocations AHRI at 2023-11-22 08:48:08
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:74
+┌ Info: Read 34959 AHRI locations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:191
+┌ Info: Area breakdown for AHRI
+│   a = [1242, 1021, 1074, 1356, 1126, 2987, 1305, 961, 1220, 2352, 340, 359, 689, 3217, 532, 962, 1700, 152, 1205, 1162, 790, 448, 870, 489, 631, 4465, 711, 403, 900, 3, 1, 286]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:207
+┌ Info: ========== Finished readlocations at 2023-11-22 08:48:08
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:76
+┌ Info: Execution started 2023-11-22 08:55
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:14
+┌ Info: ========== Start readindividuals Agincourt at 2023-11-22 08:55:12
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:43
+┌ Info: Read 300795 Agincourt individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:52
+┌ Info: Sex breakdown Agincourt
+│   sex = [4, 134418, 166373]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:54
+┌ Info: Read 58753 Agincourt pregnancies
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:64
+┌ Info: Read 58753 Agincourt unique children
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:66
+┌ Info: Wrote 300795 Agincourt individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:112
+┌ Info: Read 3148617 Agincourt individual observations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:150
+┌ Info: Read 3148351 Agincourt individual observations after bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:153
+┌ Info: Read 300794 Agincourt individuals after group
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:156
+┌ Info: Wrote 300794 Agincourt individual bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:162
+┌ Info: ========== Finished readindividuals Agincourt at 2023-11-22 08:55:29
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:45
+┌ Info: ========== Start readindividuals DIMAMO at 2023-11-22 08:55:29
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:49
+┌ Info: Read 144320 DIMAMO individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:52
+┌ Info: Sex breakdown DIMAMO
+│   sex = [1, 67636, 76680, 3]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:54
+┌ Info: Read 10743 DIMAMO pregnancies
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:64
+┌ Info: Read 10743 DIMAMO unique children
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:66
+┌ Info: Wrote 144320 DIMAMO individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:112
+┌ Info: Read 1294713 DIMAMO individual observations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:150
+┌ Info: Read 1294594 DIMAMO individual observations after bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:153
+┌ Info: Read 144318 DIMAMO individuals after group
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:156
+┌ Info: Wrote 144318 DIMAMO individual bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:162
+┌ Info: ========== Finished readindividuals DIMAMO at 2023-11-22 08:55:37
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:51
+┌ Info: ========== Start readindividuals AHRI at 2023-11-22 08:55:37
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:55
+┌ Info: Read 256425 AHRI individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:52
+┌ Info: Sex breakdown AHRI
+│   sex = [4, 120505, 135916]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:54
+┌ Info: Read 82968 AHRI pregnancies
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:64
+┌ Info: Read 82968 AHRI unique children
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:66
+┌ Info: Wrote 256425 AHRI individuals
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:112
+┌ Info: Read 6350376 AHRI individual observations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:150
+┌ Info: Read 6350208 AHRI individual observations after bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:153
+┌ Info: Read 255050 AHRI individuals after group
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:156
+┌ Info: Wrote 255050 AHRI individual bounds
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:162
+┌ Info: ========== Finished readindividuals AHRI at 2023-11-22 08:56:11
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:57
+┌ Info: ========== Start readlocations Agincourt at 2023-11-22 08:56:11
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:62
+┌ Info: Read 29976 Agincourt locations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:191
+┌ Info: Area breakdown for Agincourt
+│   a = [281, 1218, 936, 1094, 551, 1360, 1363, 1604, 671, 471, 1059, 1725, 1203, 1615, 3009, 2271, 1674, 1045, 906, 597, 1609, 531, 1005, 701, 717, 79, 111, 338, 53, 158, 13, 6, 1, 1]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:207
+┌ Info: ========== Finished readlocations Agincourt at 2023-11-22 08:56:12
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:64
+┌ Info: ========== Start readlocations DIMAMO at 2023-11-22 08:56:12
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:68
+┌ Info: Read 24260 DIMAMO locations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:191
+┌ Info: Area breakdown for DIMAMO
+│   a = [1929, 246, 167, 248, 879, 198, 241, 304, 188, 634, 167, 1383, 150, 132, 560, 229, 1595, 72, 2073, 723, 2354, 197, 415, 999, 973, 605, 619, 800, 828, 387, 66, 158, 763, 170, 117, 113, 96, 162, 173, 65, 167, 101, 127, 244, 172, 208, 81, 66, 160, 95, 200, 12, 95, 33, 21, 47, 158, 82, 13]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:207
+┌ Info: ========== Finished readlocations DIMAMO at 2023-11-22 08:56:12
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:70
+┌ Info: ========== Start readlocations AHRI at 2023-11-22 08:56:12
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:74
+┌ Info: Read 34959 AHRI locations
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:191
+┌ Info: Area breakdown for AHRI
+│   a = [1242, 1021, 1074, 1356, 1126, 2987, 1305, 961, 1220, 2352, 340, 359, 689, 3217, 532, 962, 1700, 152, 1205, 1162, 790, 448, 870, 489, 631, 4465, 711, 403, 900, 3, 1, 286]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:207
+┌ Info: ========== Finished readlocations at 2023-11-22 08:56:12
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:76
+┌ Info: ========== Start readresidences Agincourt at 2023-11-22 08:56:12
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:81
+┌ Info: Read 299066 Agincourt residences
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:283
+┌ Info: Start types Agincourt before normalisation
+│   a = [89346, 3476, 50720, 97044, 58480]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:290
+┌ Info: Start years breakdown Agincourt before normalisation
+│   a = [1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 1, 1, 1, 1, 2, 2, 4, 5, 2, 2, 4, 7, 5, 2, 15, 20, 65329, 5857, 5818, 5936, 5214, 5890, 5461, 6767, 7156, 6646, 5774, 5514, 5990, 7281, 6649, 18663, 8230, 8684, 7870, 7790, 7950, 27866, 8985, 8317, 7417, 6699, 6002, 6434, 6132, 5908, 3932, 816]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:293
+┌ Info: End types Agincourt before normalisation
+│   a = [64794, 100275, 21003, 112854, 140]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:295
+┌ Info: End years breakdown Agincourt before normalisation
+│   a = [1, 2, 8, 1, 2106, 4545, 5683, 4996, 4845, 5092, 5244, 5758, 6797, 6708, 5695, 5116, 5128, 6074, 5892, 5831, 6660, 6897, 6544, 6106, 6396, 7914, 7367, 7481, 7152, 6963, 6599, 6276, 7026, 9217, 51534, 63408, 4]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:298
+┌ Info: Start years breakdown Agincourt
+│   a = [65234, 5864, 5831, 5940, 5213, 5901, 5460, 6785, 7171, 6659, 5785, 5513, 5991, 7278, 6650, 18658, 8236, 8696, 7868, 7789, 7945, 27841, 8979, 8304, 7403, 6695, 5990, 6343, 6018, 5774, 3497, 288]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:355
+┌ Info: End years breakdown Agincourt
+│   a = [2098, 4545, 5683, 4994, 4843, 5091, 5243, 5755, 6794, 6705, 5693, 5115, 5124, 6068, 5890, 5819, 6657, 6889, 6533, 6100, 6387, 7908, 7359, 7458, 7137, 6939, 6549, 6168, 6912, 9139, 50595, 63409]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:358
+┌ Info: Start types Agincourt
+│   a = [89545, 3365, 49904, 96603, 58182]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:360
+┌ Info: End types Agincourt
+│   a = [64672, 100030, 20983, 4, 111910]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:362
+┌ Info: Node Agincourt 297598 episodes before overlap elimination at 2023-11-22T08:56:30.136
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:412
+┌ Info: 966762850 day rows for Agincourt at 2023-11-22T08:59:27.322
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:416
+┌ Info: Node Agincourt 297598 episodes after overlap elimination at 2023-11-22T09:00:11.647
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:420
+┌ Info: Read 2455317 Agincourt residence statuses
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:478
+┌ Info: Wrote 2455314 Agincourt residence statuses
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:489
+┌ Info: 297598 Agincourt residence rows
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:495
+┌ Info: 2455314 Agincourt residence status rows
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:499
+┌ Info: Node Agincourt 489039 episodes after resident split
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:552
+┌ Info: Node Agincourt 337179 episodes after dropping non-resident episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:569
+┌ Info: ========== Finished readresidences Agincourt at 2023-11-22 09:00:39
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:83
+┌ Info: ========== Start readresidences DIMAMO at 2023-11-22 09:00:39
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:87
+┌ Info: Read 153089 DIMAMO residences
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:283
+┌ Info: Start types DIMAMO before normalisation
+│   a = [101828, 3585, 17219, 17379, 10490, 2588]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:290
+┌ Info: Start years breakdown DIMAMO before normalisation
+│   a = [4, 2, 1, 1, 1, 1, 4, 1, 1, 1, 1, 2, 2, 1, 1, 4, 1, 2, 1, 5, 2, 5, 1, 9, 3, 7, 6, 4, 5, 4, 4, 8245, 788, 543, 494, 609, 611, 497, 382, 452, 498, 586, 677, 548, 529, 504, 29339, 1506, 3006, 2600, 2303, 2922, 2580, 1769, 66993, 3870, 3665, 4590, 9782, 2114]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:293
+┌ Info: End types DIMAMO before normalisation
+│   a = [43339, 17378, 7126, 84342, 61, 1, 842]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:295
+┌ Info: End years breakdown DIMAMO before normalisation
+│   a = [1, 1, 231, 561, 514, 428, 533, 524, 483, 394, 477, 425, 413, 577, 462, 397, 333, 719, 1586, 2107, 2564, 1865, 2176, 2550, 2924, 4783, 4620, 9476, 16372, 25253, 69338, 1, 1]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:298
+┌ Info: Start years breakdown DIMAMO
+│   a = [8243, 788, 545, 494, 609, 611, 497, 382, 452, 498, 586, 677, 548, 529, 504, 29337, 1505, 3005, 2600, 2304, 2922, 2581, 1768, 67045, 3873, 3667, 4615, 9782, 1631]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:355
+┌ Info: End years breakdown DIMAMO
+│   a = [231, 561, 514, 428, 533, 524, 483, 393, 477, 425, 413, 577, 462, 397, 332, 719, 1586, 2107, 2564, 1865, 2176, 2550, 2923, 4783, 4620, 9476, 16370, 25252, 68857]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:358
+┌ Info: Start types DIMAMO
+│   a = [101915, 3519, 19630, 17088, 10446]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:360
+┌ Info: End types DIMAMO
+│   a = [42698, 17169, 7063, 40100, 44694, 61, 813]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:362
+┌ Info: Node DIMAMO 152563 episodes before overlap elimination at 2023-11-22T09:00:43.794
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:412
+┌ Info: 308057402 day rows for DIMAMO at 2023-11-22T09:02:36.820
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:416
+┌ Info: Node DIMAMO 152563 episodes after overlap elimination at 2023-11-22T09:02:51.380
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:420
+┌ Info: Read 1029303 DIMAMO residence statuses
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:478
+┌ Info: Wrote 964748 DIMAMO residence statuses
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:489
+┌ Info: 152563 DIMAMO residence rows
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:495
+┌ Info: 964748 DIMAMO residence status rows
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:499
+┌ Info: Node DIMAMO 179770 episodes after resident split
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:552
+┌ Info: Node DIMAMO 153787 episodes after dropping non-resident episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:569
+┌ Info: ========== Finished readresidences DIMAMO at 2023-11-22 09:02:59
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:89
+┌ Info: ========== Start readresidences AHRI at 2023-11-22 09:02:59
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:93
+┌ Info: Read 350933 AHRI residences
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:283
+┌ Info: Start types AHRI before normalisation
+│   a = [112275, 137427, 61947, 39123, 108, 53]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:290
+┌ Info: Start years breakdown AHRI before normalisation
+│   a = [70446, 11771, 14171, 11841, 10629, 10859, 11218, 10933, 11138, 12883, 13146, 11647, 9822, 8800, 8360, 8731, 9377, 59744, 9880, 9862, 7968, 8280, 7953, 1474]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:293
+┌ Info: End types AHRI before normalisation
+│   a = [150958, 71673, 18677, 106444, 216, 2965]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:295
+┌ Info: End years breakdown AHRI before normalisation
+│   a = [4, 11, 4389, 9699, 14829, 13197, 11131, 10603, 10198, 10798, 10268, 11214, 12680, 11684, 11426, 9395, 8402, 9170, 11363, 10926, 11972, 12355, 8318, 9508, 16415, 100978]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:298
+┌ Info: Start years breakdown AHRI
+│   a = [70443, 11771, 14171, 11841, 10629, 10859, 11218, 10931, 11136, 12882, 13146, 11646, 9822, 8800, 8360, 8730, 9376, 59740, 9880, 9862, 7968, 8280, 7953, 1244]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:355
+┌ Info: End years breakdown AHRI
+│   a = [4389, 9699, 14829, 13197, 11131, 10603, 10198, 10798, 10268, 11214, 12680, 11684, 11426, 9395, 8402, 9170, 11363, 10926, 11972, 12355, 8318, 9508, 16415, 100748]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:358
+┌ Info: Start types AHRI
+│   a = [112269, 137384, 61919, 39063, 53]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:360
+┌ Info: End types AHRI
+│   a = [151015, 71569, 18630, 44971, 61547, 2956]
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:362
+┌ Info: ========== Finished readresidences AHRI at 2023-11-22 09:03:10
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:95
+┌ Info: ========== Start readhouseholds Agincourt at 2023-11-22 09:03:10
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:99
+┌ Info: Read 34050 Agincourt households
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:599
+┌ Info: Read 34050 Agincourt household residences
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:628
+┌ Info: Read 339625 Agincourt household relationships
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:656
+┌ Info: Grouped 33341 Agincourt households from household relationships
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:658
+┌ Info: Household residences 34050 Agincourt after episode counts
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:662
+┌ Info: Household residences 34036 Agincourt after right censor
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:681
+┌ Info: Wrote 34036 Agincourt household residences
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:716
+┌ Info: ========== Finished readhouseholds Agincourt at 2023-11-22 09:03:25
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:101
+┌ Info: ========== Start readhouseholds DIMAMO at 2023-11-22 09:03:25
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:105
+┌ Info: Read 23613 DIMAMO households
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:599
+┌ Info: Read 23613 DIMAMO household residences
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:628
+┌ Info: Read 191641 DIMAMO household relationships
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:656
+┌ Info: Grouped 23604 DIMAMO households from household relationships
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:658
+┌ Info: Household residences 23613 DIMAMO after episode counts
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:662
+┌ Info: Household residences 23603 DIMAMO after right censor
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:681
+┌ Info: Wrote 23603 DIMAMO household residences
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:716
+┌ Info: ========== Finished readhouseholds DIMAMO at 2023-11-22 09:03:30
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:107
+┌ Info: ========== Start readhouseholds AHRI at 2023-11-22 09:03:30
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:111
+┌ Info: Read 39437 AHRI households
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:599
+┌ Info: Read 41924 AHRI household residences
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:628
+┌ Info: Read 353274 AHRI household relationships
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:656
+┌ Info: Grouped 38419 AHRI households from household relationships
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:658
+┌ Info: Household residences 41924 AHRI after episode counts
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:662
+┌ Info: Household residences 41907 AHRI after right censor
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:681
+┌ Info: Wrote 41905 AHRI household residences
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:716
+┌ Info: ========== Finished readhouseholds at 2023-11-22 09:03:42
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:113
+┌ Info: ========== Start readhouseholdmemberships Agincourt at 2023-11-22 09:03:42
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:117
+┌ Info: Read 339625 Agincourt membership episodes from database
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:747
+┌ Info: Read 339625 Agincourt membership episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:750
+┌ Info: Read 339625 Agincourt membership episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:753
+┌ Info: Read 339625 Agincourt membership episodes after individual bounds join
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:756
+┌ Info: Wrote 337382 Agincourt membership episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:779
+┌ Info: Read 339625 Agincourt relationships episodes from database
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:805
+┌ Info: Read 339625 Agincourt relationships episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:808
+┌ Info: Read 339625 Agincourt relationships episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:811
+┌ Info: Read 339625 Agincourt relationships episodes after individual bounds join
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:814
+┌ Info: Wrote 337382 Agincourt relationships episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:837
+┌ Info: ========== Finished readhouseholdmemberships Agincourt at 2023-11-22 09:03:55
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:119
+┌ Info: ========== Start readhouseholdmemberships DIMAMO at 2023-11-22 09:03:55
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:123
+┌ Info: Read 145177 DIMAMO membership episodes from database
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:747
+┌ Info: Read 145177 DIMAMO membership episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:750
+┌ Info: Read 145177 DIMAMO membership episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:753
+┌ Info: Read 145177 DIMAMO membership episodes after individual bounds join
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:756
+┌ Info: Wrote 144799 DIMAMO membership episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:779
+┌ Info: Read 191641 DIMAMO relationships episodes from database
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:805
+┌ Info: Read 191641 DIMAMO relationships episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:808
+┌ Info: Read 191641 DIMAMO relationships episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:811
+┌ Info: Read 191641 DIMAMO relationships episodes after individual bounds join
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:814
+┌ Info: Wrote 188601 DIMAMO relationships episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:837
+┌ Info: ========== Finished readhouseholdmemberships DIMAMO at 2023-11-22 09:03:59
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:125
+┌ Info: ========== Start readhouseholdmemberships AHRI at 2023-11-22 09:03:59
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:129
+┌ Info: Read 319153 AHRI membership episodes from database
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:747
+┌ Info: Read 319153 AHRI membership episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:750
+┌ Info: Read 319153 AHRI membership episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:753
+┌ Info: Read 319153 AHRI membership episodes after individual bounds join
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:756
+┌ Info: Wrote 318898 AHRI membership episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:779
+┌ Info: Read 352198 AHRI relationships episodes from database
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:805
+┌ Info: Read 352198 AHRI relationships episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:808
+┌ Info: Read 352198 AHRI relationships episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:811
+┌ Info: Read 352198 AHRI relationships episodes after individual bounds join
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:814
+┌ Info: Wrote 351854 AHRI relationships episodes
+└ @ SAPRINCore c:\Users\kobus.herbst\repos\SaprinJulia\src\staging.jl:837
+┌ Info: ========== Finished readhouseholdmemberships AHRI at 2023-11-22 09:04:20
+└ @ Main c:\Users\kobus.herbst\repos\SaprinJulia\src\main.jl:131

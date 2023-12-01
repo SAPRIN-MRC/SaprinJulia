@@ -16,8 +16,8 @@ flush(io)
 #endregion
 
 #region Set-up execution flags
-dostaging = false
-dostagebase = false
+dostaging = true
+dostagebase = true
 dostagememberships = false
 doreadstatusobs = false
 dosocioeconomic = false
@@ -28,10 +28,10 @@ doepisodecreation = false
 dostataoutput = false
 doparentalcoresidency = false
 doparentalepisodes = false
-domhprizeepisodes = true
+domhprizeepisodes = false
 # Node specific flags
-doAgincourt = false
-doDIMAMO = false
+doAgincourt = true
+doDIMAMO = true
 doAHRI = true
 #endregion
 

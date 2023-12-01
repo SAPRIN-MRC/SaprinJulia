@@ -1,10 +1,10 @@
 {
-  "PeriodEnd": "2023-04-30T23:59:59",
+  "PeriodEnd": "2022-12-31T23:59:59",
   "LTFCutOff": "2022-01-01T00:00:00",
   "BaseDirectory": "D:\\Data\\SAPRIN_Data",
   "Server":"localhost",
   "Databases":{"Agincourt":"SaprinDb_Agincourt202307","DIMAMO":"SaprinDb_DIMAMO202307","AHRI":"SaprinDb_AHRI202307"},
   "LeftCensorDates":{"Agincourt":"1992-03-01","DIMAMO":"1995-01-26","AHRI":"2000-01-01"},
   "Nodes":{"1":"Agincourt","2":"DIMAMO","3":"AHRI"},
-  "Version": "2021.1.1"
+  "Version": "2022.1.1"
 }

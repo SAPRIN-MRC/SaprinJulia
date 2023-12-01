@@ -322,7 +322,7 @@ function readresidences_internal(db::String, node::String, periodend::Date, left
     residences.ResidenceId = 1:nrow(residences)
     insertcols!(residences, :ResidentIndex, :GapStart => 0, :GapEnd => 0)
     df = combine(groupby(residences, :IndividualId), :LocationId, :ResidenceId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate, :ResidentIndex, :GapStart, :GapEnd,
-                                     :StartDate => Base.Fix2(lead, 1) => :NextStart, :EndDate => Base.Fix2(lag, 1) => :LastEnd)
+                                     :StartDate => ShiftedArrays.lead => :NextStart, :EndDate => ShiftedArrays.lag => :LastEnd)
     for i = 1:nrow(df)
         if !ismissing(df[i,:NextStart])
             gap = Dates.value(df[i,:NextStart] - df[i,:EndDate])
@@ -515,8 +515,8 @@ function dropnonresidentepisodes(node::String)
     end
     filter!(row ->(row.ObservationDate >= row.StartDate) & (row.ObservationDate <= row.EndDate), s)       
     df = combine(groupby(sort(s,[:StartDate,:ObservationDate]), :IndividualId), :LocationId, :StartDate, :StartType, :EndDate, :EndType, :ResidentIndex, :Episode, :Episodes, :ObservationDate, :ResidentStatus,
-                :ResidentStatus => Base.Fix2(lag, 1) => :LastResidentStatus, 
-                :LocationId => Base.Fix2(lag, 1) => :LastLocationId, :Episode => Base.Fix2(lag, 1) => :LastEpisode)
+                :ResidentStatus => ShiftedArrays.lag => :LastResidentStatus, 
+                :LocationId => ShiftedArrays.lag => :LastLocationId, :Episode => ShiftedArrays.lag => :LastEpisode)
     insertcols!(df, :episode => 0)
     episode = 0
     # println(df)
@@ -551,10 +551,10 @@ function dropnonresidentepisodes(node::String)
                 :ObservationDate => minimum => :StartObservationDate, :ObservationDate => maximum => :EndObservationDate)
     @info "Node $(node) $(nrow(s)) episodes after resident split"
     df = combine(groupby(s, :IndividualId), :LocationId, :episode, :StartDate, :StartType, :EndDate, :EndType, :ResidentStatus, :StartObservationDate, :EndObservationDate, :ResidentIndex,
-                :ResidentStatus => Base.Fix2(lead, 1) => :NextResidentStatus, 
-                :ResidentStatus => Base.Fix2(lag, 1) => :LastResidentStatus, 
-                :StartObservationDate => Base.Fix2(lead, 1) => :NextStartObsDate,
-                :EndObservationDate => Base.Fix2(lag, 1) => :LastEndObsDate)
+                :ResidentStatus => ShiftedArrays.lead => :NextResidentStatus, 
+                :ResidentStatus => ShiftedArrays.lag => :LastResidentStatus, 
+                :StartObservationDate => ShiftedArrays.lead => :NextStartObsDate,
+                :EndObservationDate => ShiftedArrays.lag => :LastEndObsDate)
     for i = 1:nrow(df)
         if df[i,:ResidentStatus] == 1 && !ismissing(df[i,:NextResidentStatus]) && df[i,:NextResidentStatus] == 2
             df[i,:EndDate] = newrandomdate(df[i,:EndObservationDate], df[i,:EndObservationDate], df[i,:NextStartObsDate])
@@ -686,7 +686,7 @@ function readhouseholdresidences(db::String, node::String, periodend::Date, left
     select!(r, [:HouseholdId,:LocationId,:StartDate,:StartType,:EndDate,:EndType,:StartObservationDate,:EndObservationDate])
     disallowmissing!(r, [:StartDate,:EndDate])
     df = combine(groupby(sort(r,[:StartDate, order(:EndDate, rev=true)]), :HouseholdId), :LocationId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate,
-                                     :StartDate => Base.Fix2(lead, 1) => :NextStart, :EndDate => Base.Fix2(lag, 1) => :LastEnd)
+                                     :StartDate => ShiftedArrays.lead => :NextStart, :EndDate => ShiftedArrays.lag => :LastEnd)
     for i = 1:nrow(df)
         if !ismissing(df[i,:NextStart])
             gap = Dates.value(df[i,:NextStart] - df[i,:EndDate])
