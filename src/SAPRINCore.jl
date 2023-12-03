@@ -6,7 +6,7 @@ using ODBC
 using DBInterface
 using DataFrames
 using JSON
-using FreqTables
+using PrettyTables
 using Arrow
 using DataValues
 using ShiftedArrays
@@ -17,9 +17,11 @@ using CSV
 using NamedArrays
 # using StataCall - causing need for old version of DataFrames
 using RCall
+using Serialization
+using TranscodingStreams, CodecZstd
 
 export BatchSize, individualbatch, nextidrange, addsheet!, writeXLSX, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, 
-       arrowtostatar, runstata,
+       arrowtostatar, runstata, frequency, 
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships, readpregnancies,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, deliverydays,
@@ -140,7 +142,13 @@ function combinebatches(path::String, file::String, batches)
     end
     return nothing
 end #combinebatches
-"Combines a set of serialized DataFrames into a single DataFrame and save it in Arrow format"
+#region Serialization
+
+"""
+    combineserializedbatches(path::String, file::String, batches)
+
+TBW
+"""
 function combineserializedbatches(path::String, file::String, batches)
     i = 1
     df = open(f -> Serialization.deserialize(f), joinpath(path, "$(file)$(i).jls"), "r")
@@ -152,14 +160,68 @@ function combineserializedbatches(path::String, file::String, batches)
     open(joinpath(path, "$(file).arrow"), "w") do io
         Arrow.write(io, df, compress=:zstd)
     end
-    df = nothing
-    GC.gc()
     #delete chunks
     for i = 1:batches
         rm(joinpath(path, "$(file)$(i).jls"))
     end
     return nothing
 end #combineserializedbatches
+"""
+    restoredataframe(path::String, file::String, batches)::AbstractDataFrame
+
+Combine a series of batched dataframes into a single dataframe, assumes batchnumber is appended to the filename
+"""
+function restoredataframe(path::String, file::String, batches)::AbstractDataFrame
+    i = 1
+    df = deserializefromfile(joinpath(path, "$(file)$(i)"))
+    while i < batches
+        i = i + 1
+        s = deserializefromfile(joinpath(path, "$(file)$(i)"))
+        df = vcat(df, s)
+    end
+    return df
+end
+function deletebatchfiles(path, file, batches)
+    for i in 1:batches
+        rm(joinpath(path, "$(file)$(i).zjls"))
+    end
+end
+"""
+    deserializefromfile(file)
+
+Read and returns a value that has been serialized and compressed into a file
+"""
+function deserializefromfile(file)
+    if !endswith(file,".zjls")
+        file = file * ".zjls" 
+    end
+    io = open(file, "r")
+    try
+        io = TranscodingStream(ZstdDecompressor(), io)
+        return Serialization.deserialize(io)
+    finally
+        close(io)
+    end
+end
+"""
+    serializetofile(file, value)
+
+Compress and serialize a value to a file
+"""
+function serializetofile(file, value)
+    if !endswith(file,".zjls")
+        file = file * ".zjls" 
+    end
+    io = open(file, "w")
+    try
+        io = TranscodingStream(ZstdCompressor(), io)
+        Serialization.serialize(io, value)
+    finally
+        close(io)
+    end
+    return nothing
+end
+#endregion
 "Add a sheet to an existing Excel spreadsheet and transfer the contents of df NamedArray to the sheet"
 function addsheet!(path::String, df::NamedArray, sheetname::String)
     XLSX.openxlsx(path, mode ="rw") do xf
@@ -276,6 +338,10 @@ function runstata(dofile::String, version::VersionNumber, node::String, datafile
     run(`"$stata_executable" /e do $fname`)
     #println(fname)
     rm(fname)
+end
+function frequency(df::AbstractDataFrame, col::Symbol)::AbstractDataFrame
+    ct = combine(groupby(df, col, sort = true), nrow => :n)
+    return ct
 end
 #endregion
 

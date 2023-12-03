@@ -144,7 +144,7 @@ function basicepisodeQA(node)
         addsheet!(joinpath(episodepath(node), "QC", "EpisodesQA.xlsx"), sf, "DiedFlagWithExtResEnd")
     end
     #Episodes breakdown
-    e = freqtable(df, :Episodes)
+    e = frequency(df, :Episodes)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesQA.xlsx"), e, "EpisodesFreq")
     @info "=== Finished basic episode QA for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
@@ -414,7 +414,7 @@ function yrage_episodeQA(node)
         addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), sf, "DiedFlagWithExtResEnd")
     end
     #Episodes breakdown
-    e = freqtable(df, :Episodes)
+    e = frequency(df, :Episodes)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeQA.xlsx"), e, "EpisodesFreq")
     @info "=== Finished Yr Age episode QA node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
@@ -688,7 +688,7 @@ function yragedel_episodeQA(node)
         addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), sf, "DiedFlagWithExtResEnd")
     end
     #Episodes breakdown
-    e = freqtable(df, :Episodes)
+    e = frequency(df, :Episodes)
     addsheet!(joinpath(episodepath(node), "QC", "EpisodesYrAgeDeliveryQA.xlsx"), e, "EpisodesFreq")
     @info "=== Finished Year Age Delivery episode QA $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing

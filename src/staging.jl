@@ -1,12 +1,12 @@
 #region individuals
 "Read individuals and anonimise for specified node specified and save individual data, id map and bounds to to arrow files"
-function readindividuals(node::String)
-    readindividuals_internal(settings.Databases[node], node)
+function readindividuals(node::String, io)
+    readindividuals_internal(settings.Databases[node], node, io)
     individualobservationbounds(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
 end
 
 "Read individuals and anonimise for node specified in settings and save id map and individual data to to arrow files"
-function readindividuals_internal(db::String, node::String)
+function readindividuals_internal(db::String, node::String, io)
     con = ODBC.Connection(db)
     sql = """WITH Deaths AS (
         SELECT
@@ -47,19 +47,20 @@ function readindividuals_internal(db::String, node::String)
         JOIN dbo.Events SE ON I.BirthEventUid=SE.EventUid
         JOIN dbo.Events EE ON I.EndEventUid=EE.EventUid
         LEFT JOIN IndividualDeaths ID ON I.IndividualUid = ID.IndividualUid
-    """    
+    """
     individuals = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     @info "Read $(nrow(individuals)) $(node) individuals"
-    sex = freqtable(individuals, :Sex)
-    @info "Sex breakdown $(node)" sex
+    sex = frequency(individuals, :Sex)
+    @info "Sex breakdown $(node)"
+    pretty_table(io, sex; alignment=[:c, :r], show_subheader=false)
     sort!(individuals, :IndividualUid)
     sql = """SELECT
         UPPER(CONVERT(nvarchar(50),WomanUid)) WomanUid
         , UPPER(CONVERT(nvarchar(50),I.IndividualUid)) ChildUid
         FROM dbo.Pregnancies P
             JOIN dbo.Individuals I ON P.OutcomeEventUid=I.BirthEventUid
-    """  
-    pregnancies = DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    """
+    pregnancies = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(pregnancies)) $(node) pregnancies"
     pregnancies = unique!(pregnancies, :ChildUid)
@@ -67,43 +68,43 @@ function readindividuals_internal(db::String, node::String)
     # Add MotherUid from pregnancies
     individuals = leftjoin(individuals, pregnancies, on=:IndividualUid => :ChildUid, makeunique=true, matchmissing=:equal)
     for i = 1:nrow(individuals)
-        if ismissing(individuals[i,:MotherUid]) && !ismissing(individuals[i,:WomanUid])
-            individuals[i,:MotherUid] = individuals[i,:WomanUid]
+        if ismissing(individuals[i, :MotherUid]) && !ismissing(individuals[i, :WomanUid])
+            individuals[i, :MotherUid] = individuals[i, :WomanUid]
         end
     end
     individuals.IndividualId = 1:nrow(individuals)
     # Convert gui ids to integer ids
-    map = individuals[!,[:IndividualUid,:IndividualId]]
+    map = individuals[!, [:IndividualUid, :IndividualId]]
     Arrow.write(joinpath(stagingpath(node), "IndividualMap.arrow"), map, compress=:zstd)
     # Convert mother and father uids to corresponding integer ids
     individuals = leftjoin(individuals, map, on=:MotherUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     individuals = leftjoin(individuals, map, on=:FatherUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     # Select and rename final columns
-    select!(individuals, [:IndividualId,:Sex,:DoB,:DoD,:IndividualId_1,:IndividualId_2,:MotherDoD,:FatherDoD])
+    select!(individuals, [:IndividualId, :Sex, :DoB, :DoD, :IndividualId_1, :IndividualId_2, :MotherDoD, :FatherDoD])
     rename!(individuals, :IndividualId_1 => :MotherId, :IndividualId_2 => :FatherId)
     # Fix parent DoDs
     # Mother DoD
     mothers = select(individuals, [:MotherId])
     dropmissing!(mothers)
     unique!(mothers)
-    mothers = innerjoin(mothers, individuals, on = :MotherId => :IndividualId, makeunique=true, matchmissing=:equal)
+    mothers = innerjoin(mothers, individuals, on=:MotherId => :IndividualId, makeunique=true, matchmissing=:equal)
     select!(mothers, [:MotherId, :DoD])
     rename!(mothers, :DoD => :MotherDoD)
     # Father DoD
     fathers = select(individuals, [:FatherId])
     dropmissing!(fathers)
     unique!(fathers)
-    fathers = innerjoin(fathers, individuals, on = :FatherId => :IndividualId, makeunique=true, matchmissing=:equal)
+    fathers = innerjoin(fathers, individuals, on=:FatherId => :IndividualId, makeunique=true, matchmissing=:equal)
     select!(fathers, [:FatherId, :DoD])
     rename!(fathers, :DoD => :FatherDoD)
-    individuals = leftjoin(individuals, mothers, on = :MotherId => :MotherId, makeunique=true, matchmissing=:equal)
-    individuals = leftjoin(individuals, fathers, on = :FatherId => :FatherId, makeunique=true, matchmissing=:equal)
+    individuals = leftjoin(individuals, mothers, on=:MotherId => :MotherId, makeunique=true, matchmissing=:equal)
+    individuals = leftjoin(individuals, fathers, on=:FatherId => :FatherId, makeunique=true, matchmissing=:equal)
     for i = 1:nrow(individuals)
         if !ismissing(individuals[i, :MotherId]) #Always overwrite recorded DoD with linked mother DoD
-            individuals[i,:MotherDoD] = individuals[i,:MotherDoD_1]
+            individuals[i, :MotherDoD] = individuals[i, :MotherDoD_1]
         end
         if !ismissing(individuals[i, :FatherId]) #Always overwrite recorded DoD with linked father DoD
-            individuals[i,:FatherDoD] = individuals[i,:FatherDoD_1]
+            individuals[i, :FatherDoD] = individuals[i, :FatherDoD_1]
         end
     end
     select!(individuals, [:IndividualId, :Sex, :DoB, :DoD, :MotherId, :MotherDoD, :FatherId, :FatherDoD])
@@ -145,7 +146,7 @@ function individualobservationbounds(db::String, node::String, periodend::Date, 
     FROM dbo.HouseholdMemberships IR
     JOIN dbo.Events E ON IR.EndEventUid = E.EventUid
     """
-    observations =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    observations = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(observations)) $(node) individual observations"
     #filter!(:EventDate => s -> s <= periodend, observations) # event must be before period end
@@ -164,11 +165,11 @@ function individualobservationbounds(db::String, node::String, periodend::Date, 
 end
 #endregion individuals
 #region locations
-function readlocations(node::String)
-    readlocations_internal(settings.Databases[node], node)
+function readlocations(node::String, io)
+    readlocations_internal(settings.Databases[node], node, io)
 end
 "Read locations and anonimise for node save id map and location data to to arrow files"
-function readlocations_internal(db::String, node::String)
+function readlocations_internal(db::String, node::String, io)
     con = ODBC.Connection(db)
     sql1 = """WITH Areas AS (
         SELECT 
@@ -185,7 +186,7 @@ function readlocations_internal(db::String, node::String)
         , L.NodeId
         FROM dbo.Locations L
           LEFT JOIN Areas A ON L.LocationUid=A.LocationUid
-    """     
+    """
     sql3 = node == "AHRI" ? "WHERE AreaTypeId=1 AND LA.AreaSubTypeId=1" : " WHERE AreaTypeId=1" # AHRI has AreaSubtype for LocalAreas
     locations = DBInterface.execute(con, sql1 * sql3 * sql2; iterate_rows=true) |> DataFrame
     @info "Read $(nrow(locations)) $(node) locations"
@@ -193,25 +194,26 @@ function readlocations_internal(db::String, node::String)
     sort!(locations, :LocationUid)
     locations.LocationId = 1:nrow(locations)
     # Convert gui ids to integer ids
-    map = locations[!,[:LocationUid,:LocationId]]
+    map = locations[!, [:LocationUid, :LocationId]]
     Arrow.write(joinpath(stagingpath(node), "LocationMap.arrow"), map, compress=:zstd)
-    areas = select(locations,[:AreaUid]) # |> @select(:AreaUid) |> @filter(!isna(_.AreaUid)) |> @unique() |> DataFrame
+    areas = select(locations, [:AreaUid]) # |> @select(:AreaUid) |> @filter(!isna(_.AreaUid)) |> @unique() |> DataFrame
     dropmissing!(areas)
     unique!(areas)
     areas.AreaId = 1:nrow(areas)
     Arrow.write(joinpath(stagingpath(node), "AreaMap.arrow"), areas, compress=:zstd)
     locations = leftjoin(locations, areas, on=:AreaUid => :AreaUid, makeunique=true, matchmissing=:equal)
-    locations = select!(locations, [:LocationId,:NodeId,:LocationTypeId,:AreaId])
+    locations = select!(locations, [:LocationId, :NodeId, :LocationTypeId, :AreaId])
     Arrow.write(joinpath(stagingpath(node), "Locations.arrow"), locations, compress=:zstd)
-    a = freqtable(locations, :AreaId)
-    @info "Area breakdown for $(node)" a
+    a = frequency(locations, :AreaId)
+    @info "Area breakdown for $(node)"
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
     return nothing
 end # readlocations
 #endregion locations
 #region residencies
 "Retrieve and save residence episodes, assumes individual and locations have been read"
-function readresidences(node::String)
-    readresidences_internal(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+function readresidences(node::String, io)
+    readresidences_internal(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]), io)
     if node in ["Agincourt", "DIMAMO"]
         eliminateresidenceoverlaps(node)
         readresidencestatus(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
@@ -219,7 +221,7 @@ function readresidences(node::String)
     end
 end
 "Retrieve and save residence episodes directly from database"
-function readresidences_internal(db::String, node::String, periodend::Date, leftcensor::Date)
+function readresidences_internal(db::String, node::String, periodend::Date, leftcensor::Date, io)
     con = ODBC.Connection(db)
     sql = """WITH ResidentStatus AS (
         SELECT
@@ -285,81 +287,89 @@ function readresidences_internal(db::String, node::String, periodend::Date, left
     residences = innerjoin(residences, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     locationmap = Arrow.Table(joinpath(stagingpath(node), "LocationMap.arrow")) |> DataFrame
     residences = innerjoin(residences, locationmap, on=:LocationUid => :LocationUid, makeunique=true, matchmissing=:equal)
-    select!(residences, [:IndividualId,:LocationId,:StartDate,:StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate, :ResidentIndex])
-    a = freqtable(residences, :StartType)
-    @info "Start types $(node) before normalisation" a
-    years = Dates.year.(residences.StartDate) 
-    a = freqtable(years)
-    @info "Start years breakdown $(node) before normalisation" a
-    a = freqtable(residences, :EndType)
-    @info "End types $(node) before normalisation" a
-    years = Dates.year.(residences.EndDate) 
-    a = freqtable(years)
-    @info "End years breakdown $(node) before normalisation" a
+    select!(residences, [:IndividualId, :LocationId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate, :ResidentIndex])
+    a = frequency(residences, :StartType)
+    @info "Start types $(node) before normalisation"
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    years = DataFrame(yr=Dates.year.(residences.StartDate))
+    a = frequency(years, :yr)
+    @info "Start years breakdown $(node) before normalisation"
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(residences, :EndType)
+    @info "End types $(node) before normalisation"
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    years = DataFrame(yr=Dates.year.(residences.EndDate))
+    a = frequency(years, :yr)
+    @info "End years breakdown $(node) before normalisation"
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
     # Do recodes
-    recodeStarts = Set([100,102,999])
-    recodeEnds = Set([103,999])
+    recodeStarts = Set([100, 102, 999])
+    recodeEnds = Set([103, 999])
     for i = 1:nrow(residences)
         if residences[i, :StartDate] < leftcensor
             residences[i, :StartType] = 1 # set to enumeration
             residences[i, :StartDate] = Date(residences[i, :StartObservationDate])
         end
-        if residences[i,:EndDate] > periodend
+        if residences[i, :EndDate] > periodend
             residences[i, :EndDate] = periodend # right censor to period end
             residences[i, :EndType] = 9 # end of episode beyond periodend => OBE
         end
         if residences[i, :StartType] in recodeStarts
             residences[i, :StartType] = 3
-        end 
+        end
         if residences[i, :EndType] in recodeEnds
             residences[i, :EndType] = 4
-        end 
-            end
+        end
+    end
     filter!(:StartDate => s -> s <= periodend, residences)        # drop episodes that start after period end
-    filter!([:StartDate,:EndDate] => (s, e) -> s <= e, residences) # start date must be smaller or equal to end date
+    filter!([:StartDate, :EndDate] => (s, e) -> s <= e, residences) # start date must be smaller or equal to end date
 
-    sort!(residences, [:IndividualId,:StartDate,:StartType])
+    sort!(residences, [:IndividualId, :StartDate, :StartType])
     residences.ResidenceId = 1:nrow(residences)
     insertcols!(residences, :ResidentIndex, :GapStart => 0, :GapEnd => 0)
     df = combine(groupby(residences, :IndividualId), :LocationId, :ResidenceId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate, :ResidentIndex, :GapStart, :GapEnd,
-                                     :StartDate => ShiftedArrays.lead => :NextStart, :EndDate => ShiftedArrays.lag => :LastEnd)
+        :StartDate => ShiftedArrays.lead => :NextStart, :EndDate => ShiftedArrays.lag => :LastEnd)
     for i = 1:nrow(df)
-        if !ismissing(df[i,:NextStart])
-            gap = Dates.value(df[i,:NextStart] - df[i,:EndDate])
+        if !ismissing(df[i, :NextStart])
+            gap = Dates.value(df[i, :NextStart] - df[i, :EndDate])
             if gap <= 0
-                df[i,:EndType] = 5 # internal outmigration EXT
-             elseif gap > 180 && df[i,:EndType] != 300 # exclude refusals
-                df[i,:EndType] = 4 # external outmigration OMG
+                df[i, :EndType] = 5 # internal outmigration EXT
+            elseif gap > 180 && df[i, :EndType] != 300 # exclude refusals
+                df[i, :EndType] = 4 # external outmigration OMG
             end
         end
-        if !ismissing(df[i,:LastEnd])
-            gap = Dates.value(df[i,:StartDate] - df[i,:LastEnd])
+        if !ismissing(df[i, :LastEnd])
+            gap = Dates.value(df[i, :StartDate] - df[i, :LastEnd])
             if gap <= 0
-                df[i,:StartDate] = df[i,:LastEnd] + Dates.Day(1)
-                df[i,:StartType] = 6 # internal inmigration ENT
-            elseif gap > 0 && gap <= 180 && df[i,:StartType] == 6
-                df[i,:StartDate] = df[i,:LastEnd] + Dates.Day(1) # close internal migration gap
-            elseif gap > 180 && !(df[i,:StartType] == 300 || df[i,:StartType] == 301) # exclude refusals
-                df[i,:StartType] = 3 # external inmigration
+                df[i, :StartDate] = df[i, :LastEnd] + Dates.Day(1)
+                df[i, :StartType] = 6 # internal inmigration ENT
+            elseif gap > 0 && gap <= 180 && df[i, :StartType] == 6
+                df[i, :StartDate] = df[i, :LastEnd] + Dates.Day(1) # close internal migration gap
+            elseif gap > 180 && !(df[i, :StartType] == 300 || df[i, :StartType] == 301) # exclude refusals
+                df[i, :StartType] = 3 # external inmigration
             end
         end
     end
-    filter!([:StartDate,:EndDate] => (s, e) -> s <= e, df) # start date must be smaller or equal to end date
-    select!(df, [:ResidenceId, :IndividualId, :LocationId, :StartDate,:StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate, :ResidentIndex])
-    disallowmissing!(df, [:StartDate,:StartType,:EndDate,:EndType,:ResidentIndex])
+    filter!([:StartDate, :EndDate] => (s, e) -> s <= e, df) # start date must be smaller or equal to end date
+    select!(df, [:ResidenceId, :IndividualId, :LocationId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate, :ResidentIndex])
+    disallowmissing!(df, [:StartDate, :StartType, :EndDate, :EndType, :ResidentIndex])
     # filter!(:IndividualId => x -> x < 100, df)
-    transform!(groupby(sort(df,[:IndividualId, :StartDate]), :IndividualId), :IndividualId => eachindex => :Episode, nrow => :Episodes)
+    transform!(groupby(sort(df, [:IndividualId, :StartDate]), :IndividualId), :IndividualId => eachindex => :Episode, nrow => :Episodes)
     Arrow.write(joinpath(stagingpath(node), "IndividualResidencies.arrow"), df, compress=:zstd)
-    years = Dates.year.(residences.StartDate) 
-    a = freqtable(years)
-    @info "Start years breakdown $(node)" a
-    years = Dates.year.(residences.EndDate) 
-    a = freqtable(years)
-    @info "End years breakdown $(node)" a
-    a = freqtable(residences, :StartType)
-    @info "Start types $(node)" a
-    a = freqtable(residences, :EndType)
-    @info "End types $(node)" a
+    years = DataFrame(yr=Dates.year.(residences.StartDate))
+    a = frequency(years, :yr)
+    @info "Start years breakdown $(node)"
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    years = DataFrame(yr=Dates.year.(residences.EndDate))
+    a = frequency(years, :yr)
+    @info "End years breakdown $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(residences, :StartType)
+    @info "Start types $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(residences, :EndType)
+    @info "End types $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
     return nothing
 end
 "Decompose residency episodes into days and eliminate overlaps"
@@ -404,21 +414,21 @@ function processresidencedays(startdate, enddate, starttype, endtype, residentid
         append!(res_episode, fill(episode, length(new_daydate)))
     end
 
-    return (daydate = res_daydate, startdate = res_startdate, enddate = res_enddate, starttype = res_starttype, endtype = res_endtype, residentidx = res_residentidx, locationid = res_locationid, episode = res_episode)
+    return (daydate=res_daydate, startdate=res_startdate, enddate=res_enddate, starttype=res_starttype, endtype=res_endtype, residentidx=res_residentidx, locationid=res_locationid, episode=res_episode)
 end
 "Decompose residences into days and eliminate overlaps"
 function eliminateresidenceoverlaps(node::String)
     residences = Arrow.Table(joinpath(stagingpath(node), "IndividualResidencies.arrow")) |> DataFrame
     @info "Node $(node) $(nrow(residences)) episodes before overlap elimination at $(now())"
-    select!(residences, [:ResidenceId, :IndividualId, :LocationId, :StartDate,:StartType, :EndDate, :EndType, :ResidentIndex])
+    select!(residences, [:ResidenceId, :IndividualId, :LocationId, :StartDate, :StartType, :EndDate, :EndType, :ResidentIndex])
     insertcols!(residences, :ResidentIndex, :GapStart => 0, :GapEnd => 0, :Gap => 0)
     s = combine(groupby(sort(residences, [:StartDate, order(:EndDate, rev=true)]), :IndividualId, sort=true), [:StartDate, :EndDate, :StartType, :EndType, :ResidentIndex, :LocationId] => processresidencedays => AsTable)
     @info "$(nrow(s)) day rows for $(node) at $(now())"
-    df = combine(groupby(s, [:IndividualId,:episode,:locationid]), :daydate => minimum => :StartDate, :starttype => first => :StartType, 
-                                                               :daydate => maximum => :EndDate, :endtype => last => :EndType, 
-                                                               :residentidx => mean => :ResidentIndex, :episode => maximum => :episodes)
+    df = combine(groupby(s, [:IndividualId, :episode, :locationid]), :daydate => minimum => :StartDate, :starttype => first => :StartType,
+        :daydate => maximum => :EndDate, :endtype => last => :EndType,
+        :residentidx => mean => :ResidentIndex, :episode => maximum => :episodes)
     @info "Node $(node) $(nrow(df)) episodes after overlap elimination at $(now())"
-    rename!(df,Dict(:episode=>"Episode",:locationid=>"LocationId",:episodes => "Episodes"))
+    rename!(df, Dict(:episode => "Episode", :locationid => "LocationId", :episodes => "Episodes"))
     Arrow.write(joinpath(stagingpath(node), "IndividualResidenciesIntermediate.arrow"), df, compress=:zstd)
     return nothing
 end
@@ -468,8 +478,8 @@ function readresidencestatus(db::String, node::String, periodend::Date, leftcens
         WHEN ResStatusCode IN ('X','Q') AND (ResidentStatus<6) THEN CAST(2 AS int)
         WHEN ResStatusCode IN ('X','Q') THEN CAST(1 AS int)
         WHEN ResStatusCode <> 'P' THEN CAST(2 AS int)
-	    WHEN ResidentStatus < 6 THEN CAST(2 AS int)
-	    ELSE CAST(1 AS int)
+     WHEN ResidentStatus < 6 THEN CAST(2 AS int)
+     ELSE CAST(1 AS int)
       END ResidentStatus -- 1 Resident 2 Non-resident
     FROM SmoothedStatus
     """
@@ -482,9 +492,9 @@ function readresidencestatus(db::String, node::String, periodend::Date, leftcens
     resstatuses = innerjoin(resstatuses, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     locationmap = Arrow.Table(joinpath(stagingpath(node), "LocationMap.arrow")) |> DataFrame
     resstatuses = innerjoin(resstatuses, locationmap, on=:LocationUid => :LocationUid, makeunique=true, matchmissing=:equal)
-    select!(resstatuses, [:IndividualId,:LocationId,:ObservationDate,:ResidentStatus])
-    disallowmissing!(resstatuses, [:ObservationDate,:ResidentStatus])
-    sort!(resstatuses, [:IndividualId,:LocationId,:ObservationDate])
+    select!(resstatuses, [:IndividualId, :LocationId, :ObservationDate, :ResidentStatus])
+    disallowmissing!(resstatuses, [:ObservationDate, :ResidentStatus])
+    sort!(resstatuses, [:IndividualId, :LocationId, :ObservationDate])
     Arrow.write(joinpath(stagingpath(node), "ResidentStatus.arrow"), resstatuses, compress=:zstd)
     @info "Wrote $(nrow(resstatuses)) $(node) residence statuses"
     return nothing
@@ -505,64 +515,64 @@ function dropnonresidentepisodes(node::String)
     dropmissing!(s, :LocationId, disallowmissing=true)
     dropmissing!(s, :Episode, disallowmissing=true)
     replace!(s.ResidentStatus, missing => 1)
-    disallowmissing!(s, [:IndividualId,:StartDate,:StartType,:EndDate,:EndType, :Episode, :Episodes, :ResidentIndex, :ResidentStatus])
-    
+    disallowmissing!(s, [:IndividualId, :StartDate, :StartType, :EndDate, :EndType, :Episode, :Episodes, :ResidentIndex, :ResidentStatus])
+
     for i = 1:nrow(s)
-       # od = s[i,:ObservationDate]
-        if ismissing(s[i,:ObservationDate])
-            s[i,:ObservationDate] = s[i,:StartDate]
+        # od = s[i,:ObservationDate]
+        if ismissing(s[i, :ObservationDate])
+            s[i, :ObservationDate] = s[i, :StartDate]
         end
     end
-    filter!(row ->(row.ObservationDate >= row.StartDate) & (row.ObservationDate <= row.EndDate), s)       
-    df = combine(groupby(sort(s,[:StartDate,:ObservationDate]), :IndividualId), :LocationId, :StartDate, :StartType, :EndDate, :EndType, :ResidentIndex, :Episode, :Episodes, :ObservationDate, :ResidentStatus,
-                :ResidentStatus => ShiftedArrays.lag => :LastResidentStatus, 
-                :LocationId => ShiftedArrays.lag => :LastLocationId, :Episode => ShiftedArrays.lag => :LastEpisode)
+    filter!(row -> (row.ObservationDate >= row.StartDate) & (row.ObservationDate <= row.EndDate), s)
+    df = combine(groupby(sort(s, [:StartDate, :ObservationDate]), :IndividualId), :LocationId, :StartDate, :StartType, :EndDate, :EndType, :ResidentIndex, :Episode, :Episodes, :ObservationDate, :ResidentStatus,
+        :ResidentStatus => ShiftedArrays.lag => :LastResidentStatus,
+        :LocationId => ShiftedArrays.lag => :LastLocationId, :Episode => ShiftedArrays.lag => :LastEpisode)
     insertcols!(df, :episode => 0)
     episode = 0
     # println(df)
     # Arrow.write(joinpath(stagingpath(node), "dropnonresidentepisodes.arrow"), df, compress=:zstd)
     for i = 1:nrow(df)
-        if ismissing(df[i,:LastLocationId])
+        if ismissing(df[i, :LastLocationId])
             episode = 1
-            df[i,:episode] = episode        
+            df[i, :episode] = episode
         else
-            location = df[i,:LocationId]
-            lastlocation = df[i,:LastLocationId]
-            e = df[i,:Episode]
-            laste = df[i,:LastEpisode]
+            location = df[i, :LocationId]
+            lastlocation = df[i, :LastLocationId]
+            e = df[i, :Episode]
+            laste = df[i, :LastEpisode]
             if location != lastlocation || e != laste
                 episode = episode + 1
-                df[i,:episode] = episode
+                df[i, :episode] = episode
             else
-                residentstatus = df[i,:ResidentStatus]
-                lastresidentstatus = df[i,:LastResidentStatus]
+                residentstatus = df[i, :ResidentStatus]
+                lastresidentstatus = df[i, :LastResidentStatus]
                 if residentstatus != lastresidentstatus
-                episode = episode + 1
-                    df[i,:episode] = episode
+                    episode = episode + 1
+                    df[i, :episode] = episode
                 else
-                    df[i,:episode] = episode
+                    df[i, :episode] = episode
                 end
             end
         end
     end
-    s = combine(groupby(df, [:IndividualId,:LocationId,:episode]), :StartDate => first => :StartDate, :StartType => first => :StartType, 
-                :EndDate => first => :EndDate, :EndType => first => :EndType, 
-                :ResidentStatus => first => :ResidentStatus, :ResidentIndex => mean => :ResidentIndex,
-                :ObservationDate => minimum => :StartObservationDate, :ObservationDate => maximum => :EndObservationDate)
+    s = combine(groupby(df, [:IndividualId, :LocationId, :episode]), :StartDate => first => :StartDate, :StartType => first => :StartType,
+        :EndDate => first => :EndDate, :EndType => first => :EndType,
+        :ResidentStatus => first => :ResidentStatus, :ResidentIndex => mean => :ResidentIndex,
+        :ObservationDate => minimum => :StartObservationDate, :ObservationDate => maximum => :EndObservationDate)
     @info "Node $(node) $(nrow(s)) episodes after resident split"
     df = combine(groupby(s, :IndividualId), :LocationId, :episode, :StartDate, :StartType, :EndDate, :EndType, :ResidentStatus, :StartObservationDate, :EndObservationDate, :ResidentIndex,
-                :ResidentStatus => ShiftedArrays.lead => :NextResidentStatus, 
-                :ResidentStatus => ShiftedArrays.lag => :LastResidentStatus, 
-                :StartObservationDate => ShiftedArrays.lead => :NextStartObsDate,
-                :EndObservationDate => ShiftedArrays.lag => :LastEndObsDate)
+        :ResidentStatus => ShiftedArrays.lead => :NextResidentStatus,
+        :ResidentStatus => ShiftedArrays.lag => :LastResidentStatus,
+        :StartObservationDate => ShiftedArrays.lead => :NextStartObsDate,
+        :EndObservationDate => ShiftedArrays.lag => :LastEndObsDate)
     for i = 1:nrow(df)
-        if df[i,:ResidentStatus] == 1 && !ismissing(df[i,:NextResidentStatus]) && df[i,:NextResidentStatus] == 2
-            df[i,:EndDate] = newrandomdate(df[i,:EndObservationDate], df[i,:EndObservationDate], df[i,:NextStartObsDate])
-            df[i,:EndType] = 4
+        if df[i, :ResidentStatus] == 1 && !ismissing(df[i, :NextResidentStatus]) && df[i, :NextResidentStatus] == 2
+            df[i, :EndDate] = newrandomdate(df[i, :EndObservationDate], df[i, :EndObservationDate], df[i, :NextStartObsDate])
+            df[i, :EndType] = 4
         end
-        if df[i,:ResidentStatus] == 1 && !ismissing(df[i,:LastResidentStatus]) && df[i,:LastResidentStatus] == 2
-            df[i,:StartDate] = newrandomdate(df[i,:LastEndObsDate], df[i,:LastEndObsDate], df[i,:StartObservationDate])
-            df[i,:StartType] = 3
+        if df[i, :ResidentStatus] == 1 && !ismissing(df[i, :LastResidentStatus]) && df[i, :LastResidentStatus] == 2
+            df[i, :StartDate] = newrandomdate(df[i, :LastEndObsDate], df[i, :LastEndObsDate], df[i, :StartObservationDate])
+            df[i, :StartType] = 3
         end
     end
     filter!(:ResidentStatus => s -> s == 1, df)
@@ -570,7 +580,7 @@ function dropnonresidentepisodes(node::String)
     df.ResidenceId = 1:nrow(df)
     select!(df, [:ResidenceId, :IndividualId, :LocationId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate, :ResidentIndex])
     mv(joinpath(stagingpath(node), "IndividualResidencies.arrow"), joinpath(stagingpath(node), "IndividualResidencies_old.arrow"), force=true)
-    transform!(groupby(sort(df,[:IndividualId, :StartDate]),:IndividualId), :IndividualId => eachindex => :Episode, nrow => :Episodes)
+    transform!(groupby(sort(df, [:IndividualId, :StartDate]), :IndividualId), :IndividualId => eachindex => :Episode, nrow => :Episodes)
     Arrow.write(joinpath(stagingpath(node), "IndividualResidencies.arrow"), df, compress=:zstd)
     return nothing
 end # dropnonresidentepisodes
@@ -595,11 +605,11 @@ function readhouseholds_internal(db::String, node::String)
         JOIN dbo.Events EE ON H.EndEventUid=EE.EventUid
     ORDER BY HouseholdUid
     """
-    households = DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    households = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     @info "Read $(nrow(households)) $(node) households"
     DBInterface.close!(con)
     households.HouseholdId = 1:nrow(households)
-    map = households[!,[:HouseholdUid,:HouseholdId]]
+    map = households[!, [:HouseholdUid, :HouseholdId]]
     Arrow.write(joinpath(stagingpath(node), "HouseholdMap.arrow"), map, compress=:zstd)
     select!(households, [:HouseholdId, :StartDate, :StartType, :EndDate, :EndType])
     Arrow.write(joinpath(stagingpath(node), "Households.arrow"), households, compress=:zstd)
@@ -624,7 +634,7 @@ function readhouseholdresidences(db::String, node::String, periodend::Date, left
         JOIN dbo.Events SO ON SE.ObservationEventUid=SO.EventUid
         JOIN dbo.Events EO ON EE.ObservationEventUid=EO.EventUid
     """
-    residences =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    residences = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     @info "Read $(nrow(residences)) $(node) household residences"
     sql = """SELECT
       HM.IndividualUid
@@ -651,12 +661,12 @@ function readhouseholdresidences(db::String, node::String, periodend::Date, left
         JOIN dbo.Events HRSS ON HRS.ObservationEventUid=HRSS.EventUid
         JOIN dbo.Events HRSE ON HRE.ObservationEventUid=HRSE.EventUid;  
     """
-    relationships =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    relationships = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(relationships)) $(node) household relationships"
     lastseen = combine(groupby(relationships, :HouseholdUid), :EndDate => maximum => :LastHHDate, :EndObservationDate => maximum => :LastObservationDate)
     @info "Grouped $(nrow(lastseen)) $(node) households from household relationships"
-    sort!(residences, [:HouseholdUid,:StartDate])
+    sort!(residences, [:HouseholdUid, :StartDate])
     residences = combine(groupby(residences, :HouseholdUid), sdf -> sort(sdf, [:StartDate, order(:EndDate, rev=true)]), s -> 1:nrow(s), nrow => :Episodes)
     rename!(residences, :x1 => :Episode)
     @info "Household residences $(nrow(residences)) $(node) after episode counts"
@@ -667,50 +677,50 @@ function readhouseholdresidences(db::String, node::String, periodend::Date, left
             r[i, :StartDate] = Date(residences[i, :StartObservationDate])
         end
         if !ismissing(r[i, :LastHHDate]) && r[i, :Episode] == r[i, :Episodes] && r[i, :LastHHDate] > r[i, :EndDate]
-            r[i,:EndDate] = r[i,:LastHHDate]
-            r[i,:EndObservationDate] = r[i,:LastObservationDate]
+            r[i, :EndDate] = r[i, :LastHHDate]
+            r[i, :EndObservationDate] = r[i, :LastObservationDate]
         end
-        if r[i,:EndDate] > periodend
+        if r[i, :EndDate] > periodend
             r[i, :EndDate] = periodend # right censor to period end
             r[i, :EndType] = 9 # end of episode beyond periodend => OBE
         end
     end
     filter!(:StartDate => s -> s <= periodend, r)        # drop episodes that start after period end
-    filter!([:StartDate,:EndDate] => (s, e) -> s <= e, r) # start date must be smaller or equal to end date
-    select!(r, [:HouseholdUid,:LocationUid,:StartDate,:StartType,:EndDate,:EndType,:StartObservationDate,:EndObservationDate])
+    filter!([:StartDate, :EndDate] => (s, e) -> s <= e, r) # start date must be smaller or equal to end date
+    select!(r, [:HouseholdUid, :LocationUid, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate])
     @info "Household residences $(nrow(r)) $(node) after right censor"
     householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
     r = innerjoin(r, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
     locationmap = Arrow.Table(joinpath(stagingpath(node), "LocationMap.arrow")) |> DataFrame
     r = innerjoin(r, locationmap, on=:LocationUid => :LocationUid, makeunique=true, matchmissing=:equal)
-    select!(r, [:HouseholdId,:LocationId,:StartDate,:StartType,:EndDate,:EndType,:StartObservationDate,:EndObservationDate])
-    disallowmissing!(r, [:StartDate,:EndDate])
-    df = combine(groupby(sort(r,[:StartDate, order(:EndDate, rev=true)]), :HouseholdId), :LocationId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate,
-                                     :StartDate => ShiftedArrays.lead => :NextStart, :EndDate => ShiftedArrays.lag => :LastEnd)
+    select!(r, [:HouseholdId, :LocationId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate])
+    disallowmissing!(r, [:StartDate, :EndDate])
+    df = combine(groupby(sort(r, [:StartDate, order(:EndDate, rev=true)]), :HouseholdId), :LocationId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate,
+        :StartDate => ShiftedArrays.lead => :NextStart, :EndDate => ShiftedArrays.lag => :LastEnd)
     for i = 1:nrow(df)
-        if !ismissing(df[i,:NextStart])
-            gap = Dates.value(df[i,:NextStart] - df[i,:EndDate])
+        if !ismissing(df[i, :NextStart])
+            gap = Dates.value(df[i, :NextStart] - df[i, :EndDate])
             if gap <= 0
-                df[i,:EndType] = 5 # internal outmigration EXT
-             elseif gap > 180 && df[i,:EndType] != 300 # exclude refusals
-                df[i,:EndType] = 4 # external outmigration OMG
+                df[i, :EndType] = 5 # internal outmigration EXT
+            elseif gap > 180 && df[i, :EndType] != 300 # exclude refusals
+                df[i, :EndType] = 4 # external outmigration OMG
             end
         end
-        if !ismissing(df[i,:LastEnd])
-            gap = Dates.value(df[i,:StartDate] - df[i,:LastEnd])
+        if !ismissing(df[i, :LastEnd])
+            gap = Dates.value(df[i, :StartDate] - df[i, :LastEnd])
             if gap <= 0
-                df[i,:StartDate] = df[i,:LastEnd] + Dates.Day(1)
-                df[i,:StartType] = 6 # internal inmigration ENT
-            elseif gap > 0 && gap <= 180 && df[i,:StartType] == 6
-                df[i,:StartDate] = df[i,:LastEnd] + Dates.Day(1) # close internal migration gap
-            elseif gap > 180 && !(df[i,:StartType] == 300 || df[i,:StartType] == 301) # exclude refusals
-                df[i,:StartType] = 3 # external inmigration
+                df[i, :StartDate] = df[i, :LastEnd] + Dates.Day(1)
+                df[i, :StartType] = 6 # internal inmigration ENT
+            elseif gap > 0 && gap <= 180 && df[i, :StartType] == 6
+                df[i, :StartDate] = df[i, :LastEnd] + Dates.Day(1) # close internal migration gap
+            elseif gap > 180 && !(df[i, :StartType] == 300 || df[i, :StartType] == 301) # exclude refusals
+                df[i, :StartType] = 3 # external inmigration
             end
         end
     end
-    filter!([:StartDate,:EndDate] => (s, e) -> s <= e, df) # start date must be smaller or equal to end date
-    sort!(df,[:HouseholdId,:StartDate, order(:EndDate, rev=true)])
-    select!(df,[:HouseholdId, :LocationId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate])
+    filter!([:StartDate, :EndDate] => (s, e) -> s <= e, df) # start date must be smaller or equal to end date
+    sort!(df, [:HouseholdId, :StartDate, order(:EndDate, rev=true)])
+    select!(df, [:HouseholdId, :LocationId, :StartDate, :StartType, :EndDate, :EndType, :StartObservationDate, :EndObservationDate])
     transform!(groupby(df, [:HouseholdId]), :HouseholdId => eachindex => :Episode, nrow => :Episodes)
     Arrow.write(joinpath(stagingpath(node), "HouseholdResidences.arrow"), df, compress=:zstd)
     @info "Wrote $(nrow(df)) $(node) household residences"
@@ -742,39 +752,39 @@ function readhouseholdmemberships_internal(db::String, node::String, periodend::
         JOIN dbo.Events HRSE ON HME.ObservationEventUid=HRSE.EventUid
     WHERE HME.EventTypeId>0 -- get rid of NYO episodes
     """
-    memberships =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    memberships = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(memberships)) $(node) membership episodes from database"
     householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
     memberships = innerjoin(memberships, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(memberships)) $(node) membership episodes"
-    individualmap = Arrow.Table(joinpath(stagingpath(node),"IndividualMap.arrow")) |> DataFrame
+    individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     memberships = innerjoin(memberships, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(memberships)) $(node) membership episodes"
-    individualbounds = Arrow.Table(joinpath(stagingpath(node),"IndividualBounds.arrow")) |> DataFrame
-    m = leftjoin(memberships,individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
+    individualbounds = Arrow.Table(joinpath(stagingpath(node), "IndividualBounds.arrow")) |> DataFrame
+    m = leftjoin(memberships, individualbounds, on=:IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(m)) $(node) membership episodes after individual bounds join"
     #adjust start and end dates
     for i = 1:nrow(m)
-        if ismissing(m[i,:EarliestDate])
-            m[i,:EarliestDate] = leftcensor
+        if ismissing(m[i, :EarliestDate])
+            m[i, :EarliestDate] = leftcensor
         end
-        if m[i,:StartDate] < leftcensor
-            m[i,:StartDate] = m[i,:EarliestDate]
-            m[i,:StartObservationDate] = m[i,:EarliestDate]
-            m[i,:StartType] = 1
+        if m[i, :StartDate] < leftcensor
+            m[i, :StartDate] = m[i, :EarliestDate]
+            m[i, :StartObservationDate] = m[i, :EarliestDate]
+            m[i, :StartType] = 1
         end
-        if m[i,:EndDate] > periodend
-            m[i,:EndDate] = periodend
-            m[i,:EndType] = 9
+        if m[i, :EndDate] > periodend
+            m[i, :EndDate] = periodend
+            m[i, :EndType] = 9
         end
     end
     filter!(:StartDate => s -> s <= periodend, m)         # drop episodes that start after period end
-    filter!([:StartDate,:EndDate] => (s, e) -> s <= e, m) # start date must be smaller or equal to end date
-    sort!(m,[:IndividualId,:HouseholdId,:StartDate])
+    filter!([:StartDate, :EndDate] => (s, e) -> s <= e, m) # start date must be smaller or equal to end date
+    sort!(m, [:IndividualId, :HouseholdId, :StartDate])
     m.MembershipId = 1:nrow(m)
-    transform!(groupby(m,[:IndividualId,:HouseholdId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
-    select!(m,[:MembershipId, :IndividualId, :HouseholdId, :StartDate, :StartType, :StartObservationDate, :EndDate, :EndType, :EndObservationDate, :Episode, :Episodes])
+    transform!(groupby(m, [:IndividualId, :HouseholdId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
+    select!(m, [:MembershipId, :IndividualId, :HouseholdId, :StartDate, :StartType, :StartObservationDate, :EndDate, :EndType, :EndObservationDate, :Episode, :Episodes])
     Arrow.write(joinpath(stagingpath(node), "HouseholdMemberships.arrow"), m, compress=:zstd)
     @info "Wrote $(nrow(m)) $(node) membership episodes"
     return nothing
@@ -800,7 +810,7 @@ function readhouseholdheadrelationships(db::String, node::String, periodend::Dat
         JOIN dbo.Events HRSE ON HME.ObservationEventUid=HRSE.EventUid
     WHERE HME.EventTypeId>0 -- get rid of NYO episodes
     """
-    relationships =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    relationships = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(relationships)) $(node) relationships episodes from database"
     householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
@@ -810,29 +820,29 @@ function readhouseholdheadrelationships(db::String, node::String, periodend::Dat
     relationships = innerjoin(relationships, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(relationships)) $(node) relationships episodes"
     individualbounds = Arrow.Table(joinpath(stagingpath(node), "IndividualBounds.arrow")) |> DataFrame
-    m = leftjoin(relationships,individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
+    m = leftjoin(relationships, individualbounds, on=:IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(m)) $(node) relationships episodes after individual bounds join"
     #adjust start and end dates
     for i = 1:nrow(m)
-        if ismissing(m[i,:EarliestDate])
-            m[i,:EarliestDate] = leftcensor
+        if ismissing(m[i, :EarliestDate])
+            m[i, :EarliestDate] = leftcensor
         end
-        if m[i,:StartDate] < leftcensor
-            m[i,:StartDate] = m[i,:EarliestDate]
-            m[i,:StartObservationDate] = m[i,:EarliestDate]
-            m[i,:StartType] = 1
+        if m[i, :StartDate] < leftcensor
+            m[i, :StartDate] = m[i, :EarliestDate]
+            m[i, :StartObservationDate] = m[i, :EarliestDate]
+            m[i, :StartType] = 1
         end
-        if m[i,:EndDate] > periodend
-            m[i,:EndDate] = periodend
-            m[i,:EndType] = 9
+        if m[i, :EndDate] > periodend
+            m[i, :EndDate] = periodend
+            m[i, :EndType] = 9
         end
     end
     filter!(:StartDate => s -> s <= periodend, m)         # drop episodes that start after period end
-    filter!([:StartDate,:EndDate] => (s, e) -> s <= e, m) # start date must be smaller or equal to end date
-    sort!(m,[:IndividualId,:HouseholdId, :StartDate, :HHRelationshipTypeId])
+    filter!([:StartDate, :EndDate] => (s, e) -> s <= e, m) # start date must be smaller or equal to end date
+    sort!(m, [:IndividualId, :HouseholdId, :StartDate, :HHRelationshipTypeId])
     m.RelationshipId = 1:nrow(m)
-    transform!(groupby(m,[:IndividualId,:HouseholdId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
-    select!(m,[:RelationshipId, :IndividualId, :HouseholdId, :HHRelationshipTypeId, :StartDate, :StartType, :StartObservationDate, :EndDate, :EndType, :EndObservationDate, :Episode, :Episodes])
+    transform!(groupby(m, [:IndividualId, :HouseholdId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
+    select!(m, [:RelationshipId, :IndividualId, :HouseholdId, :HHRelationshipTypeId, :StartDate, :StartType, :StartObservationDate, :EndDate, :EndType, :EndObservationDate, :Episode, :Episodes])
     Arrow.write(joinpath(stagingpath(node), "HHeadRelationships.arrow"), m, compress=:zstd)
     @info "Wrote $(nrow(m)) $(node) relationships episodes"
     return nothing
@@ -840,7 +850,7 @@ end #readhouseholdheadrelationships
 #endregion
 #region IndividualMemberships
 "Decompose household memberships to days and combine with houeshold relationships and produced consolidated individual hosuehold membership episodes with household head relationship"
-function readindividualmemberships(node::String, batchsize::Int64 = BatchSize)
+function readindividualmemberships(node::String, batchsize::Int64=BatchSize)
     batchmemberships(node, batchsize)
 end
 function processmembershipdays(startdate, enddate, starttype, endtype)
@@ -876,11 +886,11 @@ function processmembershipdays(startdate, enddate, starttype, endtype)
         append!(res_episode, fill(episode, length(new_daydate)))
     end
 
-    return (daydate = res_daydate, startdate = res_startdate, enddate = res_enddate, starttype = res_starttype, endtype = res_endtype, episode = res_episode)
+    return (daydate=res_daydate, startdate=res_startdate, enddate=res_enddate, starttype=res_starttype, endtype=res_endtype, episode=res_episode)
 end
 function getmembershipdays(f)
     s = combine(groupby(sort(f, [:StartDate, order(:EndDate, rev=true)]), [:IndividualId, :HouseholdId], sort=true), [:StartDate, :EndDate, :StartType, :EndType] => processmembershipdays => AsTable)
-     rename!(s,Dict(:daydate=>"DayDate",:episode=>"Episode",:startdate=>"StartDate",:enddate => "EndDate",:starttype => "StartType",:endtype => "EndType"))
+    rename!(s, Dict(:daydate => "DayDate", :episode => "Episode", :startdate => "StartDate", :enddate => "EndDate", :starttype => "StartType", :endtype => "EndType"))
     return s
 end #getmembershipdays
 function processrelationshipdays(startdate, enddate, starttype, endtype, hhrelationtype)
@@ -920,65 +930,60 @@ function processrelationshipdays(startdate, enddate, starttype, endtype, hhrelat
         append!(res_episode, fill(episode, length(new_daydate)))
     end
 
-    return (daydate = res_daydate, startdate = res_startdate, enddate = res_enddate, starttype = res_starttype, endtype = res_endtype, hhrelationtype = res_relation ,episode = res_episode)
+    return (daydate=res_daydate, startdate=res_startdate, enddate=res_enddate, starttype=res_starttype, endtype=res_endtype, hhrelationtype=res_relation, episode=res_episode)
 end
 function getrelationshipdays(f)
     s = combine(groupby(sort(f, [:StartDate, order(:EndDate, rev=true)]), [:IndividualId, :HouseholdId], sort=true), [:StartDate, :EndDate, :StartType, :EndType, :HHRelationshipTypeId] => processrelationshipdays => AsTable)
-    rename!(s,Dict(:daydate=>"DayDate",:episode=>"Episode",:startdate=>"StartDate",:enddate => "EndDate",:starttype => "StartType",:endtype => "EndType",:hhrelationtype => "HHRelationshipTypeId"))
+    rename!(s, Dict(:daydate => "DayDate", :episode => "Episode", :startdate => "StartDate", :enddate => "EndDate", :starttype => "StartType", :endtype => "EndType", :hhrelationtype => "HHRelationshipTypeId"))
     return s
 end #getrelationshipdays
 function individualmemberships(node::String, m, r, batch::Int64)
-    mr = leftjoin(getmembershipdays(m), getrelationshipdays(r), on = [:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
-    select!(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :Episode])
+    mr = leftjoin(getmembershipdays(m), getrelationshipdays(r), on=[:IndividualId => :IndividualId, :HouseholdId => :HouseholdId, :DayDate => :DayDate], makeunique=true, matchmissing=:equal)
+    select!(mr, [:IndividualId, :HouseholdId, :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :Episode])
     replace!(mr.HHRelationshipTypeId, missing => 12)
-    disallowmissing!(mr,[:HHRelationshipTypeId, :DayDate])
+    disallowmissing!(mr, [:HHRelationshipTypeId, :DayDate])
     @info "$(nrow(mr)) $(node) day rows in batch $(batch)"
-    mr = combine(groupby(mr,[:IndividualId,:HouseholdId]), :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :Episode, 
-                             :HHRelationshipTypeId => Base.Fix2(lag,1) => :LastRelation, :HHRelationshipTypeId => Base.Fix2(lead,1) => :NextRelation)
+    mr = combine(groupby(mr, [:IndividualId, :HouseholdId]), :HHRelationshipTypeId, :DayDate, :StartType, :EndType, :Episode,
+        :HHRelationshipTypeId => ShiftedArrays.lag => :LastRelation, :HHRelationshipTypeId => ShiftedArrays.lead => :NextRelation)
     for i = 1:nrow(mr)
-        if !ismissing(mr[i,:LastRelation])
+        if !ismissing(mr[i, :LastRelation])
             if mr[i, :LastRelation] != mr[i, :HHRelationshipTypeId]
                 mr[i, :StartType] = 104
             end
         end
-        if !ismissing(mr[i,:NextRelation])
+        if !ismissing(mr[i, :NextRelation])
             if mr[i, :NextRelation] != mr[i, :HHRelationshipTypeId]
                 mr[i, :EndType] = 104
             end
         end
     end
-    memberships = combine(groupby(mr,[:IndividualId, :HouseholdId, :HHRelationshipTypeId, :Episode]), :DayDate => minimum => :StartDate, :StartType => first => :StartType,
-                                                                                            :DayDate => maximum => :EndDate, :EndType => last => :EndType)
-    open(joinpath(stagingpath(node), "IndividualMemberships$(batch).arrow"),"w"; lock = false) do io
-        Arrow.write(io, memberships)
-    end
+    memberships = combine(groupby(mr, [:IndividualId, :HouseholdId, :HHRelationshipTypeId, :Episode]), :DayDate => minimum => :StartDate, :StartType => first => :StartType,
+        :DayDate => maximum => :EndDate, :EndType => last => :EndType)
+    serializetofile(joinpath(stagingpath(node), "IndividualMemberships$(batch)"), memberships)
     @info "Wrote $(nrow(memberships)) $(node) individual membership episodes in batch $(batch)"
     memberships = nothing
     return nothing
 end #individualmemberships
 function openchunk(node::String, chunk::Int64)
-    open(joinpath(stagingpath(node), "IndividualMemberships$(chunk).arrow"),"r"; lock = false) do io
-        t = Arrow.Table(io)
-        d = DataFrame(t)
-        t = nothing
-        return d
+    open(joinpath(stagingpath(node), "IndividualMemberships$(chunk).arrow")) do io
+        return Arrow.Table(io) |> DataFrame
     end;
 end
 "Concatenate membership batches"
 function combinemembershipbatch(node::String, batches)
     memberships = openchunk(node::String, 1)
-    r = similar(memberships,0)
+    r = similar(memberships, 0)
     for i = 1:batches
         m = openchunk(node::String, i)
         append!(r, m)
         m = nothing
     end
-    open(joinpath(stagingpath(node), "IndividualMemberships.arrow"),"w"; lock = false) do io
+    open(joinpath(stagingpath(node), "IndividualMemberships.arrow"), "w"; lock=false) do io
         Arrow.write(io, r, compress=:zstd)
     end
     @info "Final individual membership rows $(nrow(r)) for $(node)"
     r = nothing
-    GC.gc()
+    GC.gc(); GC.gc(); GC.gc()
     #delete chunks
     for i = 1:batches
         rm(joinpath(stagingpath(node), "IndividualMemberships$(i).arrow"))
@@ -986,19 +991,19 @@ function combinemembershipbatch(node::String, batches)
     return nothing
 end #combinemembershipbatch
 "Normalise memberships in batches"
-function batchmemberships(node::String, batchsize::Int64 = BatchSize)
+function batchmemberships(node::String, batchsize::Int64=BatchSize)
     relationships = open(joinpath(stagingpath(node), "HHeadRelationships.arrow")) do io
         return Arrow.Table(io) |> DataFrame
     end
-    select!(relationships,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType, :HHRelationshipTypeId])
+    select!(relationships, [:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType, :HHRelationshipTypeId])
     @info "Node $(node) $(nrow(relationships)) relationship episodes"
     memberships = open(joinpath(stagingpath(node), "HouseholdMemberships.arrow")) do io
         return Arrow.Table(io) |> DataFrame
     end
-    select!(memberships,[:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType])
+    select!(memberships, [:IndividualId, :HouseholdId, :Episode, :StartDate, :StartType, :EndDate, :EndType])
     @info "Node $(node) $(nrow(memberships)) memberships episodes"
     minId, maxId, batches = individualbatch(node, batchsize)
-#    Threads.@threads for i = 1:batches
+    #    Threads.@threads for i = 1:batches
     for i = 1:batches
         fromId, toId = nextidrange(minId, maxId, i, batchsize)
         @info "Batch $(i) from $(fromId) to $(toId)"
@@ -1006,16 +1011,22 @@ function batchmemberships(node::String, batchsize::Int64 = BatchSize)
         r = filter([:IndividualId] => id -> fromId <= id <= toId, relationships)
         individualmemberships(node, m, r, i)
     end
-    combinemembershipbatch(node, batches)
+    memberships = nothing
+    relationships = nothing
+    r = restoredataframe(stagingpath(node),"IndividualMemberships", batches)
+    open(joinpath(stagingpath(node), "IndividualMemberships.arrow"), "w"; lock=false) do io
+        Arrow.write(io, r, compress=:zstd)
+    end
+    r = nothing
     return nothing
 end #batchmemberships
 
 #endregion
 #region EducationStatuses
-function readeducationstatuses(node::String)
-    educationstatus(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+function readeducationstatuses(node::String, io)
+    educationstatus(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]), io)
 end
-function educationstatus(db::String, node::String, periodend::Date, leftcensor::Date)
+function educationstatus(db::String, node::String, periodend::Date, leftcensor::Date, io)
     con = ODBC.Connection(db)
     sql = """SELECT
     UPPER(CONVERT(varchar(50),IndividualUid)) IndividualUid
@@ -1026,49 +1037,52 @@ function educationstatus(db::String, node::String, periodend::Date, leftcensor::
     FROM dbo.IndividualObservations IO
         JOIN dbo.Events OE ON IO.ObservationUid=OE.EventUid
     """
-    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    s = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(s)) $(node) education statuses from database"
     individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     si = innerjoin(s, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     individualbounds = Arrow.Table(joinpath(stagingpath(node), "IndividualBounds.arrow")) |> DataFrame
-    m = leftjoin(si, individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
-    insertcols!(m,:OutsideBounds => false)
-    for i=1:nrow(m)
-        if (!ismissing(m[i,:EarliestDate]) && m[i,:ObservationDate] < m[i,:EarliestDate]) || (m[i,:ObservationDate] < leftcensor)
-            m[i,:OutsideBounds]=true
+    m = leftjoin(si, individualbounds, on=:IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
+    insertcols!(m, :OutsideBounds => false)
+    for i = 1:nrow(m)
+        if (!ismissing(m[i, :EarliestDate]) && m[i, :ObservationDate] < m[i, :EarliestDate]) || (m[i, :ObservationDate] < leftcensor)
+            m[i, :OutsideBounds] = true
         end
-        if (!ismissing(m[i,:LatestDate]) && m[i,:ObservationDate] > m[i,:LatestDate]) || (m[i,:ObservationDate] > periodend)
-            m[i,:OutsideBounds]=true
+        if (!ismissing(m[i, :LatestDate]) && m[i, :ObservationDate] > m[i, :LatestDate]) || (m[i, :ObservationDate] > periodend)
+            m[i, :OutsideBounds] = true
         end
     end
     #filter if outside bounds
     filter!([:OutsideBounds] => x -> !x, m)
     @info "Read $(nrow(m)) $(node) education statuses inside bounds"
-    filter!([:CurrentEducation, :HighestSchoolLevel, :HighestNonSchoolLevel] => (x,y,z) -> !(x<0 && y<0 && z<0), m)
+    filter!([:CurrentEducation, :HighestSchoolLevel, :HighestNonSchoolLevel] => (x, y, z) -> !(x < 0 && y < 0 && z < 0), m)
     @info "Read $(nrow(m)) $(node) education statuses not missing"
-    disallowmissing!(m,[:ObservationDate])
-    select!(m,[:IndividualId,:ObservationDate,:CurrentEducation, :HighestSchoolLevel, :HighestNonSchoolLevel])
-    sort!(m,[:IndividualId,:ObservationDate])
+    disallowmissing!(m, [:ObservationDate])
+    select!(m, [:IndividualId, :ObservationDate, :CurrentEducation, :HighestSchoolLevel, :HighestNonSchoolLevel])
+    sort!(m, [:IndividualId, :ObservationDate])
     Arrow.write(joinpath(stagingpath(node), "EducationStatuses.arrow"), m, compress=:zstd)
-    a = freqtable(m,:CurrentEducation)
-    @info "Current Education breakdown for $(node)" a
-    a = freqtable(m,:HighestSchoolLevel)
-    @info "Highest School Level breakdown for $(node)" a
-    a = freqtable(m,:HighestNonSchoolLevel)
-    @info "Highest Non-School Level breakdown for $(node)" a
+    a = frequency(m, :CurrentEducation)
+    @info "Current Education breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(m, :HighestSchoolLevel)
+    @info "Highest School Level breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(m, :HighestNonSchoolLevel)
+    @info "Highest Non-School Level breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
     return nothing
 end
 #endregion
 #region household socio-economic
 "Read and save household socio-economic data"
-function readhouseholdsocioeconomic(node::String)
-    householdassets(settings.Databases[node], node)
-    householdsocioeconomic(settings.Databases[node], node)
+function readhouseholdsocioeconomic(node::String, io)
+    householdassets(settings.Databases[node], node, io)
+    householdsocioeconomic(settings.Databases[node], node, io)
     retrieve_asset_items(settings.Databases[node], node)
     retrieve_hse(settings.Databases[node], node)
 end
-function householdassets(db::String, node::String)
+function householdassets(db::String, node::String, io)
     con = ODBC.Connection(db)
     sql = """SELECT
         UPPER(CONVERT(varchar(50),HA.HouseholdObservationUid)) HouseholdObservationUid,
@@ -1077,35 +1091,37 @@ function householdassets(db::String, node::String)
     FROM dbo.HouseholdAssets HA
     WHERE HA.AssetStatusId>0;
     """
-    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    s = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(s)) $(node) asset statuses from database"
-    assetmap = DataFrame(XLSX.readtable(joinpath(pwd(),"src","Assets.xlsx"),"Consolidated")...)
-    assetmap[!,:AssetId] = map(convertanytoint,assetmap[!,:AssetId])
-    assetmap[!,:Id] = map(convertanytoint,assetmap[!,:Id])
-    assetmap[!,:AssetName] = map(convertanytostr,assetmap[!,:AssetName])
-    assetmap[!,:Name] = map(convertanytostr,assetmap[!,:Name])
-    assetmap[!,:AssetIdx] = map(convertanytostr,assetmap[!,:AssetIdx])    
-    si = innerjoin(s, assetmap, on = :AssetId => :AssetId,  makeunique=true, matchmissing=:equal)
-    g = combine(groupby(si,[:HouseholdObservationUid,:Id]), :AssetStatusId => minimum => :AssetStatus, :AssetIdx => first => :AssetGroup)
+    assetmap = DataFrame(XLSX.readtable(joinpath(pwd(), "src", "Assets.xlsx"), "Consolidated"))
+    assetmap[!, :AssetId] = map(convertanytoint, assetmap[!, :AssetId])
+    assetmap[!, :Id] = map(convertanytoint, assetmap[!, :Id])
+    assetmap[!, :AssetName] = map(convertanytostr, assetmap[!, :AssetName])
+    assetmap[!, :Name] = map(convertanytostr, assetmap[!, :Name])
+    assetmap[!, :AssetIdx] = map(convertanytostr, assetmap[!, :AssetIdx])
+    si = innerjoin(s, assetmap, on=:AssetId => :AssetId, makeunique=true, matchmissing=:equal)
+    g = combine(groupby(si, [:HouseholdObservationUid, :Id]), :AssetStatusId => minimum => :AssetStatus, :AssetIdx => first => :AssetGroup)
     @info "$(nrow(g)) $(node) grouped asset statuses"
     filter!([:AssetStatus] => x -> x == 1, g)
     @info "$(nrow(g)) $(node) present asset statuses"
-    gg = combine(groupby(g,[:HouseholdObservationUid,:AssetGroup]), :AssetStatus => sum => :Idx)
+    gg = combine(groupby(g, [:HouseholdObservationUid, :AssetGroup]), :AssetStatus => sum => :Idx)
     @info "$(nrow(gg)) $(node) asset groups"
     filter!([:AssetGroup] => x -> x != "0", gg)
     w = unstack(gg, :HouseholdObservationUid, :AssetGroup, :Idx)
     replace!(w.Modern, missing => 0)
     replace!(w.Livestock, missing => 0)
-    disallowmissing!(w,[:HouseholdObservationUid,:Modern,:Livestock])
-    a = freqtable(w,:Modern)
-    @info "Modern asset breakdown for $(node)" a
-    a = freqtable(w,:Livestock)
-    @info "Livestock asset breakdown for $(node)" a
+    disallowmissing!(w, [:HouseholdObservationUid, :Modern, :Livestock])
+    a = frequency(w, :Modern)
+    @info "Modern asset breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(w, :Livestock)
+    @info "Livestock asset breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
     Arrow.write(joinpath(stagingpath(node), "AssetStatus.arrow"), w, compress=:zstd)
     return nothing
 end #householdassets
-function householdsocioeconomic(db::String, node::String)
+function householdsocioeconomic(db::String, node::String, io)
     con = ODBC.Connection(db)
     sql = """SELECT
         UPPER(CONVERT(varchar(50),HouseholdObservationUid)) HouseholdObservationUid,
@@ -1130,38 +1146,48 @@ function householdsocioeconomic(db::String, node::String)
     FROM dbo.HouseholdObservations HO
         JOIN dbo.Events E ON HO.ObservationUid = E.EventUid;
     """
-    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    s = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(s)) $(node) HSE observations from database"
     householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
     si = innerjoin(s, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(si)) $(node) HSE observations after household map"
-    a = freqtable(si,:WaterSource)
-    @info "Watersource breakdown for $(node)" a
-    a = freqtable(si,:Toilet)
-    @info "Toilet breakdown for $(node)" a
-    recode!(si[!,:Toilet], missing => 0, [0,8] => 0, [1,15,16,17] => 1, 2 => 2, 3 => 3, 4 => 4, [5,18] => 5, [6,19] => 6, [7,11] => 7)
-    a = freqtable(si,:Toilet)
-    @info "Toilet breakdown for $(node) after recode" a
-    a = freqtable(si,:CookingFuel)
-    @info "CookingFuel breakdown for $(node)" a
-    a = freqtable(si,:WallMaterial)
-    @info "WallMaterial breakdown for $(node)" a
-    a = freqtable(si,:FloorMaterial)
-    @info "FloorMaterial breakdown for $(node)" a
-    a = freqtable(si,:Bedrooms)
-    @info "Bedrooms breakdown for $(node)" a
-    recode!(si[!,:Bedrooms], missing => 0, 0 => 0, [1, 2] => 1, [3, 4] => 2, [5, 6] => 3, 7:90 => 4, 91:99 => 0, 100:9999 => 4)
-    a = freqtable(si,:Bedrooms)
-    @info "Bedrooms breakdown for $(node) after recode" a
-    a = freqtable(si,:ConnectedToGrid)
-    @info "ConnectedToGrid breakdown for $(node)" a
+    a = frequency(si, :WaterSource)
+    @info "Watersource breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(si, :Toilet)
+    @info "Toilet breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    recode!(si[!, :Toilet], missing => 0, [0, 8] => 0, [1, 15, 16, 17] => 1, 2 => 2, 3 => 3, 4 => 4, [5, 18] => 5, [6, 19] => 6, [7, 11] => 7)
+    a = frequency(si, :Toilet)
+    @info "Toilet breakdown for $(node) after recode" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(si, :CookingFuel)
+    @info "CookingFuel breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(si, :WallMaterial)
+    @info "WallMaterial breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(si, :FloorMaterial)
+    @info "FloorMaterial breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(si, :Bedrooms)
+    @info "Bedrooms breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    recode!(si[!, :Bedrooms], missing => 0, 0 => 0, [1, 2] => 1, [3, 4] => 2, [5, 6] => 3, 7:90 => 4, 91:99 => 0, 100:9999 => 4)
+    a = frequency(si, :Bedrooms)
+    @info "Bedrooms breakdown for $(node) after recode" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(si, :ConnectedToGrid)
+    @info "ConnectedToGrid breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
     replace!(si.ConnectedToGrid, missing => 0, true => 1, false => 0)
-    a = freqtable(si,:ConnectedToGrid)
-    @info "ConnectedToGrid for $(node) after recode" a
-    select!(si, [:HouseholdId,:ObservationDate,:WaterSource,:Toilet,:ConnectedToGrid,:CookingFuel,:WallMaterial, :FloorMaterial, :Bedrooms,
-                :Crime, :FinancialStatus, :CutMeals, :CutMealsFrequency, :NotEat, :NotEatFrequency, :ChildMealSkipCut, :ChildMealSkipCutFrequency, :ConsentToCall])
-    sort!(si, [:HouseholdId,:ObservationDate])
+    a = frequency(si, :ConnectedToGrid)
+    @info "ConnectedToGrid for $(node) after recode" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    select!(si, [:HouseholdId, :ObservationDate, :WaterSource, :Toilet, :ConnectedToGrid, :CookingFuel, :WallMaterial, :FloorMaterial, :Bedrooms,
+        :Crime, :FinancialStatus, :CutMeals, :CutMealsFrequency, :NotEat, :NotEatFrequency, :ChildMealSkipCut, :ChildMealSkipCutFrequency, :ConsentToCall])
+    sort!(si, [:HouseholdId, :ObservationDate])
     Arrow.write(joinpath(stagingpath(node), "SocioEconomic.arrow"), si, compress=:zstd)
     return nothing
 end #householdsocioeconomic
@@ -1179,7 +1205,7 @@ function retrieve_asset_items(db::String, node::String)
     JOIN dbo.Events E ON HO.ObservationUid=E.EventUid
     WHERE HA.AssetStatusId>0;
     """
-    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    s = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(s)) $(node) asset statuses from database"
     householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
@@ -1214,24 +1240,24 @@ function retrieve_hse(db::String, node::String)
     FROM dbo.HouseholdObservations HO
         JOIN dbo.Events E ON HO.ObservationUid = E.EventUid;
     """
-    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    s = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(s)) $(node) HSE observations from database"
     householdmap = Arrow.Table(joinpath(stagingpath(node), "HouseholdMap.arrow")) |> DataFrame
     si = innerjoin(s, householdmap, on=:HouseholdUid => :HouseholdUid, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(si)) $(node) HSE observations after household map"
     select!(si, Not([:HouseholdUid]))
-    sort!(si, [:HouseholdId,:ObservationDate])
+    sort!(si, [:HouseholdId, :ObservationDate])
     Arrow.write(joinpath(stagingpath(node), "SocioEconomicRaw.arrow"), si, compress=:zstd)
     return nothing
 end
 #endregion
 #region Marital status
 "Read and save individual marital status observations"
-function readmaritalstatuses(node::String)
-    maritalstatus(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+function readmaritalstatuses(node::String, io)
+    maritalstatus(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]), io)
 end
-function maritalstatus(db::String, node::String, periodend::Date, leftcensor::Date)
+function maritalstatus(db::String, node::String, periodend::Date, leftcensor::Date, io)
     con = ODBC.Connection(db)
     sql = """SELECT
       UPPER(CONVERT(varchar(50),IndividualUid)) IndividualUid
@@ -1242,41 +1268,42 @@ function maritalstatus(db::String, node::String, periodend::Date, leftcensor::Da
     WHERE NOT MaritalStatus IS NULL
       AND MaritalStatus > 0
     """
-    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    s = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(s)) $(node) marital statuses from database"
     individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     si = innerjoin(s, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     @info "$(nrow(si)) $(node) marital statuses after individual map"
-    select!(si,[:IndividualId, :ObservationDate, :MaritalStatus])
+    select!(si, [:IndividualId, :ObservationDate, :MaritalStatus])
     individualbounds = Arrow.Table(joinpath(stagingpath(node), "IndividualBounds.arrow")) |> DataFrame
-    m = leftjoin(si, individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
-    insertcols!(m,:OutsideBounds => false)
-    for i=1:nrow(m)
-        if (!ismissing(m[i,:EarliestDate]) && m[i,:ObservationDate] < m[i,:EarliestDate]) || (m[i,:ObservationDate] < leftcensor)
-            m[i,:OutsideBounds]=true
+    m = leftjoin(si, individualbounds, on=:IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
+    insertcols!(m, :OutsideBounds => false)
+    for i = 1:nrow(m)
+        if (!ismissing(m[i, :EarliestDate]) && m[i, :ObservationDate] < m[i, :EarliestDate]) || (m[i, :ObservationDate] < leftcensor)
+            m[i, :OutsideBounds] = true
         end
-        if (!ismissing(m[i,:LatestDate]) && m[i,:ObservationDate] > m[i,:LatestDate]) || (m[i,:ObservationDate] > periodend)
-            m[i,:OutsideBounds]=true
+        if (!ismissing(m[i, :LatestDate]) && m[i, :ObservationDate] > m[i, :LatestDate]) || (m[i, :ObservationDate] > periodend)
+            m[i, :OutsideBounds] = true
         end
     end
     #filter if outside bounds
     filter!([:OutsideBounds] => x -> !x, m)
     @info "$(nrow(m)) $(node) marital statuses inside bounds"
-    a = freqtable(m,:MaritalStatus)
-    @info "Marital Status breakdown for $(node)" a
-    select!(m,[:IndividualId, :ObservationDate, :MaritalStatus])
-    disallowmissing!(m,:ObservationDate)
+    a = frequency(m, :MaritalStatus)
+    @info "Marital Status breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    select!(m, [:IndividualId, :ObservationDate, :MaritalStatus])
+    disallowmissing!(m, :ObservationDate)
     sort!(m, [:IndividualId, :ObservationDate])
     Arrow.write(joinpath(stagingpath(node), "MaritalStatus.arrow"), m, compress=:zstd)
     return nothing
 end #maritalstatus
 #endregion
 #region Labour status
-function readlabourstatuses(node::String)
-    labourstatus(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]))
+function readlabourstatuses(node::String, io)
+    labourstatus(settings.Databases[node], node, Date(settings.PeriodEnd), Date(settings.LeftCensorDates[node]), io)
 end
-function labourstatus(db::String, node::String, periodend::Date, leftcensor::Date)
+function labourstatus(db::String, node::String, periodend::Date, leftcensor::Date, io)
     con = ODBC.Connection(db)
     sql = """SELECT
       UPPER(CONVERT(varchar(50),IndividualUid)) IndividualUid
@@ -1293,46 +1320,51 @@ function labourstatus(db::String, node::String, periodend::Date, leftcensor::Dat
     --AND EmploymentType IN (0,200)
     --AND Employer IN (0,300));
     """
-    s =  DBInterface.execute(con, sql;iterate_rows=true) |> DataFrame
+    s = DBInterface.execute(con, sql; iterate_rows=true) |> DataFrame
     DBInterface.close!(con)
     @info "Read $(nrow(s)) $(node) labour statuses from database"
     individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     si = innerjoin(s, individualmap, on=:IndividualUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     @info "$(nrow(si)) $(node) labour statuses after individual map"
-    select!(si,[:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer, :Unemployment])
+    select!(si, [:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer, :Unemployment])
     individualbounds = Arrow.Table(joinpath(stagingpath(node), "IndividualBounds.arrow")) |> DataFrame
-    m = leftjoin(si, individualbounds, on = :IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
-    insertcols!(m,:OutsideBounds => false)
-    for i=1:nrow(m)
-        if (!ismissing(m[i,:EarliestDate]) && m[i,:ObservationDate] < m[i,:EarliestDate]) || (m[i,:ObservationDate] < leftcensor)
-            m[i,:OutsideBounds]=true
+    m = leftjoin(si, individualbounds, on=:IndividualId => :IndividualId, makeunique=true, matchmissing=:equal)
+    insertcols!(m, :OutsideBounds => false)
+    for i = 1:nrow(m)
+        if (!ismissing(m[i, :EarliestDate]) && m[i, :ObservationDate] < m[i, :EarliestDate]) || (m[i, :ObservationDate] < leftcensor)
+            m[i, :OutsideBounds] = true
         end
-        if (!ismissing(m[i,:LatestDate]) && m[i,:ObservationDate] > m[i,:LatestDate]) || (m[i,:ObservationDate] > periodend)
-            m[i,:OutsideBounds]=true
+        if (!ismissing(m[i, :LatestDate]) && m[i, :ObservationDate] > m[i, :LatestDate]) || (m[i, :ObservationDate] > periodend)
+            m[i, :OutsideBounds] = true
         end
     end
     #filter if outside bounds
     filter!([:OutsideBounds] => x -> !x, m)
-    select!(m,[:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer, :Unemployment])
-    disallowmissing!(m,:ObservationDate)
+    select!(m, [:IndividualId, :ObservationDate, :CurrentEmployment, :EmploymentSector, :EmploymentType, :Employer, :Unemployment])
+    disallowmissing!(m, :ObservationDate)
     @info "Read $(nrow(m)) $(node) labour statuses inside bounds"
-    a = freqtable(m,:CurrentEmployment)
-    @info "CurrentEmployment breakdown for $(node)" a
-    a = freqtable(m,:EmploymentSector)
-    @info "EmploymentSector breakdown for $(node)" a
-    a = freqtable(m,:EmploymentType)
-    @info "EmploymentType breakdown for $(node)" a
-    a = freqtable(m,:Employer)
-    @info "Employer breakdown for $(node)" a
-    a = freqtable(m,:Unemployment)
-    @info "Unemployment breakdown for $(node)" a
+    a = frequency(m, :CurrentEmployment)
+    @info "CurrentEmployment breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(m, :EmploymentSector)
+    @info "EmploymentSector breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(m, :EmploymentType)
+    @info "EmploymentType breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(m, :Employer)
+    @info "Employer breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
+    a = frequency(m, :Unemployment)
+    @info "Unemployment breakdown for $(node)" 
+    pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
     sort!(m, [:IndividualId, :ObservationDate])
     Arrow.write(joinpath(stagingpath(node), "LabourStatus.arrow"), m, compress=:zstd)
     return nothing
 end #labourstatus
 #endregion
 #region Pregnancies
-function readpregnancies(node::String)
+function readpregnancies(node::String, io)
     con = ODBC.Connection(settings.Databases[node])
     sql = """    
         SELECT
@@ -1350,17 +1382,19 @@ function readpregnancies(node::String)
     DBInterface.close!(con)
     individualmap = Arrow.Table(joinpath(stagingpath(node), "IndividualMap.arrow")) |> DataFrame
     @info "Read $(nrow(individualmap)) $(node) individualmap entries"
-    pregnancies = innerjoin(pregnancies, individualmap, on = :WomanUid => :IndividualUid, makeunique=true, matchmissing=:equal)
+    pregnancies = innerjoin(pregnancies, individualmap, on=:WomanUid => :IndividualUid, makeunique=true, matchmissing=:equal)
     @info "Read $(nrow(pregnancies)) $(node) pregnancies after join"
     select!(pregnancies, [:IndividualId, :DeliveryDate, :LiveBirths, :StillBirths, :TerminationTypeId])
     sort!(pregnancies, [:IndividualId, :DeliveryDate])
     pregnancies = combine(groupby(pregnancies, [:IndividualId, :DeliveryDate]), :LiveBirths => maximum => :LiveBirths, :StillBirths => maximum => :StillBirths, :TerminationTypeId => maximum => :TerminationTypeId)
     Arrow.write(joinpath(stagingpath(node), "Pregnancies.arrow"), pregnancies, compress=:zstd)
     @info "Wrote $(nrow(pregnancies)) $(node) pregnancies"
-    livebirths = freqtable(pregnancies, :LiveBirths)
-    @info "LiveBirths breakdown $(node)" livebirths
-    stillbirths = freqtable(pregnancies, :StillBirths)
-    @info "StillBirths breakdown $(node)" stillbirths
+    livebirths = frequency(pregnancies, :LiveBirths)
+    @info "LiveBirths breakdown $(node)" 
+    pretty_table(io, livebirths; alignment=[:c, :r], show_subheader=false)
+    stillbirths = frequency(pregnancies, :StillBirths)
+    @info "StillBirths breakdown $(node)" 
+    pretty_table(io, stillbirths; alignment=[:c, :r], show_subheader=false)
     return nothing
 end
 #endregion

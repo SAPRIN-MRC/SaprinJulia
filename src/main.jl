@@ -4,7 +4,7 @@ using Arrow
 using DataFrames
 using CSV
 using Dates
-using FreqTables
+using PrettyTables
 
 #region Setup Logging
 l = open("log.log", "a+")
@@ -16,18 +16,18 @@ flush(io)
 #endregion
 
 #region Set-up execution flags
-dostaging = true
-dostagebase = true
+dostaging = false
+dostagebase = false
 dostagememberships = false
 doreadstatusobs = false
 dosocioeconomic = false
-dodayextraction = false
-dobasedayextraction = false
-dopreferredhouseholdextraction = false
-doepisodecreation = false
-dostataoutput = false
-doparentalcoresidency = false
-doparentalepisodes = false
+dodayextraction = true
+dobasedayextraction = true
+dopreferredhouseholdextraction = true
+doepisodecreation = true
+dostataoutput = true
+doparentalcoresidency = true
+doparentalepisodes = true
 domhprizeepisodes = false
 # Node specific flags
 doAgincourt = true
@@ -41,57 +41,57 @@ if dostaging
         # Individuals
         if doAgincourt
             @info "========== Start readindividuals Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readindividuals("Agincourt")
+            readindividuals("Agincourt", io)
             @info "========== Finished readindividuals Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doDIMAMO
             @info "========== Start readindividuals DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readindividuals("DIMAMO")
+            readindividuals("DIMAMO", io)
             @info "========== Finished readindividuals DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doAHRI
             @info "========== Start readindividuals AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readindividuals("AHRI")
+            readindividuals("AHRI", io)
             @info "========== Finished readindividuals AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         #Locations
         if doAgincourt
             @info "========== Start readlocations Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readlocations("Agincourt")
+            readlocations("Agincourt", io)
             @info "========== Finished readlocations Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doDIMAMO
             @info "========== Start readlocations DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readlocations("DIMAMO")
+            readlocations("DIMAMO", io)
             @info "========== Finished readlocations DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doAHRI
             @info "========== Start readlocations AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readlocations("AHRI")
+            readlocations("AHRI", io)
             @info "========== Finished readlocations at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         #Individual Residencies
         if doAgincourt
             @info "========== Start readresidences Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readresidences("Agincourt")
+            readresidences("Agincourt", io)
             @info "========== Finished readresidences Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end 
         if doDIMAMO
             @info "========== Start readresidences DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readresidences("DIMAMO")
+            readresidences("DIMAMO", io)
             @info "========== Finished readresidences DIMAMO at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
         if doAHRI
             @info "========== Start readresidences AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readresidences("AHRI")
+            readresidences("AHRI", io)
             @info "========== Finished readresidences AHRI at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
             flush(io)
         end
@@ -155,7 +155,7 @@ if dostaging
     if doreadstatusobs
         if doAgincourt
             @info "========== Start readeducationstatuses Agincourt at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readeducationstatuses("Agincourt")
+            readeducationstatuses("Agincourt", io)
             arrowtostatar(stagingpath("Agincourt"), "EducationStatuses", "EducationStatuses")
             runstata("education.do", settings.Version, "Agincourt", joinpath(stagingpath("Agincourt"), "EducationStatuses.dta"))
              @info "========== Finished Agincourt readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -163,7 +163,7 @@ if dostaging
         end
         if doDIMAMO
             @info "========== Start DIMAMO readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readeducationstatuses("DIMAMO")
+            readeducationstatuses("DIMAMO", io)
             arrowtostatar(stagingpath("DIMAMO"), "EducationStatuses", "EducationStatuses")
             runstata("education.do", settings.Version, "DIMAMO", joinpath(stagingpath("DIMAMO"), "EducationStatuses.dta"))
             @info "========== Finished DIMAMO readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -171,7 +171,7 @@ if dostaging
         end
         if doAHRI
             @info "========== Start AHRI readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readeducationstatuses("AHRI")
+            readeducationstatuses("AHRI", io)
             arrowtostatar(stagingpath("AHRI"), "EducationStatuses", "EducationStatuses")
             runstata("education.do", settings.Version, "AHRI", joinpath(stagingpath("AHRI"), "EducationStatuses.dta"))
             @info "========== Finished AHRI readeducationstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -179,7 +179,7 @@ if dostaging
         end
         if doAgincourt
             @info "========== Start Agincourt readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readmaritalstatuses("Agincourt")
+            readmaritalstatuses("Agincourt", io)
             arrowtostatar(stagingpath("Agincourt"), "MaritalStatus", "MaritalStatus")
             runstata("marital.do", settings.Version, "Agincourt", joinpath(stagingpath("Agincourt"), "MaritalStatus.dta"))
             @info "========== Finished Agincourt readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -187,7 +187,7 @@ if dostaging
         end
         if doDIMAMO
             @info "========== Start DIMAMO readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readmaritalstatuses("DIMAMO")
+            readmaritalstatuses("DIMAMO", io)
             arrowtostatar(stagingpath("DIMAMO"), "MaritalStatus", "MaritalStatus")
             runstata("marital.do", settings.Version, "DIMAMO", joinpath(stagingpath("DIMAMO"), "MaritalStatus.dta"))
             @info "========== Finished DIMAMO readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -195,7 +195,7 @@ if dostaging
         end
         if doAHRI
             @info "========== Start AHRI readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readmaritalstatuses("AHRI")
+            readmaritalstatuses("AHRI", io)
             arrowtostatar(stagingpath("AHRI"), "MaritalStatus", "MaritalStatus")
             runstata("marital.do", settings.Version, "AHRI", joinpath(stagingpath("AHRI"), "MaritalStatus.dta"))
             @info "========== Finished AHRI readmaritalstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -203,7 +203,7 @@ if dostaging
         end
         if doAgincourt
             @info "========== Start Agincourt readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readlabourstatuses("Agincourt")
+            readlabourstatuses("Agincourt", io)
             arrowtostatar(stagingpath("Agincourt"), "LabourStatus", "LabourStatus")
             runstata("labour.do", settings.Version, "Agincourt", joinpath(stagingpath("Agincourt"), "LabourStatus.dta"))
             @info "========== Finished Agincourt readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -211,7 +211,7 @@ if dostaging
         end
         if doDIMAMO
             @info "========== Start DIMAMO readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readlabourstatuses("DIMAMO")
+            readlabourstatuses("DIMAMO", io)
             arrowtostatar(stagingpath("DIMAMO"), "LabourStatus", "LabourStatus")
             runstata("labour.do", settings.Version, "DIMAMO", joinpath(stagingpath("DIMAMO"), "LabourStatus.dta"))
             @info "========== Finished DIMAMO readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -219,7 +219,7 @@ if dostaging
         end
         if doAHRI
             @info "========== Start AHRI readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readlabourstatuses("AHRI")
+            readlabourstatuses("AHRI", io)
             arrowtostatar(stagingpath("AHRI"), "LabourStatus", "LabourStatus")
             runstata("labour.do", settings.Version, "AHRI", joinpath(stagingpath("AHRI"), "LabourStatus.dta"))
             @info "========== Finished AHRI readlabourstatuses at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
@@ -229,7 +229,7 @@ if dostaging
     if dosocioeconomic
         if doAgincourt
             @info "========== Start Agincourt readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readhouseholdsocioeconomic("Agincourt")
+            readhouseholdsocioeconomic("Agincourt", io)
             arrowtostatar(stagingpath("Agincourt"), "AssetStatusRaw", "AssetStatusRaw")
             runstata("assets.do", settings.Version, "Agincourt", joinpath(stagingpath("Agincourt"), "AssetStatusRaw.dta"))
             arrowtostatar(stagingpath("Agincourt"), "SocioEconomicRaw", "SocioEconomicRaw")
@@ -239,7 +239,7 @@ if dostaging
         end
         if doDIMAMO
             @info "========== Start DIMAMO readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readhouseholdsocioeconomic("DIMAMO")
+            readhouseholdsocioeconomic("DIMAMO", io)
             arrowtostatar(stagingpath("DIMAMO"), "AssetStatusRaw", "AssetStatusRaw")
             runstata("assets.do", settings.Version, "DIMAMO", joinpath(stagingpath("DIMAMO"), "AssetStatusRaw.dta"))
             arrowtostatar(stagingpath("DIMAMO"), "SocioEconomicRaw", "SocioEconomicRaw")
@@ -249,7 +249,7 @@ if dostaging
         end
         if doAHRI
             @info "========== Start AHRI readhouseholdsocioeconomic at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
-            readhouseholdsocioeconomic("AHRI")
+            readhouseholdsocioeconomic("AHRI", io)
             arrowtostatar(stagingpath("AHRI"), "AssetStatusRaw", "AssetStatusRaw")
             runstata("assets.do", settings.Version, "AHRI", joinpath(stagingpath("AHRI"), "AssetStatusRaw.dta"))
             arrowtostatar(stagingpath("AHRI"), "SocioEconomicRaw", "SocioEconomicRaw")
@@ -528,7 +528,7 @@ if doepisodecreation
     if doDIMAMO
         @info "========== Start DIMAMO read pregnancies at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        readpregnancies("DIMAMO")
+        readpregnancies("DIMAMO", io)
         d = now()-t
         @info "DIMAMO read pregnancies complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -557,7 +557,7 @@ if doepisodecreation
     if doAgincourt
         @info "========== Start Agincourt read pregnancies at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        readpregnancies("Agincourt")
+        readpregnancies("Agincourt", io)
         d = now()-t
         @info "Agincourt read pregnancies complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -586,7 +586,7 @@ if doepisodecreation
     if doAHRI
         @info "========== Start AHRI read pregnancies at $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS"))"
         t = now()
-        readpregnancies("AHRI")
+        readpregnancies("AHRI", io)
         d = now()-t
         @info "AHRI read pregnancies complete $(Dates.format(now(), "yyyy-mm-dd HH:MM:SS")) duration $(round(d, Dates.Second))"
         flush(io)
@@ -817,20 +817,23 @@ if domhprizeepisodes
         transform!(location_iur, :IUR => ByRow(x -> codeDict[x]) => :IUR)
         location_map = Arrow.Table(joinpath(stagingpath("AHRI"), "LocationMap.arrow")) |> DataFrame
         locations = leftjoin(location_map, location_iur, on = :LocationUid => :LocationUid, makeunique=true, matchmissing=:equal)
-        a = freqtable(locations, :IUR)
-        @info "IUR breakdown: " a
+        a = frequency(locations, :IUR)
+        @info "IUR breakdown: " 
+        pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
         flush(io)
         episodes = Arrow.Table(joinpath(episodepath("AHRI"), "IndividualExposureEpisodes.arrow")) |> DataFrame
         episodes_new = leftjoin(episodes, locations, on = :LocationId => :LocationId, makeunique=true, matchmissing=:equal)
-        a = freqtable(episodes_new, :IUR)
-        @info "IUR breakdown after join :" a
+        a = frequency(episodes_new, :IUR)
+        @info "IUR breakdown after join :" 
+        pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
         flush(io)
         episodes = nothing
         select!(episodes_new, :NodeId, :IndividualId, :DoB, :DoD, :CalendarYear, :Age, :Sex, :LocationId, :HouseholdId, :HHRelation, 
                              :IUR => :IsUrbanOrRural, :MotherId, :FatherId, :SpouseId, :StartDate, :EndDate, :StartType, :EndType, 
                              :Episode, :Episodes, :Resident, :MotherStatus, :FatherStatus, :ChildrenEverBorn)
-        a = freqtable(episodes_new, :IsUrbanOrRural)
-        @info "IsUrbanOrRural breakdown after transform :" a
+        a = frequency(episodes_new, :IsUrbanOrRural)
+        @info "IsUrbanOrRural breakdown after transform :" 
+        pretty_table(io, a; alignment=[:c, :r], show_subheader=false)
         @info "Columns after transform :" names(episodes_new)
         flush(io)
         open(joinpath(episodepath("AHRI"), "IndividualExposureEpisodesTmp.arrow"), "w") do io

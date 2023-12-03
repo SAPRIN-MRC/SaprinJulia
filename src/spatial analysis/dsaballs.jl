@@ -1,7 +1,7 @@
 using CSV
 using UUIDs
 using DataFrames
-using NearestNeighbors
+using NearestNeighbors #removed from packages - put back if you need to use this
 using StaticArrays
 
 function enumeratetree(tree, index_range)
