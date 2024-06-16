@@ -21,7 +21,7 @@ using Serialization
 using TranscodingStreams, CodecZstd
 
 export BatchSize, individualbatch, nextidrange, addsheet!, writeXLSX, arrowtocsv, stagingpath, dayextractionpath, episodepath, settings, age, 
-       arrowtostatar, runstata, frequency, 
+       arrowtostatar, runstata, frequency, deletebatchfiles,
        readindividuals, readlocations, readresidences, readhouseholds, readhouseholdmemberships, readindividualmemberships, readpregnancies,
        readeducationstatuses, readhouseholdsocioeconomic, readmaritalstatuses, readlabourstatuses,
        extractresidencydays, extracthhresidencydays, extractmembershipdays, combinebatches, deliverydays,

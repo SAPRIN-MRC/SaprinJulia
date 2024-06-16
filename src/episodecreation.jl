@@ -1,14 +1,12 @@
 "Group day records into basic exposure records"
 function basicepisodes(node)
     @info "Started basic episode creation for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
-    residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep02_batched.arrow"))
-    hstate = iterate(residentdaybatches)
-    i = 1
-    while hstate !== nothing
+    minId, maxId, batches = individualbatch(node)
+    #residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep02_batched.arrow"))
+    for batch = 1:batches
         t = now()
-        @info "Node $(node) batch $(i) at $(t)"
-        h, hst = hstate
-        hd = h |> DataFrame
+        @info "Node $(node) batch $(batch) at $(t)"
+        hd = deserializefromfile(joinpath(dayextractionpath(node), "DayDatasetStep02$(batch)"))
         e = combine(groupby(hd, [:IndividualId, :Episode]), :Resident => first => :Resident, :LocationId => first => :LocationId, :HouseholdId => first => :HouseholdId,
             :Sex => first => :Sex, :DoB => first => :DoB, :DoD => first => :DoD, :MotherId => first => :MotherId, :FatherId => first => :FatherId,
             :DayDate => minimum => :StartDate, :DayDate => maximum => :EndDate, nrow => :Days,
@@ -84,21 +82,21 @@ function basicepisodes(node)
         filter!(r -> r.Delete == 0, episodes)
         select!(episodes, Not([:Delete, :Episode, :Episodes]))
         e = transform(groupby(sort(episodes, [:IndividualId, :StartDate]), [:IndividualId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
-        open(joinpath(episodepath(node), "SurveillanceEpisodesBasic$(i).arrow"), "w"; lock=true) do io
-            Arrow.write(io, e, compress=:zstd)
-        end
-        hstate = iterate(residentdaybatches, hst)
-        @info "Node $(node) batch $(i) completed with $(nrow(e)) episodes after $(round(now()-t, Dates.Second))"
-        i = i + 1
+        serializetofile(joinpath(episodepath(node), "SurveillanceEpisodesBasic$(batch)"), e)
+        @info "Node $(node) batch $(batch) completed with $(nrow(e)) episodes after $(round(now()-t, Dates.Second))"
     end
-    combinebatches(episodepath(node), "SurveillanceEpisodesBasic", i - 1)
+    episodes = restoredataframe(episodepath(node), "SurveillanceEpisodesBasic", batches)
+    open(joinpath(episodepath(node), "SurveillanceEpisodesBasic.arrow"), "w"; lock=true) do io
+        Arrow.write(io, episodes, compress=:zstd)
+    end
+    deletebatchfiles(episodepath(node), "SurveillanceEpisodesBasic", batches)
     @info "=== Finished basic episode creation for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
 "Do basic episodes QA"
 function basicepisodeQA(node)
     @info "Started basic episode QA for node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
-    df = Arrow.Table(joinpath(episodepath(node), "SurveillanceEpisodesBasic_batched.arrow")) |> DataFrame
+    df = Arrow.Table(joinpath(episodepath(node), "SurveillanceEpisodesBasic.arrow")) |> DataFrame
     sf = combine(groupby(df, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart]), nrow => :n)
     sort!(sf)
     writeXLSX(joinpath(episodepath(node), "QC", "EpisodesQA.xlsx"), sf, "StartFlags")
@@ -152,14 +150,11 @@ end
 "Group day records into basic exposure records"
 function yrage_episodes(node)
     @info "Started Yr Age episode creation node $(node) $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
-    residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep02_batched.arrow"))
-    hstate = iterate(residentdaybatches)
-    i = 1
-    while hstate !== nothing
+    minId, maxId, batches = individualbatch(node)
+    for batch in 1:batches
         t = now()
-        @info "Node $(node) batch $(i) at $(t)"
-        h, hst = hstate
-        hd = h |> DataFrame
+        @info "Node $(node) batch $(batch) at $(t)"
+        hd = deserializefromfile(joinpath(dayextractionpath(node), "DayDatasetStep02$(batch)"))
         hd = transform!(hd, :DayDate => (x -> Dates.year.(x)) => :CalendarYear, [:DoB, :DayDate] => ((x, y) -> age.(x, y)) => :Age)
         # Debug
         # t = filter(row -> row.IndividualId == 11100 || row.IndividualId == 17829, hd)
@@ -187,8 +182,8 @@ function yrage_episodes(node)
         # end
         # End Debug
         episodes = transform(groupby(sort(e, [:IndividualId, :Episode, :CalendarYear, :Age]), [:IndividualId]), nrow => :Episodes, :IndividualId => eachindex => :episode,
-            :CalendarYear => Base.Fix2(lead, 1) => :NextYear, :CalendarYear => Base.Fix2(lag, 1) => :PrevYear,
-            :Age => Base.Fix2(lead, 1) => :NextAge, :Age => Base.Fix2(lag, 1) => :PrevAge)
+            :CalendarYear => ShiftedArrays.lead => :NextYear, :CalendarYear => ShiftedArrays.lag => :PrevYear,
+            :Age => ShiftedArrays.lead => :NextAge, :Age => ShiftedArrays.lag => :PrevAge)
         # Debug
         # t = filter(row -> row.IndividualId == 11100 || row.IndividualId == 17829, episodes)
         # open(joinpath(episodepath(node), "DebugEpisodes3Tmp$(i).arrow"),"w"; lock = true) do io
@@ -291,21 +286,21 @@ function yrage_episodes(node)
         filter!(r -> r.Delete == 0, episodes)
         select!(episodes, Not([:Delete, :Episode, :Episodes, :PrevYear, :NextYear, :PrevAge, :NextAge]))
         e = transform(groupby(sort(episodes, [:IndividualId, :StartDate]), [:IndividualId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
-        open(joinpath(episodepath(node), "SurveillanceEpisodesYrAge$(i).arrow"), "w"; lock=true) do io
-            Arrow.write(io, e, compress=:zstd)
-        end
-        hstate = iterate(residentdaybatches, hst)
-        @info "Node $(node) batch $(i) completed with $(nrow(e)) episodes after $(round(now()-t, Dates.Second))"
-        i = i + 1
+        serializetofile(joinpath(episodepath(node), "SurveillanceEpisodesYrAge$(batch)"), e)
+        @info "Node $(node) batch $(batch) completed with $(nrow(e)) episodes after $(round(now()-t, Dates.Second))"
     end
-    combinebatches(episodepath(node), "SurveillanceEpisodesYrAge", i - 1)
+    episodes = restoredataframe(episodepath(node), "SurveillanceEpisodesYrAge", batches)
+    open(joinpath(episodepath(node), "SurveillanceEpisodesYrAge.arrow"), "w"; lock=true) do io
+        Arrow.write(io, episodes, compress=:zstd)
+    end
+    deletebatchfiles(episodepath(node),"SurveillanceEpisodesYrAge", batches)
     @info "=== Finished Yr Age episode creation $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
 "Do yr-age episodes QA"
 function yrage_episodeQA(node)
     @info "Started Yr Age episode QA $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
-    df = Arrow.Table(joinpath(episodepath(node), "SurveillanceEpisodesYrAge_batched.arrow")) |> DataFrame
+    df = Arrow.Table(joinpath(episodepath(node), "SurveillanceEpisodesYrAge.arrow")) |> DataFrame
     # StartFlags
     sf = combine(groupby(df, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart, :YrStart, :AgeStart]), nrow => :n)
     sort!(sf)
@@ -424,20 +419,14 @@ Create individual exposure episodes split on calendar year, age, and child birth
 """
 function yragedel_episodes(node)
     @info "Started Year Age Delivery episode creation $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
-    residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep04_batched.arrow"))
-    hstate = iterate(residentdaybatches)
-    deliverydaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DeliveryDays_batched.arrow"))
-    dstate = iterate(deliverydaybatches)
-    i = 1
-    while hstate !== nothing
+    minId, maxId, batches = individualbatch(node)
+    for i in 1:batches
         t = now()
         @info "Node $(node) batch $(i) at $(t)"
-        h, hst = hstate
-        hd = h |> DataFrame
-        hd = transform!(hd, :DayDate => (x -> Dates.year.(x)) => :CalendarYear, [:DoB, :DayDate] => ((x, y) -> age.(x, y)) => :Age)
+        hd = deserializefromfile(joinpath(dayextractionpath(node), "DayDatasetStep02$(i)"))
+        transform!(hd, :DayDate => (x -> Dates.year.(x)) => :CalendarYear, [:DoB, :DayDate] => ((x, y) -> age.(x, y)) => :Age)
         #get delivery days
-        d, dst = dstate
-        dd = d |> DataFrame
+        dd = deserializefromfile(joinpath(dayextractionpath(node), "DeliveryDays$(i)"))
         hd = leftjoin(hd, dd, on=[:IndividualId => :IndividualId, :DayDate => :DayDate])
         transform!(hd, :ChildrenBorn => ByRow(x -> ismissing(x) ? 0 : x) => :ChildrenBorn, :ChildrenEverBorn => ByRow(x -> ismissing(x) ? 0 : x) => :ChildrenEverBorn)
         e = combine(groupby(hd, [:IndividualId, :Episode, :CalendarYear, :Age, :ChildrenEverBorn]), :Resident => first => :Resident, :LocationId => first => :LocationId, :HouseholdId => first => :HouseholdId,
@@ -449,9 +438,9 @@ function yragedel_episodes(node)
         filter!(row -> ismissing(row.DoD) || (!ismissing(row.DoD) && (row.StartDate <= row.DoD || row.DoB == row.DoD)), e) #Episode start must be less or equal than DoD, unless person born and died on the same day
         # Create episodes    
         episodes = transform(groupby(sort(e, [:IndividualId, :Episode, :CalendarYear, :Age, :ChildrenEverBorn]), [:IndividualId]), nrow => :Episodes, :IndividualId => eachindex => :episode,
-            :CalendarYear => Base.Fix2(lead, 1) => :NextYear, :CalendarYear => Base.Fix2(lag, 1) => :PrevYear,
-            :Age => Base.Fix2(lead, 1) => :NextAge, :Age => Base.Fix2(lag, 1) => :PrevAge,
-            :ChildrenEverBorn => Base.Fix2(lag, 1) => :PrevBorn)
+            :CalendarYear => ShiftedArrays.lead => :NextYear, :CalendarYear => ShiftedArrays.lag => :PrevYear,
+            :Age => ShiftedArrays.lead => :NextAge, :Age => ShiftedArrays.lag => :PrevAge,
+            :ChildrenEverBorn => ShiftedArrays.lag => :PrevBorn)
         insertcols!(episodes, :Delete => Int16(0), :YrStart => Int16(0), :YrEnd => Int16(0), :AgeStart => Int16(0), :AgeEnd => Int16(0), :Delivery => Int16(0))
         select!(episodes, Not(:Episode))
         rename!(episodes, :episode => :Episode)
@@ -554,22 +543,21 @@ function yragedel_episodes(node)
         filter!(r -> r.Delete == 0, episodes)
         select!(episodes, Not([:Delete, :Episode, :Episodes, :PrevYear, :NextYear, :PrevAge, :NextAge, :PrevBorn]))
         e = transform(groupby(sort(episodes, [:IndividualId, :StartDate]), [:IndividualId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
-        open(joinpath(episodepath(node), "SurveillanceEpisodesYrAgeDelivery$(i).arrow"), "w"; lock=true) do io
-            Arrow.write(io, e, compress=:zstd)
-        end
+        serializetofile(joinpath(episodepath(node), "SurveillanceEpisodesYrAgeDelivery$(i)"), e)
         @info "Node $(node) batch $(i) completed with $(nrow(e)) episodes after $(round(now()-t, Dates.Second))"
-        hstate = iterate(residentdaybatches, hst)
-        dstate = iterate(deliverydaybatches, dst)
-        i = i + 1
     end
-    combinebatches(episodepath(node), "SurveillanceEpisodesYrAgeDelivery", i - 1)
+    episodes = restoredataframe(episodepath(node), "SurveillanceEpisodesYrAgeDelivery", batches)
+    open(joinpath(episodepath(node), "SurveillanceEpisodesYrAgeDelivery.arrow"), "w"; lock=true) do io
+        Arrow.write(io, episodes, compress=:zstd)
+    end
+    deletebatchfiles(episodepath(node), "SurveillanceEpisodesYrAgeDelivery", batches)
     @info "=== Finished Year Age Delivery episode creation $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
 "Do yr-age-delivery episodes QA"
 function yragedel_episodeQA(node)
     @info "Started Year Age Delivery episode QA $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
-    df = Arrow.Table(joinpath(episodepath(node), "SurveillanceEpisodesYrAgeDelivery_batched.arrow")) |> DataFrame
+    df = Arrow.Table(joinpath(episodepath(node), "SurveillanceEpisodesYrAgeDelivery.arrow")) |> DataFrame
     # StartFlags
     sf = combine(groupby(df, [:Born, :Enumeration, :InMigration, :LocationEntry, :ExtResStart, :Participation, :MembershipStart, :YrStart, :AgeStart, :Delivery]), nrow => :n)
     sort!(sf)
@@ -696,14 +684,12 @@ end
 
 "Group day records into parent co-residency records"
 function parentresidentepisodes(node)
-    residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep04_batched.arrow"))
-    hstate = iterate(residentdaybatches)
-    i = 1
-    while hstate !== nothing
+    #residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep04_batched.arrow"))
+    minId, maxId, batches = individualbatch(node)
+    for i = 1:batches
         t = now()
         @info "Node $(node) batch $(i) at $(t)"
-        h, hst = hstate
-        hd = h |> DataFrame
+        hd = deserializefromfile(joinpath(dayextractionpath(node), "DayDatasetStep04$(i)"))
         e = combine(groupby(hd, [:IndividualId, :Episode, :MotherCoResident, :FatherCoResident]), :Resident => first => :Resident, :LocationId => first => :LocationId, :HouseholdId => first => :HouseholdId,
             :Sex => first => :Sex, :DoB => first => :DoB, :DoD => first => :DoD, :MotherId => first => :MotherId, :FatherId => first => :FatherId,
             :DayDate => minimum => :StartDate, :DayDate => maximum => :EndDate, nrow => :Days,
@@ -779,14 +765,14 @@ function parentresidentepisodes(node)
         filter!(r -> r.Delete == 0, episodes)
         select!(episodes, Not([:Delete, :Episode, :Episodes]))
         e = transform(groupby(sort(episodes, [:IndividualId, :StartDate]), [:IndividualId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
-        open(joinpath(episodepath(node), "SurveillanceEpisodesParentCoresident$(i).arrow"), "w"; lock=true) do io
-            Arrow.write(io, e, compress=:zstd)
-        end
-        hstate = iterate(residentdaybatches, hst)
+        serializetofile(joinpath(episodepath(node), "SurveillanceEpisodesParentCoresident$(i)"),e)
         @info "Node $(node) batch $(i) completed with $(nrow(e)) episodes after $(round(now()-t, Dates.Second))"
-        i = i + 1
     end
-    combinebatches(episodepath(node), "SurveillanceEpisodesParentCoresident", i - 1)
+    episodes = restoredataframe(episodepath(node), "SurveillanceEpisodesParentCoresident", batches)
+    open(joinpath(episodepath(node), "SurveillanceEpisodesParentCoresident.arrow"), "w"; lock=true) do io
+        Arrow.write(io, episodes, compress=:zstd)
+    end
+    deletebatchfiles(episodepath(node), "SurveillanceEpisodesParentCoresident", batches)
     return nothing
 end
 "Determine parental status, 0 = unknown, 1 = coresident, 2 = alive living elsewhere, 3 = dead"
@@ -807,22 +793,18 @@ Create individual exposure episodes split on calendar year, age, child birth (de
 """
 function yragedelparentalstatus_episodes(node)
     @info "Started Year Age Delivery Parental Status episode creation $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
-    residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep04_batched.arrow"))
-    hstate = iterate(residentdaybatches)
-    deliverydaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DeliveryDays_batched.arrow"))
-    dstate = iterate(deliverydaybatches)
-    i = 1
-    while hstate !== nothing
+    #residentdaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DayDatasetStep04_batched.arrow"))
+    #deliverydaybatches = Arrow.Stream(joinpath(dayextractionpath(node), "DeliveryDays_batched.arrow"))
+    minId, maxId, batches = individualbatch(node)
+    for i = 1:batches
         t = now()
         @info "Node $(node) batch $(i) at $(t)"
-        h, hst = hstate
-        hd = h |> DataFrame
+        hd = deserializefromfile(joinpath(dayextractionpath(node), "DayDatasetStep04$(i)"))
         hd = transform!(hd, :DayDate => (x -> Dates.year.(x)) => :CalendarYear, [:DoB, :DayDate] => ((x, y) -> age.(x, y)) => :Age,
             [:MotherDead, :MotherCoResident] => ((x, y) -> parentstatus.(x, y)) => :MotherStatus,
             [:FatherDead, :FatherCoResident] => ((x, y) -> parentstatus.(x, y)) => :FatherStatus)
         #get delivery days
-        d, dst = dstate
-        dd = d |> DataFrame
+        dd = deserializefromfile(joinpath(dayextractionpath(node), "DeliveryDays$(i)"))
         hd = leftjoin(hd, dd, on=[:IndividualId => :IndividualId, :DayDate => :DayDate])
         transform!(hd, :ChildrenBorn => ByRow(x -> ismissing(x) ? 0 : x) => :ChildrenBorn, :ChildrenEverBorn => ByRow(x -> ismissing(x) ? 0 : x) => :ChildrenEverBorn)
         e = combine(groupby(hd, [:IndividualId, :Episode, :CalendarYear, :Age, :ChildrenEverBorn, :MotherStatus, :FatherStatus]), :Resident => first => :Resident, :LocationId => first => :LocationId, :HouseholdId => first => :HouseholdId,
@@ -835,10 +817,10 @@ function yragedelparentalstatus_episodes(node)
         filter!(row -> ismissing(row.DoD) || (!ismissing(row.DoD) && (row.StartDate <= row.DoD || row.DoB == row.DoD)), e) #Episode start must be less or equal than DoD, unless person born and died on the same day
         # Create episodes    
         episodes = transform(groupby(sort(e, [:IndividualId, :Episode, :CalendarYear, :Age, :ChildrenEverBorn, :StartDate]), [:IndividualId]), nrow => :Episodes, :IndividualId => eachindex => :episode,
-            :CalendarYear => Base.Fix2(lead, 1) => :NextYear, :CalendarYear => Base.Fix2(lag, 1) => :PrevYear,
-            :Age => Base.Fix2(lead, 1) => :NextAge, :Age => Base.Fix2(lag, 1) => :PrevAge,
-            :ChildrenEverBorn => Base.Fix2(lag, 1) => :PrevBorn,
-            :MotherStatus => Base.Fix2(lag, 1) => :PrevMotherStatus, :FatherStatus => Base.Fix2(lag, 1) => :PrevFatherStatus)
+            :CalendarYear => ShiftedArrays.lead => :NextYear, :CalendarYear => ShiftedArrays.lag => :PrevYear,
+            :Age => ShiftedArrays.lead => :NextAge, :Age => ShiftedArrays.lag => :PrevAge,
+            :ChildrenEverBorn => ShiftedArrays.lag => :PrevBorn,
+            :MotherStatus => ShiftedArrays.lag => :PrevMotherStatus, :FatherStatus => ShiftedArrays.lag => :PrevFatherStatus)
         insertcols!(episodes, :Delete => Int16(0), :YrStart => Int16(0), :YrEnd => Int16(0), :AgeStart => Int16(0), :AgeEnd => Int16(0), :Delivery => Int16(0), :ParentStatusChanged => Int16(0))
         select!(episodes, Not(:Episode))
         rename!(episodes, :episode => :Episode)
@@ -946,15 +928,14 @@ function yragedelparentalstatus_episodes(node)
         filter!(r -> r.Delete == 0, episodes)
         select!(episodes, Not([:Delete, :Episode, :Episodes, :PrevYear, :NextYear, :PrevAge, :NextAge, :PrevBorn, :PrevMotherStatus, :PrevFatherStatus]))
         e = transform(groupby(sort(episodes, [:IndividualId, :StartDate]), [:IndividualId]), :IndividualId => eachindex => :Episode, nrow => :Episodes)
-        open(joinpath(episodepath(node), "SurveillanceEpisodesYrAgeDeliveryParents$(i).arrow"), "w"; lock=true) do io
-            Arrow.write(io, e, compress=:zstd)
-        end
+        serializetofile(joinpath(episodepath(node), "SurveillanceEpisodesYrAgeDeliveryParents$(i)"), e)
         @info "Node $(node) batch $(i) completed with $(nrow(e)) episodes after $(round(now()-t, Dates.Second))"
-        hstate = iterate(residentdaybatches, hst)
-        dstate = iterate(deliverydaybatches, dst)
-        i = i + 1
     end
-    combinebatches(episodepath(node), "SurveillanceEpisodesYrAgeDeliveryParents", i - 1)
+    episodes = restoredataframe(episodepath(node), "SurveillanceEpisodesYrAgeDeliveryParents", batches)
+    open(joinpath(episodepath(node), "SurveillanceEpisodesYrAgeDeliveryParents.arrow"), "w"; lock=true) do io
+        Arrow.write(io, episodes, compress=:zstd)
+    end
+    deletebatchfiles(episodepath(node), "SurveillanceEpisodesYrAgeDeliveryParents", batches)
     @info "=== Finished Year Age Delivery Parent status episode creation $(Dates.format(now(), "yyyy-mm-dd HH:MM"))"
     return nothing
 end
